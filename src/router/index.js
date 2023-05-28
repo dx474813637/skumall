@@ -15,7 +15,7 @@ const routes = [
     }, 
     {
         path: '/index',
-        name: 'Index',
+        name: 'index',
         meta: {
             title: '首页',
         },
@@ -23,7 +23,7 @@ const routes = [
     }, 
     {
         path: '/list',
-        name: 'List',
+        name: 'list',
         meta: {
             title: '列表',
             cache: true,
@@ -36,7 +36,7 @@ const routes = [
     // }, 
     {
         path: '/login',
-        name: 'Login',
+        name: 'login',
         meta: {
             title: '登录',
             cache: true,
@@ -45,7 +45,7 @@ const routes = [
     },
     {
         path: '/user/:id',  //:id就是动态路由匹配
-        name: 'User',
+        name: 'user',
         component: () => import('@/views/user/user.vue'),
         // props:true  //传值1.props值为true时，将path里面的id传递给component里面的User.vue里面。 
         //下面是通过props传id和title。

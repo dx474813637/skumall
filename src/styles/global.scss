@@ -10,6 +10,7 @@ $browser: null;
 .home-w {
     max-width: $home-w-max;
     margin: 0 auto;
+	position: relative;
 }
 %display {
     display:inline-block;
@@ -32,6 +33,8 @@ $flex-params: (
 	y: column,
 	start: flex-start,
 	center: center,
+	end: flex-end,
+	baseline: baseline,
 	around: space-around,
 	between: space-between,
 );

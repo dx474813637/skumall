@@ -10,8 +10,7 @@
                 <div class="top-right ">
                     <span class="item">合作入驻</span>
                     <span class="item">智能门店招商</span>
-                    <span class="item">客服：15957197946</span>
-                    <i-ep-plus />
+                    <span class="item">客服：15957197946</span> 
                 </div>
             </div>
         </div>
@@ -108,16 +107,9 @@
 </template>
 
 <script setup lang='ts'>
-import { onMounted, onBeforeMount, ref } from 'vue'
+import { ref } from 'vue'
 import { Search } from '@element-plus/icons-vue'
-const kw = ref('')
-// const select = ref('')
-onBeforeMount(() => {
-    console.log('2.组件挂载页面之前执行----onBeforeMount')
-})
-onMounted(() => {
-    console.log('3.-组件挂载到页面之后执行-------onMounted')
-})
+const kw = ref('') 
 </script>  
 <style lang='scss' scoped>
 ::v-deep .input-with-select {
@@ -136,7 +128,7 @@ onMounted(() => {
 
 header {
     color: $uni-text-color-grey;
-
+    background: #fff;
     &.header {
         .header-top {
             background-color: #fafafa;

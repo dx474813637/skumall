@@ -9,8 +9,8 @@ import IconsResolver from 'unplugin-icons/resolver'
 import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 
 import path from 'path'; //导入已经安装的@type/node
-
-
+ 
+// import { viteMockServe } from 'vite-plugin-mock' 
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
@@ -26,7 +26,7 @@ export default defineConfig({
         // 路径重写，**** 如果你的后端有统一前缀(如:/api)，就不开启；没有就开启
         //简单来说，就是是否改路径 加某些东西
         rewrite: (path) => path.replace(/^\/tqapi/, '')
-      }
+      },  
     }
   },
   css: {
@@ -47,6 +47,9 @@ export default defineConfig({
   },
   plugins: [
     vue(),
+    // viteMockServe({
+    //   mockPath: './mock', // 设置模拟.ts 文件的存储文件夹 
+    // }),
     vueSetupExtend(),
     AutoImport({
       resolvers: [
