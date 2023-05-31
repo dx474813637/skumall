@@ -33,10 +33,10 @@
 import { ref, inject } from "vue";
 const currentPage1 = ref(5)
 const small = ref(false) 
-// const $axios:any = inject('$axios'); 
-//   $axios.get("/api/userlist").then((res:any) => {
-//     console.log(res);
-//   });
+const $api = inject('$api'); 
+$api.product()
+$api.login_sku()
+$api.cate_list()
 const handleSizeChange = (val: number) => {
   console.log(`${val} items per page`)
 }

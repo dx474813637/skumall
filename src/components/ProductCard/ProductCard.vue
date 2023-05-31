@@ -11,7 +11,7 @@
 				<div class="item">
 					<div class="price">
 						<div class="price-unit">￥</div>
-						<div class="price-num">911.00</div>
+						<div class="price-num"><el-statistic :value="98500" :precision="2" value-style="color: #ff0000"></el-statistic></div>
 					</div>
 				</div>
 				<div class="item"></div>
@@ -78,7 +78,7 @@
 					.price-unit {
 					}
 					.price-num {
-                        font-size: 18px;
+                        font-size: 18px; 
 					}
 				}
 			}

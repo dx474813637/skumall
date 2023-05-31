@@ -38,6 +38,12 @@ export const createAxiosByinterceptors = (
     instance.interceptors.request.use(
         function (config: any) {
             // 在发送请求之前做些什么
+            // config.headers = {
+            //     ...config.headers, 
+            //     'content-type': 'application/x-www-form-urlencoded',
+            //     'appid': 10001,
+            //     'appsecret': '66f7iMFW6859I2reEiTsm7wIZQWhevpdvu2XggRIuUnH/zEbybV1fMs',
+            // }
             const { loading = true } = config;
             console.log("config:", config);
             // config.headers.Authorization = vm.$Cookies.get("vue_admin_token");
@@ -58,18 +64,18 @@ export const createAxiosByinterceptors = (
             // const { loading = true } = response.config;
             // if (loading) cancelLoading();
             cancelLoading();
-            const { code, data, message } = response.data;
+            const { code, list, msg } = response.data;
             // config设置responseType为blob 处理文件下载
             if (response.data instanceof Blob) {
                 return downloadFile(response);
             } else {
-                if (code === 200) return data;
+                if (code === 1) return response.data;
                 else if (code === 401) {
                     // jumpLogin();
                     console.log('401需要登陆权限 跳登录')
                     return Promise.reject(response.data);
                 } else {
-                    ElMessage.error(message);
+                    ElMessage.error(msg);
                     return Promise.reject(response.data);
                 }
             }
@@ -87,7 +93,7 @@ export const createAxiosByinterceptors = (
                     console.log('401需要登陆权限 跳登录') 
                 }
             }
-            ElMessage.error(error?.response?.data?.message || "服务端异常");
+            ElMessage.error(error?.response?.data?.msg || "服务端异常");
             return Promise.reject(error);
         }
     );

@@ -7,11 +7,11 @@ export const baseStore = defineStore('base', {
 	state: () => {
 		return {
 			// sys: uni.getSystemInfoSync(),
-			configBaseURL: 'https://wx.rawmex.cn/Zhushou/',
+			configBaseURL: import.meta.env.VITE_BASE_URL,
 			configHeader: {
 				'content-type': 'application/x-www-form-urlencoded',
-				'appid': 10002,
-				'appsecret': 'd34cv+9aniPoY1kcGGJThS+QmuYoKgH0oZZb1CSWtNR1MWNXsWFiFr4',
+				'appid': 10001,
+				'appsecret': '66f7iMFW6859I2reEiTsm7wIZQWhevpdvu2XggRIuUnH/zEbybV1fMs',
 			},
 			share_other: '',
 			themeColor: '#0070c5',

@@ -12,7 +12,7 @@ const routes = [
     {
         path: '/',
         redirect: '/index'
-    }, 
+    },
     {
         path: '/index',
         name: 'index',
@@ -20,7 +20,7 @@ const routes = [
             title: '首页',
         },
         component: () => import('@/views/index/index.vue')
-    }, 
+    },
     {
         path: '/list',
         name: 'list',
@@ -29,7 +29,7 @@ const routes = [
             cache: true,
         },
         component: () => import('@/views/list/list.vue')
-    }, 
+    },
     // {
     //     path: '/home',
     //     component: () => import('@/views/home/home.vue')
@@ -44,7 +44,16 @@ const routes = [
         component: () => import('@/views/login/login.vue')
     },
     {
-        path: '/user/:id',  //:id就是动态路由匹配
+        path: '/reg',
+        name: 'reg',
+        meta: {
+            title: '注册',
+            cache: true,
+        },
+        component: () => import('@/views/reg/reg.vue')
+    },
+    {
+        path: '/user',  //:id就是动态路由匹配
         name: 'user',
         component: () => import('@/views/user/user.vue'),
         // props:true  //传值1.props值为true时，将path里面的id传递给component里面的User.vue里面。 
@@ -54,7 +63,22 @@ const routes = [
             title: route.query.title
         }),
         children: [
-              
+            {
+                path: 'product_edit/:id',
+                name: 'product_edit',
+                meta: {
+                    title: '编辑商品', 
+                },
+                component: () => import('@/views/user/product_edit/product_edit.vue'),
+            },
+            {
+                path: 'product_add',
+                name: 'product_add',
+                meta: {
+                    title: '新增商品', 
+                },
+                component: () => import('@/views/user/product_edit/product_edit.vue'),
+            },
         ]
     },
     {
