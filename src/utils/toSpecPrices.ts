@@ -19,14 +19,14 @@
 //         "price": 120,
 //     }
 // ]
-
+import {deepClone} from '@/utils/index';
 export default function toSpecPrices(Spec: any, index: any, SpecPrices: any, result: any) {  
-    for (var i = 0; i < Spec[index].length; i++) {
-        result[index] = Spec[index][i].value;
+    for (var i = 0; i < Spec[index].length; i++) { 
+        result[Spec[index][i].title] = Spec[index][i].value 
         if (index != Spec.length - 1) { 
             SpecPrices = toSpecPrices(Spec, index + 1, SpecPrices, result)
-        } else { 
-            SpecPrices.push(result.join(','))
+        } else {  
+            SpecPrices.push(deepClone(result))
         }
     }
     return SpecPrices

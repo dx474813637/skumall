@@ -73,13 +73,17 @@
                         <el-row style="width: 100%;" :gutter="10">
                             <el-col :span="8">
                                 <el-row style="width: 100%;"> 
-                                    <el-input v-model="domain.label" placeholder="输入自定义规格标题" /> 
+                                    <el-input v-model="domain.label" placeholder="输入自定义规格标题" >
+                                        <template #prepend>标题</template>
+                                    </el-input> 
                                 </el-row>
                             </el-col>
                             <el-col :span="16">
                                 <el-row class="u-m-b-10" :gutter="10" v-for="(domainValue, i) in domain.values" :key="i">
                                     <el-col :span="22">
-                                        <el-input v-model="domainValue.value" placeholder="输入自定义规格属性" />
+                                        <el-input v-model="domainValue.value" placeholder="输入自定义规格属性" >
+                                            <template #prepend>属性</template>
+                                        </el-input>
                                     </el-col>
                                     <el-col :span="2" v-if="domain.values.length > 1">
                                         <el-button type="danger" :icon="CloseBold" circle
@@ -90,7 +94,7 @@
                                 <el-row :gutter="10">
                                     <el-col :span="22">
                                         <el-button type="primary" :icon="CirclePlus" plain
-                                            @click.prevent="addDomain(String(index))">新增规格属性</el-button>
+                                            @click.prevent="addDomain(String(index))">新增属性输入框</el-button>
                                     </el-col>
                                 </el-row>
 
@@ -99,7 +103,94 @@
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>
-        </el-form-item>    
+        </el-form-item>      
+        <el-form-item
+            v-for="(domains2Price, index) in dynamicValidateForm.domains2Price"
+            :key="index"
+            >
+           <div class="domains2Price-rows">
+                <div class="item ">
+                    <el-upload 
+                        :ref="(el) => setUploadRef(el, index)" 
+                        action="" 
+                        :class="{
+                            limit: domains2Price.img
+                        }"
+                        list-type="picture-card"
+                        :headers="configHeader" 
+                        :limit="1"
+                        :on-exceed="function (files, uploadFiles) { return handlePictureExceed(files, uploadFiles, index) }"
+                        :http-request="function (options: UploadRequestOptions) { return upload(options, index) }"
+                        :before-upload="beforeUpload">
+                        <el-icon>
+                            <Plus />
+                        </el-icon>
+
+                        <template #file="{ file }">
+                            <div>
+                                <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+                                <span class="el-upload-list__item-actions">
+                                    <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                                        <el-icon><zoom-in /></el-icon>
+                                    </span>
+                                    <span v-if="!disabled" class="el-upload-list__item-delete"
+                                        @click="handleRemove(file, index)">
+                                        <el-icon>
+                                            <Delete />
+                                        </el-icon>
+                                    </span>
+                                </span>
+                            </div>
+                        </template>
+                    </el-upload>
+                </div>
+                <div class="item u-flex-1 u-p-l-10" style="flex: 0 0 calc(100% - 65px)">
+                    <el-row style="width: 100%;" :gutter="10">
+                        <el-col :span="24">
+                            <span
+                                v-for="(ele, i) in dynamicValidateForm.domains"
+                                :key="i"
+                                class="u-p-r-10"
+                            >
+                            {{ `【${ele.label}】${domains2Price.sku[ele.label]}` }}
+                            </span>
+                            
+                        </el-col>  
+                    </el-row>
+                    <el-row style="width: 100%;" :gutter="10">
+                        <el-col :span="12" > 
+                            <el-form-item  
+                                :prop="'domains2Price.' + index + '.price'" 
+                                :rules="{
+                                    required: true,
+                                    message: '价格不能为空',
+                                    trigger: 'blur',
+                                }"
+                                >
+                                <el-input v-model="domains2Price.price" placeholder="价格" >
+                                    <template #prepend>价格</template>
+                                </el-input> 
+                            </el-form-item> 
+                        </el-col> 
+                        <el-col :span="12"> 
+                            <el-form-item  
+                                :prop="'domains2Price.' + index + '.stock'" 
+                                :rules="{
+                                    required: true,
+                                    message: '库存不能为空',
+                                    trigger: 'blur',
+                                }"
+                                > 
+                                <el-input v-model="domains2Price.stock" placeholder="库存" >
+                                    <template #prepend>库存</template>
+                                </el-input> 
+                            </el-form-item>
+                        </el-col>  
+                    </el-row>
+                </div>
+           </div>
+            
+        </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm(formRef)">Submit</el-button> 
             <el-button @click="resetForm(formRef)">Reset</el-button> 
@@ -117,7 +208,7 @@ import { genFileId, ElMessage } from 'element-plus'
 import type { FormInstance, UploadFile, UploadRequestOptions, UploadRawFile, UploadProps } from 'element-plus'
 import {
     CloseBold, 
-    Delete, Plus, ZoomIn, CirclePlus, Refresh
+    Delete, Plus, ZoomIn, CirclePlus, Refresh, Switch
 } from '@element-plus/icons-vue'
 import { baseStore } from '@/stores/main'
 import toSpecPrices from '@/utils/toSpecPrices'
@@ -152,8 +243,8 @@ interface DomainItem {
 interface Domain2PricesItem {
     sku: Object  
     img: string
-    stock: number | string
-    price: number | string
+    stock: number 
+    price: number 
 }
 const setUploadRef = (el: any, index: string) => {
     if (el) {
@@ -228,13 +319,13 @@ const removeTab = (targetName: string) => {
   dynamicValidateForm.domains = tabs.filter((tab) => tab.name !== targetName)
 }
 async function upload(param: any, index: string) {
-    console.log(param, index)
+    // console.log(param, index)
     const formData = new FormData()
     formData.append('file', param.file)
     const res = await $api.upimg(formData)
-    console.log(res)
+    // console.log(res)
     if (res.code == 1) {
-        (dynamicValidateForm.domains as any)[index].img = res.list[0]
+        (dynamicValidateForm.domains2Price as any)[index].img = res.list[0]
         ElMessage.success('图片上传成功')
         return true
     }
@@ -243,7 +334,7 @@ async function upload(param: any, index: string) {
 const handleRemove = (file: UploadFile, index: string) => {
     console.log(uploadRefs[index])
     uploadRefs[index].clearFiles();
-    (dynamicValidateForm.domains as any)[index].img = ''
+    (dynamicValidateForm.domains2Price as any)[index].img = ''
     ElMessage.success('图片移除成功')
 }
 
@@ -264,7 +355,7 @@ async function handlePictureExceed(files: UploadFile, uploadFiles, index: string
 }
 const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
     //   if (rawFile.type !== 'image/jpeg' ) {
-    console.log(rawFile.type)
+    // console.log(rawFile.type)
     if (!/(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(rawFile.type)) {
         ElMessage.error('图片格式有误！请检查！')
         return false
@@ -298,21 +389,50 @@ const resetForm = (formEl: FormInstance | undefined) => {
 }
 
 function render() {
-    console.log(toSpecPrices(dynamicValidateForm.domains.map(ele => ele.values), 0, [], []))
+    let arr = dynamicValidateForm.domains.map(ele => {
+        return ele.values.map(item => {
+            return {
+                value: item.value,
+                title: ele.label
+            }
+        })
+    })
+    let SpecPrices:any = [];
+    let SpecPricesItem = {};
+    toSpecPrices(arr, 0, SpecPrices, SpecPricesItem) 
+    // console.log(SpecPrices)
+    dynamicValidateForm.domains2Price = SpecPrices.map((ele:any) => {
+        return {
+            sku: ele,
+            img: "",
+            stock: 0,
+            price: 0,
+        }
+    })
+    console.log(dynamicValidateForm)
 }
+ 
 
 </script>
   
 <style lang='scss' scoped>
+.domains2Price-rows {
+    @include flex(x, start, start);
+    width: 100%;
+}
 ::v-deep {
     .el-upload--picture-card {
-        --el-upload-picture-card-size: 100px;
+        --el-upload-picture-card-size: 65px;
         // background-color: var(--el-color-primary-light-9);
     }
-
-    .el-upload-list--picture-card .el-upload-list__item {
-        --el-upload-list-picture-card-size: 100px
+    .limit .el-upload--picture-card {
+        display: none;
     }
+    .el-upload-list--picture-card .el-upload-list__item {
+        --el-upload-list-picture-card-size: 65px;
+        margin: 0;
+    }
+    
 }
 
 .domains-box {
