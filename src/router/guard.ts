@@ -6,6 +6,10 @@ import {useSettingsStore} from '@/stores/settings'
 router.beforeEach(async (to, from, next) => {
     start()
     console.log(to, from)
+    if(to?.meta?.isAuth && to.matched.some(ele => ele.meta.isAuth) && !localStorage.getItem('token')) {
+        router.push({ name: 'login' })
+        return
+    }
     if(to?.meta?.title) {
         // document.title = to?.meta?.title
         useSettingsStore().setTitle(to.meta.title)

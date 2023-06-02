@@ -1,9 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { ElMessage, ElLoading  } from "element-plus";
-import { downloadFile } from "@/utils"; 
-// import { ElLoadingComponent } from "element-plus";
-// import vm from "@/main";
+import { downloadFile, toGuid } from "@/utils"; 
 
+import router from '@/router/guard' 
+// import { ElLoadingComponent } from "element-plus";
+// import vm from "@/main";  
 let loadingInstance:any = null;
 let requestNum = 0;
 
@@ -24,12 +25,24 @@ const cancelLoading = () => {
     if (requestNum === 0) loadingInstance?.close();
 };
 
+//设置唯一设备标识符 
+const setGuid = () => {
+    let guid = localStorage.getItem('guid')
+    if(!guid) {
+        guid = toGuid()
+        localStorage.setItem('guid', guid)
+    }
+    return guid
+}
+
 export const createAxiosByinterceptors = (
     config?: AxiosRequestConfig
-): AxiosInstance => {
+): AxiosInstance => { 
+    
+    config.headers.guid = setGuid()
     const instance = axios.create({
         timeout: 1000,    //超时配置
-        withCredentials: true,  //跨域携带cookie
+        withCredentials: true,  //跨域携带cookie 
         // contentType: 'application/x-www-form-urlencoded',
         ...config,   // 自定义配置覆盖基本配置
     });
@@ -38,12 +51,11 @@ export const createAxiosByinterceptors = (
     instance.interceptors.request.use(
         function (config: any) {
             // 在发送请求之前做些什么
-            // config.headers = {
-            //     ...config.headers, 
-            //     'content-type': 'application/x-www-form-urlencoded',
-            //     'appid': 10001,
-            //     'appsecret': '66f7iMFW6859I2reEiTsm7wIZQWhevpdvu2XggRIuUnH/zEbybV1fMs',
-            // }
+            config.headers = {
+                ...config.headers, 
+                token: localStorage.getItem('token'),
+                login: localStorage.getItem('login'),
+            } 
             const { loading = true } = config;
             console.log("config:", config);
             // config.headers.Authorization = vm.$Cookies.get("vue_admin_token");
@@ -65,14 +77,26 @@ export const createAxiosByinterceptors = (
             // if (loading) cancelLoading();
             cancelLoading();
             const { code, list, msg } = response.data;
-            // config设置responseType为blob 处理文件下载
+            // config设置responseType为blob 处理文件下载 
             if (response.data instanceof Blob) {
                 return downloadFile(response);
             } else {
-                if (code === 1) return response.data;
-                else if (code === 401) {
+                if (code === 1) {
+                    if(response.data.hasOwnProperty('token')) {
+                        localStorage.setItem('token', response.data.token)
+                    }
+                    if(response.data.hasOwnProperty('login')) {
+                        localStorage.setItem('login', response.data.login)
+                    }
+                    return response.data
+                }
+                else if (code === 9) {
                     // jumpLogin();
-                    console.log('401需要登陆权限 跳登录')
+                    console.log('清除token 登录过期')
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('login')
+                    ElMessage.error(msg);
+                    router.push({ name: 'login' })
                     return Promise.reject(response.data);
                 } else {
                     ElMessage.error(msg);

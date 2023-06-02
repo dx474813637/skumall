@@ -16,11 +16,11 @@
 						<el-form label-position="top" :model="formData" :rules="rules" ref="form" style="max-width: 460px"
 							:validate-on-rule-change="false">
 							<div v-show="activeName == 'account_login'">
-								<el-form-item label="账号" prop="account">
-									<el-input clearable v-model="formData.account" />
+								<el-form-item label="账号" prop="login">
+									<el-input clearable v-model="formData.login" />
 								</el-form-item>
-								<el-form-item label="密码" prop="password">
-									<el-input clearable v-model="formData.password" showPassword type="password" />
+								<el-form-item label="密码" prop="passwd">
+									<el-input clearable v-model="formData.passwd" showPassword type="password" />
 								</el-form-item>
 
 							</div>
@@ -89,11 +89,13 @@
 <script setup lang="ts">
 import Vcode from "vue3-puzzle-vcode";
 import type { TabsPaneContext, FormRules, FormInstance } from "element-plus";
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, inject } from "vue";
+// import { createLoadingComponent } from "element-plus/es/components/loading/src/loading";
+const $api: any = inject('$api')
 const activeName = ref("account_login");
 const formData = reactive({
-	account: "",
-	password: "",
+	login: "",
+	passwd: "",
 	phone: "",
 	code: "",
 });
@@ -116,14 +118,14 @@ const rules = computed<FormRules>(() => {
 	if (activeName.value == 'account_login') {
 		return {
 			...obj,
-			account: [
+			login: [
 				{
 					required: true,
 					message: '账号不得为空',
 					trigger: ['change', 'blur'],
 				}
 			],
-			password: [
+			passwd: [
 				{
 					required: true,
 					message: '密码不得为空',
@@ -185,12 +187,13 @@ async function getCodeBtn() {
 const isShow = ref(false)
 // 用户通过了验证
 function success(msg) {
+	console.log('验证通过' + msg);
+	isShow.value = false; // 通过验证后，需要手动隐藏模态框
 	if (activeName.value == 'phone_login') {
 		setCountValue()
+		return
 	}
-	isShow.value = false; // 通过验证后，需要手动隐藏模态框
-	console.log('验证通过' + msg);
-
+	login()
 }
 // 用户点击遮罩层，应该关闭模态框
 function close() {
@@ -202,6 +205,13 @@ function fail() {
 } 
 function countDownFinish() {
 	countValue.value = 0
+}
+async function login() {
+	const res = await $api.syblogin({
+		params: {
+			...formData
+		}
+	})
 }
 </script>
 <style lang="scss" scoped>
