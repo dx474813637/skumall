@@ -7,8 +7,8 @@ import axios from '@/request/index'
 import apis from '@/apis/index'
 import 'element-plus/dist/index.css' 
 const app = createApp(App)
-app.use(router)
 app.use(pinia)
+app.use(router)
 app.provide('$api', apis); 
 app.provide('$axios', axios);
 app.mount('#app')

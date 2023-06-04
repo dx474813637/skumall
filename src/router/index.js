@@ -55,8 +55,7 @@ const routes = [
     {
         path: '/user',  //:id就是动态路由匹配
         name: 'user',
-        meta: {
-            title: '用户中心',
+        meta: { 
             isAuth: true,
         },
         component: () => import('@/views/user/user.vue'),
@@ -67,6 +66,14 @@ const routes = [
             title: route.query.title
         }),
         children: [
+            {
+                path: 'index',
+                name: 'userIndex',
+                meta: {
+                    title: '用户中心', 
+                },
+                component: () => import('@/views/user/index/index.vue'),
+            },
             {
                 path: 'product_list',
                 name: 'product_list',

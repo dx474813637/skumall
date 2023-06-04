@@ -68,6 +68,7 @@
 header {
 	color: $uni-text-color-grey;
 	background: #fff;
+	border-bottom: 1px solid #f8f8f8;
 	&.header {
 		.header-top {
 			background-color: #fafafa;

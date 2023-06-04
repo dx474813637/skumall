@@ -1,5 +1,14 @@
 <template>
-    <el-form ref="formRef" :model="dynamicValidateForm" label-width="120px" :rules="rules" class="demo-dynamic">
+    <el-form 
+        ref="formRef" 
+        :model="dynamicValidateForm" 
+        label-width="120px" 
+        :rules="rules" 
+        class="demo-dynamic u-p-20"
+        label-position="top"
+        scroll-to-error
+        inline-message
+        >
         <el-form-item prop="name" label="商品名称">
             <el-input v-model="dynamicValidateForm.name" />
         </el-form-item>
@@ -61,7 +70,7 @@
                 v-model:file-list="dynamicValidateForm.description"
                 list-type="picture-card" 
                 :headers="configHeader"  
-                :http-request="function (options: UploadRequestOptions) { return upload(options, 'dynamicValidateForm.description') }"
+                :http-request="function (options: UploadRequestOptions) { return upload(options, dynamicValidateForm.description) }"
                 :before-upload="beforeUpload">
                 <el-icon>
                     <Plus />
@@ -125,8 +134,8 @@
 
         <el-form-item label="商品规格" prop="domains">
             <el-button :icon="CirclePlus" type="primary" plain @click.prevent="addDomain('')">添加新的规格</el-button>
-            <el-button :icon="Refresh" type="danger" plain @click="render"
-                v-if="dynamicValidateForm.domains.length > 0">生成价格与库存表单</el-button>
+            <el-button :icon="FolderOpened" type="warning" plain @click.prevent="addDomain('')">引用规格模板</el-button>
+            <!-- <el-button :icon="Refresh" type="danger" plain @click="render" v-if="dynamicValidateForm.domains.length > 0">生成价格与库存表单</el-button> -->
         </el-form-item>
         <el-form-item v-if="dynamicValidateForm.domains.length > 0">
             <el-tabs 
@@ -142,8 +151,17 @@
                     :key="domain.name"
                     :label="domain.label" 
                     :name="domain.name"
+                    lazy
                     >
-                     
+                    <template #label>
+                        <div class="tabs-item">
+                            <span>{{ domain.label }}</span>
+                            <el-icon class="u-m-l-5" v-show="domain.isMainKey" color="#b961ed" size="16">
+                                <i-ep-PictureFilled />
+                            </el-icon>
+                            
+                        </div>
+                    </template> 
                     <el-form-item 
                         label="" 
                         :prop="'domains.' + index + '.label'" 
@@ -162,6 +180,7 @@
                                     :name="domain.name"
                                     size="small"
                                     active-text="添加图片规格"
+                                    @change="function(val) {return mainKeyChange(val, domain, index)}" 
                                     /> 
                             </el-col>
                             
@@ -193,19 +212,19 @@
                                     </div> 
                                 </div> 
                             </div>
-                            <div class="domain2Item-upload u-m-t-8" v-show="domain.isMainKey">
+                            <div class="domain2Item-upload u-m-t-8 table-box" v-show="domain.isMainKey">
                                 <el-upload   
                                     :ref="(el) => setUploadRef(el, i, uploadRefs1)" 
                                     action="" 
                                     :class="{
-                                        limit: domainValue.files.length > 0
+                                        limit: domainValue.filesList.length == 1
                                     }"  
-                                    v-model:file-list="domainValue.files"
+                                    v-model:file-list="domainValue.filesList"
                                     list-type="picture-card" 
                                     :headers="configHeader" 
                                     :limit="1"
-                                    :on-exceed="function (files, uploadFiles) { return handlePictureExceed(files, uploadFiles, domainValue.files) }"
-                                    :http-request="function (options: UploadRequestOptions) { return upload(options, domainValue.files) }"
+                                    :on-exceed="function (files, uploadFiles) { return handlePictureExceed(files, uploadFiles, domainValue.filesList) }"
+                                    :http-request="function (options: UploadRequestOptions) { return upload(options, domainValue.filesList) }"
                                     :before-upload="beforeUpload"> 
                                     <el-icon size="16">
                                         <Plus />
@@ -239,81 +258,146 @@
                     </div>  
                 </el-tab-pane>
             </el-tabs>
-        </el-form-item>
-        <el-form-item v-for="(domains2Price, index) in dynamicValidateForm.domains2Price" :key="index">
-            <div class="domains2Price-rows">
-                <div class="item ">
-                    <el-upload 
-                        :ref="(el) => setUploadRef(el, index, uploadRefs2)" 
-                        action="" 
-                        :class="{
-                            limit: domains2Price.img
-                        }"  
-                        v-model:file-list="domains2Price.fileList"
-                        list-type="picture-card" 
-                        :headers="configHeader" 
-                        :limit="1"
-                        :on-exceed="function (files, uploadFiles) { return handlePictureExceed(files, uploadFiles, domains2Price.files) }"
-                        :http-request="function (options: UploadRequestOptions) { return upload(options, `domains2Price.${index}.files`) }"
-                        :before-upload="beforeUpload">
-                        <el-icon>
-                            <Plus />
-                        </el-icon>
+        </el-form-item> 
+        <el-form-item label="价格与库存" prop="domains2Price" >
+            <el-table
+                :data="dynamicValidateForm.domains2Price"
+                :span-method="objectSpanMethod"
+                border
+                style="width: 100% " 
+                max-height="60vh"
+                > 
+                <el-table-column 
+                    width="240"
+                    v-for="item in dynamicValidateForm.domains"
+                    :key="item.name"
+                    :prop="item.label" 
+                    :label="item.label"
+                    />
+                <el-table-column label="预览图" width="80px" fixed="right" >
+                    <template #default="{ row, $index }">
+                        <div class="table-box">
+                            <el-upload 
+                                :ref="(el) => setUploadRef(el, $index, uploadRefs2)" 
+                                action="" 
+                                :class="{
+                                    limit: row.filesList.length == 1
+                                }"  
+                                v-model:file-list="row.filesList"
+                                list-type="picture-card" 
+                                :headers="configHeader" 
+                                :limit="1"
+                                :on-exceed="function (files, uploadFiles) { return handlePictureExceed(files, uploadFiles, row.filesList) }"
+                                :http-request="function (options: UploadRequestOptions) { return upload(options, row.filesList) }"
+                                :before-upload="beforeUpload">
+                                <el-icon>
+                                    <Plus />
+                                </el-icon>
 
-                        <template #file="{ file }">
-                            <div>
-                                <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-                                <span class="el-upload-list__item-actions">
-                                    <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-                                        <el-icon><zoom-in /></el-icon>
-                                    </span>
-                                    <span v-if="!disabled" class="el-upload-list__item-delete"
-                                        @click="handleRemove(file, index, uploadRefs2)">
-                                        <el-icon>
-                                            <Delete />
-                                        </el-icon>
-                                    </span>
-                                </span>
+                                <template #file="{ file }">
+                                    <div>
+                                        <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+                                        <span class="el-upload-list__item-actions">
+                                            <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                                                <el-icon><zoom-in /></el-icon>
+                                            </span>
+                                            <span v-if="!disabled" class="el-upload-list__item-delete"
+                                                @click="handleRemove(file, $index, uploadRefs2)">
+                                                <el-icon>
+                                                    <Delete />
+                                                </el-icon>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </template>
+                            </el-upload>
+                        </div>
+                        
+                    </template>
+                    
+                </el-table-column>
+                <el-table-column prop="price" label="价格" fixed="right" width="150" >
+                    <template #header >
+                        <div class="u-flex">
+                            <div class="item" style="white-space: nowrap;">价格</div>
+                            <div class="item u-m-l-5" v-show="!quickEditForm.price.show">
+                                <el-button type="warning" plain size="small" link @click="() => {quickEditForm.price.show = true}">
+                                    <div class="u-flex">
+                                        <i-ep-Edit />
+                                        <span >批量编辑</span>
+                                    </div>
+                                </el-button>
                             </div>
-                        </template>
-                    </el-upload>
-                </div>
-                <div class="item u-flex-1 u-p-l-10" style="flex: 0 0 calc(100% - 65px)">
-                    <el-row style="width: 100%;" :gutter="10">
-                        <el-col :span="24">
-                            <span v-for="(ele, i) in dynamicValidateForm.domains" :key="i" class="u-p-r-10">
-                                {{ `【${ele.label}】${domains2Price.sku[ele.label]}` }}
-                            </span>
-
-                        </el-col>
-                    </el-row>
-                    <el-row style="width: 100%;" :gutter="10">
-                        <el-col :span="12">
-                            <el-form-item :prop="'domains2Price.' + index + '.price'" :rules="{
+                            <div class="item u-p-l-5 u-p-r-5 u-flex" v-show="quickEditForm.price.show">
+                                <el-input size="small" v-model="quickEditForm.price.value" style="max-width: 80px; min-width: 50px" />
+                                <div class="u-m-l-5">
+                                    <el-button type="success" size="small" link  @click="quickEdit('price')">
+                                        <i-ep-Select />
+                                    </el-button>
+                                </div>
+                                <div class="u-m-l-5"> 
+                                    <el-button type="danger" size="small" link  @click="() => {quickEditForm.price.show = false}">
+                                        <i-ep-CloseBold />
+                                    </el-button>
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                        
+                    </template>
+                    <template #default="{ row, $index }">
+                        <el-form-item :prop="'domains2Price.' + $index + '.price'" :rules="{
                                 required: true,
                                 message: '价格不能为空',
                                 trigger: 'blur',
                             }">
-                                <el-input v-model="domains2Price.price" placeholder="价格">
-                                    <template #prepend>价格</template>
-                                </el-input>
+                                <el-input v-model="row.price" placeholder="价格" />
                             </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item :prop="'domains2Price.' + index + '.stock'" :rules="{
+                    </template>
+                </el-table-column>
+                <el-table-column prop="stock" label="库存" fixed="right" width="150" >
+                    <template #header >
+                        <div class="u-flex">
+                            <div class="item" style="white-space: nowrap;">库存</div>
+                            <div class="item u-m-l-5" v-show="!quickEditForm.stock.show">
+                                <el-button type="warning" plain size="small" link @click="() => {quickEditForm.stock.show = true}">
+                                    <div class="u-flex">
+                                        <i-ep-Edit />
+                                        <span >批量编辑</span>
+                                    </div>
+                                </el-button>
+                            </div>
+                            <div class="item u-m-l-5 u-flex" v-show="quickEditForm.stock.show">
+                                <el-input size="small" v-model="quickEditForm.stock.value" style="max-width: 80px; min-width: 50px" />
+                                <div class="u-m-l-5">
+                                    <el-button type="success" size="small" link  @click="quickEdit('stock')">
+                                        <i-ep-Select />
+                                    </el-button>
+                                </div>
+                                <div class="u-m-l-5"> 
+                                    <el-button type="danger" size="small" link  @click="() => {quickEditForm.stock.show = false}">
+                                        <i-ep-CloseBold />
+                                    </el-button>
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                        
+                    </template>
+                    <template #default="{ row, $index }">
+                        <el-form-item :prop="'domains2Price.' + $index + '.stock'" :rules="{
                                 required: true,
                                 message: '库存不能为空',
                                 trigger: 'blur',
                             }">
-                                <el-input v-model="domains2Price.stock" placeholder="库存">
-                                    <template #prepend>库存</template>
-                                </el-input>
+                                <el-input v-model="row.stock" placeholder="库存" />
                             </el-form-item>
-                        </el-col>
-                    </el-row>
-                </div>
-            </div>
+                    </template>
 
+                </el-table-column>
+            </el-table>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm(formRef)">发布</el-button>
@@ -327,17 +411,16 @@
 </template>
   
 <script lang="ts" setup>
-import { reactive, ref, inject, toRefs  } from 'vue'
+import { reactive, ref, inject, toRefs, watch  } from 'vue'
 import { genFileId, ElMessage } from 'element-plus'
-import type { FormInstance, UploadFile, UploadRequestOptions, UploadRawFile, UploadProps, FormRules } from 'element-plus'
+import type { FormInstance, UploadFile, UploadRequestOptions, UploadRawFile, UploadProps, FormRules, TableColumnCtx  } from 'element-plus'
 import {
-    CloseBold,
-    Delete, Plus, ZoomIn, CirclePlus, Refresh, Switch
+    Delete, Plus, ZoomIn, CirclePlus, FolderOpened 
 } from '@element-plus/icons-vue'
 import { baseStore } from '@/stores/main'
 import { cateStore } from '@/stores/cate'
 import toSpecPrices from '@/utils/toSpecPrices' 
-import { deepClone } from '@/utils'
+import { deepClone } from '@/utils' 
 const { configHeader } = baseStore()
 const cate = cateStore()
 const { cate_list } = toRefs(cate)
@@ -454,9 +537,60 @@ const rules = reactive<FormRules>({
             message: '商品规格不能为空',
             trigger: ['change', 'blur'],
         }
+    ],
+    domains2Price: [
+        {
+            required: true,
+            message: '价格库存表不能为空',
+            trigger: ['change', 'blur'],
+        }
     ]
 })
+const quickEditForm = reactive({
+    price: {
+        show: false,
+        value: ''
+    },
+    stock: {
+        show: false,
+        value: ''
+    },
+})
 
+watch(
+    () => dynamicValidateForm.domains,
+    (newVal, oldVal) => {
+        console.log('深度');
+        render()
+    },
+    {deep: true}
+)
+
+interface SpanMethodProps {
+//   row: User
+//   column: TableColumnCtx<any>
+  rowIndex: number
+  columnIndex: number
+}
+const objectSpanMethod = ({ 
+  rowIndex,
+  columnIndex,
+}: SpanMethodProps) => {
+  if (columnIndex === 0) {  
+    let len = dynamicValidateForm.domains.slice(1).reduce((sum, item) => sum * item.values.length, 1) 
+    if (rowIndex % len === 0) {
+      return {
+        rowspan: len,
+        colspan: 1,
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0,
+      }
+    }
+  }
+} 
 let domainIndex = 0
 const domainsTabsValue = ref('')
 // const domainsTabs:Array<any> = ref([]) 
@@ -511,7 +645,7 @@ const addDomain = (index: string | undefined) => {
         item.valuesIndex += 1;
         (dynamicValidateForm.domains as any)[index].values.push({ 
             value: `自定义规格值${item.name}-${item.valuesIndex}`,
-            files: [],
+            filesList: [],
             key: item.valuesIndex,
             parentKey: item.key
         })
@@ -525,7 +659,7 @@ const addDomain = (index: string | undefined) => {
             values: [
                 {
                     value: `自定义规格值${domainIndex}-1`,
-                    files: [],
+                    filesList: [],
                     key: 1,
                     parentKey: domainIndex
                 }
@@ -566,7 +700,7 @@ async function upload(param: any , propName) {
     const res = await $api.upimg(formData)
     // console.log(res)
     if (res.code == 1) {
-        propName[0].url = res.list[0];  
+        propName[propName.length - 1].url = res.list[0];  
         ElMessage.success('图片上传成功')
         return true
     }
@@ -578,8 +712,8 @@ const handleRemove = (file: UploadFile, index: string, propName ) => {
         propName[index].clearFiles(); 
     }else {
         console.log(file)
-        let i = propName.findIndex(ele => ele.url == file.url)
-        dynamicValidateForm.pic.splice(i, 1)
+        let i = dynamicValidateForm[propName].findIndex(ele => ele.url == file.url)
+        dynamicValidateForm[propName].splice(i, 1)
     }
     ElMessage.success('图片移除成功')
 }
@@ -641,26 +775,45 @@ const resetForm = (formEl: FormInstance | undefined) => {
 function render() {
     dynamicValidateForm.domains2Price = [];
     uploadRefs2 = []
-    let arr = dynamicValidateForm.domains.map(ele => {
+    let index = -1
+    let arr = dynamicValidateForm.domains.map((ele, i) => {
         return ele.values.map(item => {
-            return {
+            let base =  {
                 value: item.value,
-                title: ele.label
+                title: ele.label,
+                key: item.key,
+                parentKey: item.parentKey, 
             }
+            if(ele.isMainKey) {
+                index = i
+                base.filesList = item.filesList
+            }
+            return base
         })
-    })
+    }) 
+    // if(index != -1) { 
+    //     let item = deepClone(arr[index])
+    //     arr.splice(index, 1)
+    //     arr.unshift(item)
+    // }
     let SpecPrices: any = [];
     let SpecPricesItem = {};
+    console.log(arr)
     toSpecPrices(arr, 0, SpecPrices, SpecPricesItem)
-    // console.log(SpecPrices)
+    console.log(SpecPrices)
     dynamicValidateForm.domains2Price = SpecPrices.map((ele: any) => {
-        return {
-            sku: ele,
-            img: "",
-            fileList: [],
+        let base =  {
+            sku: ele, 
+            ...ele,
+            filesList: [],
             stock: 0,
             price: 0,
+            keys: ele.keys.join('|'), 
         }
+        if(ele.hasOwnProperty('filesList')) {
+            base.filesList = ele.filesList
+        }
+        return base
     })
     console.log(dynamicValidateForm)
 }
@@ -678,12 +831,19 @@ function formParams2apiParams() {
     formParams.pic = formParams.pic.map(ele => ele.url).join('|')
     formParams.description = formParams.description.map(ele => ele.url).join('|')
     formParams.cate = formParams.cate[formParams.cate.length - 1]
-    formParams.spec_prices = JSON.stringify(formParams.domains2Price.map(ele => {
-        ele.fileList = ''
-        return {
-            ...ele
+    let tar = formParams.domains2Price.map(ele => { 
+        let obj = {
+            sku: deepClone(ele.sku),
+            img: ele.filesList[0].url,
+            stock: ele.stock,
+            price: ele.price,
         }
-    }))
+        delete obj.sku.filesList 
+        delete obj.sku.keys 
+        return obj
+    })
+    console.log(tar)
+    formParams.spec_prices = JSON.stringify(tar)
     formParams.specs = formParams.domains.map(ele => {
         let right = ele.values.map(item => item.value).join(',')
         return `${ele.label}|${right}`
@@ -693,6 +853,29 @@ function formParams2apiParams() {
     return formParams
 }
 
+function mainKeyChange(value, domain, index) {
+    // console.log(value, domain)
+    if(value && dynamicValidateForm.domains.length != 1 ) {  
+        dynamicValidateForm.domains.forEach((ele,index) => {
+            if(domain.key != ele.key) { 
+                ele.isMainKey = false
+            }
+        })
+        if(index>0) {
+            dynamicValidateForm.domains.splice(index, 1)
+            setTimeout(() => {
+                dynamicValidateForm.domains.unshift(domain) 
+            }, 0)
+        }
+        
+       
+    }
+    // console.log(dynamicValidateForm.domains)
+}
+function quickEdit(key) {
+    dynamicValidateForm.domains2Price.forEach(ele => ele[key] = quickEditForm[key].value)
+    quickEditForm[key].show = false
+}
 </script>
   
 <style lang='scss' scoped>
@@ -702,13 +885,37 @@ function formParams2apiParams() {
 }
 
 ::v-deep {
+    .el-table {
+        // --el-table-border-color: #dcdfe6;
+        thead tr th{
+            border-color: #dcdfe6;
+        }
+    }
+    .el-tabs--border-card>.el-tabs__header {
+        border-radius: 5px 5px 0 0;
+    }
+    .el-tabs--border-card {
+        border-radius: 5px;
+    }
+    .el-form-item__label {
+        font-weight: bold;
+        font-size: 15px;
+    }
     .el-upload--picture-card {
         --el-upload-picture-card-size: 65px;
         // background-color: var(--el-color-primary-light-9);
     }
 
-    .limit .el-upload--picture-card {
-        display: none;
+    .limit {
+        .el-upload--picture-card {
+            display: none;
+        }
+        .el-upload-list--picture-card {
+            display: flex;
+        }
+        .el-upload-list--picture-card .el-upload-list__item {
+            margin: 0
+        }
     }
 
     .el-upload-list--picture-card .el-upload-list__item {
@@ -717,6 +924,19 @@ function formParams2apiParams() {
     }
 
 }
+.table-box {
+    ::v-deep {
+        .el-upload--picture-card { 
+            --el-upload-picture-card-size: 55px;
+        }
+        .el-upload-list--picture-card .el-upload-list__item {
+            --el-upload-list-picture-card-size: 55px;
+        }
+        .el-upload-list--picture-card .el-upload-list__item-actions span+span {
+            margin-left: 8px
+        }
+    }
+} 
 .domain2Item-box {
     @include flex(x, start, start);
     flex-wrap: wrap;

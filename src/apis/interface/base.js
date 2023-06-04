@@ -56,5 +56,5 @@ export const save_product = (data, config) => axios.post('Userapi/save_product',
 //     }
 // ]
 
-// save_stock 保存某一个规格的库存和价格 参数id 库存id stock price img
+// 弃用 save_stock 保存某一个规格的库存和价格 参数id 库存id stock price img
 export const save_stock = (data) => axios.get('Userapi/save_stock', data) 

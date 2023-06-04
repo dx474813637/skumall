@@ -1,12 +1,13 @@
 @charset "utf-8";
 @import "@/styles/variable.scss";
+@import "@/styles/flex.scss";
 // 变量存储
 // 字体Unicode编码 微软雅黑:\5FAE\8F6F\96C5\9ED1 , 宋体:\5B8B\4F53
 $pcFont: '\5FAE\8F6F\96C5\9ED1', '\5B8B\4F53', arial;
 $defaultColor: #333;
 $mobileFont: 'Helvetica Neue', Helvetica, STHeiTi, Microsoft YaHei, sans-serif, Microsoft JhengHei, Arial;
 $browser: null;
-
+ 
 .home-w {
     max-width: $home-w-max;
     margin: 0 auto;
@@ -27,30 +28,6 @@ $browser: null;
     box-sizing:border-box;
 }
 
-//  flex布局
-$flex-params: (
-	x: row,
-	y: column,
-	start: flex-start,
-	center: center,
-	end: flex-end,
-	baseline: baseline,
-	around: space-around,
-	between: space-between,
-);
- 
-@mixin flex($coor:null, $justify: start, $alignItems: center) {
-	display: flex;
-	@if $coor {
-		flex-direction: map-get($flex-params, $coor);
-	}
-	@if $justify {
-		justify-content: map-get($flex-params, $justify);
-	}
-	@if $alignItems {
-		align-items: map-get($flex-params, $alignItems);
-	}
-} 
 // 绝对居中
 @mixin center($width, $height) {
     position: absolute;

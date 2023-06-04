@@ -90,6 +90,10 @@
 import Vcode from "vue3-puzzle-vcode";
 import type { TabsPaneContext, FormRules, FormInstance } from "element-plus";
 import { ref, reactive, computed, inject } from "vue";
+import { ElMessage } from "element-plus";
+import {useSettingsStore} from '@/stores/settings'
+const useSettings = useSettingsStore()
+// console.log(router)
 // import { createLoadingComponent } from "element-plus/es/components/loading/src/loading";
 const $api: any = inject('$api')
 const activeName = ref("account_login");
@@ -212,6 +216,10 @@ async function login() {
 			...formData
 		}
 	})
+	if(res.code == 1) {
+		ElMessage.success('登录成功')
+		useSettings.loginSuccessRoute()
+	}
 }
 </script>
 <style lang="scss" scoped>

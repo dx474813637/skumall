@@ -1,0 +1,195 @@
+
+//  flex布局
+$flex-params: (
+	x: row,
+	y: column,
+	start: flex-start,
+	center: center,
+	end: flex-end,
+	baseline: baseline,
+	around: space-around,
+	between: space-between,
+);
+ 
+@mixin flex($coor:x, $justify: start, $alignItems: center) {
+	display: flex;
+	@if $coor {
+		flex-direction: map-get($flex-params, $coor);
+	}
+	@if $justify {
+		justify-content: map-get($flex-params, $justify);
+	}
+	@if $alignItems {
+		align-items: map-get($flex-params, $alignItems);
+	}
+} 
+.u-flex,
+.u-flex-row,
+.u-flex-x {
+	@include flex;
+}
+
+.u-flex-y,
+.u-flex-column {
+	@include flex(y);
+}
+
+.u-flex-x-center {
+	@include flex(x, center); 
+}
+
+.u-flex-xy-center {
+	@include flex(x, center, center); 
+}
+
+.u-flex-y-center {
+	@include flex(x, start, center); 
+}
+
+.u-flex-x-left {
+	@include flex(x, start, start); 
+}
+
+.u-flex-x-reverse,
+.u-flex-row-reverse {
+	flex-direction: row-reverse;
+}
+
+.u-flex-y-reverse,
+.u-flex-column-reverse {
+	flex-direction: column-reverse;
+}
+
+// 换行
+.u-flex-wrap {
+	flex-wrap: wrap;
+}
+
+// 反向换行
+.u-flex-wrap-reverse {
+	flex-wrap: wrap-reverse;
+}
+
+// 主轴起点对齐
+.u-flex-start {
+	justify-content: flex-start
+}
+
+// 主轴中间对齐
+.u-flex-center {
+	justify-content: center
+}
+
+// 主轴终点对齐
+.u-flex-end {
+	justify-content: flex-end
+}
+
+// 主轴等比间距
+.u-flex-between {
+	justify-content: space-between
+}
+
+// 主轴均分间距
+.u-flex-around {
+	justify-content: space-around
+}
+
+// 交叉轴起点对齐
+.u-flex-items-start {
+	align-items: flex-start
+}
+
+// 交叉轴中间对齐
+.u-flex-items-center {
+	align-items: center
+}
+
+// 交叉轴终点对齐
+.u-flex-items-end {
+	align-items: flex-end
+}
+
+// 交叉轴第一行文字基线对齐
+.u-flex-items-baseline {
+	align-items: baseline
+}
+
+// 交叉轴方向拉伸对齐
+.u-flex-items-stretch {
+	align-items: stretch
+}
+
+
+// 以下属于项目(子元素)的类
+
+// 子元素交叉轴起点对齐
+.u-flex-self-start {
+	align-self: flex-start
+}
+
+// 子元素交叉轴居中对齐
+.u-flex-self-center {
+	align-self: center
+}
+
+// 子元素交叉轴终点对齐
+.u-flex-self-end {
+	align-self: flex-end
+}
+
+// 子元素交叉轴第一行文字基线对齐
+.u-flex-self-baseline {
+	align-self: baseline
+}
+
+// 子元素交叉轴方向拉伸对齐
+.u-flex-self-stretch {
+	align-self: stretch
+}
+
+// 多轴交叉时的对齐方式
+
+// 起点对齐
+.u-flex-content-start {
+	align-content: flex-start
+}
+
+// 居中对齐
+.u-flex-content-center {
+	align-content: center
+}
+
+// 终点对齐
+.u-flex-content-end {
+	align-content: flex-end
+}
+
+// 两端对齐
+.u-flex-content-between {
+	align-content: space-between
+}
+
+// 均分间距
+.u-flex-content-around {
+	align-content: space-around
+}
+
+// 全部居中对齐
+.u-flex-middle {
+	justify-content: center;
+	align-items: center;
+	align-self: center;
+	align-content: center
+}
+
+// 是否可以放大
+.u-flex-grow {
+	flex-grow: 1
+}
+
+// 是否可以缩小
+.u-flex-shrink {
+	flex-shrink: 1
+}
+

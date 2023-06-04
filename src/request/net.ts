@@ -2,7 +2,9 @@ import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { ElMessage, ElLoading  } from "element-plus";
 import { downloadFile, toGuid } from "@/utils"; 
 
-import router from '@/router/guard' 
+import router from "@/router/guard" 
+import {useSettingsStore} from '@/stores/settings'
+const useSettings = useSettingsStore()
 // import { ElLoadingComponent } from "element-plus";
 // import vm from "@/main";  
 let loadingInstance:any = null;
@@ -57,7 +59,7 @@ export const createAxiosByinterceptors = (
                 login: localStorage.getItem('login'),
             } 
             const { loading = true } = config;
-            console.log("config:", config);
+            // console.log("config:", config);
             // config.headers.Authorization = vm.$Cookies.get("vue_admin_token");
             if (loading) addLoading();
             return config;
@@ -72,7 +74,7 @@ export const createAxiosByinterceptors = (
     instance.interceptors.response.use(
         function (response) {
             // 对响应数据做点什么
-            console.log("response:", response);
+            // console.log("response:", response);
             // const { loading = true } = response.config;
             // if (loading) cancelLoading();
             cancelLoading();
@@ -96,7 +98,8 @@ export const createAxiosByinterceptors = (
                     localStorage.removeItem('token')
                     localStorage.removeItem('login')
                     ElMessage.error(msg);
-                    router.push({ name: 'login' })
+                    useSettings.goLogin()
+                    useSettings.setPrevPage(router.currentRoute.value)
                     return Promise.reject(response.data);
                 } else {
                     ElMessage.error(msg);

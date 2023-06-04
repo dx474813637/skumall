@@ -1,6 +1,7 @@
 // import defaultSettings from '@/settings'
 import { useDynamicTitle } from '@/utils/dynamicTitle'
 import {defineStore} from "pinia";
+import router from "@/router/guard" 
  
 // const { dynamicTitle } = defaultSettings
  
@@ -10,6 +11,7 @@ export const useSettingsStore = defineStore(
     'settings',
     {
         state: () => ({
+            loginToPage: null,
             title: '',
             dynamicTitle: storageSetting.dynamicTitle === undefined ? import.meta.env.VITE_APP_TITLE : storageSetting.dynamicTitle
         }),
@@ -18,7 +20,28 @@ export const useSettingsStore = defineStore(
             setTitle(title) {
                 this.title = title
                 useDynamicTitle();
-            }
+            },
+            goLogin() {
+                router.push({ name: 'login' }) 
+            },
+            setPrevPage(route) { 
+                this.loginToPage = route 
+            }, 
+            loginSuccessRoute() { 
+                if(this.loginToPage) {
+                    router.push({ 
+                        name: this.loginToPage.name, 
+                        params: this.loginToPage.params 
+                    })  
+                } else {
+                    router.push({ 
+                        name: 'user', 
+                        params: {} 
+                    }) 
+                }
+                this.loginToPage = null
+                
+            }, 
         }
     })
  
