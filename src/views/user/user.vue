@@ -5,11 +5,41 @@
 		<div class="home-w u-flex u-flex-items-start u-p-t-15 u-p-b-15">
 			<div class="item item-menus u-radius-5 u-p-5">
 				<el-menu
-					default-active="2"
+					:default-active="menuActive"
 					class="el-menu-vertical-demo"
 					@open="handleOpen"
 					@close="handleClose"
 				>
+					<template  v-for="item in menuListRef" >
+						<el-sub-menu  v-if="item.children && item.children.length > 0" :index="item.index" :key="item.index">
+							<template #title>
+								<i class="custom-icon" :class="item.icon" v-if="item.icon" ></i>
+								<span class="menu-title" slot="title">{{item.label}}</span>
+							</template>
+							<el-menu-item v-for="ele in item.children" :index="ele.index" :key="ele.index">
+								
+								<!-- <i class="custom-icon" :class="ele.icon" v-if="ele.icon" ></i>
+								<span slot="title">{{ele.label}}</span> -->
+								
+								<view class="u-flex u-row-between" slot="title">
+									<view class="item-left">
+										<i class="custom-icon" :class="ele.icon" v-if="ele.icon" ></i>
+										<span>{{ele.label}}</span>
+									</view>
+									<!-- <view class="item-right">
+										<template v-if="ele.active == 'cart'">
+											<text class="num" v-if="cartNumTotal > 0">{{cartNumTotal}}</text>
+										</template>
+										
+									</view> -->
+								</view>
+							</el-menu-item>
+						</el-sub-menu>
+						<el-menu-item v-else :index="item.index" :key="item.index">
+							<i class="custom-icon" :class="item.icon" v-if="item.icon" ></i>
+							<span slot="title">{{item.label}}</span>
+						</el-menu-item>
+					</template>
 					<el-sub-menu index="1">
 						<template #title>
 							<el-icon><location /></el-icon>
@@ -52,12 +82,15 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import menuList from "@/utils/menuList"
 import {
 	Document,
 	Menu as IconMenu,
 	Location,
 	Setting,
 } from "@element-plus/icons-vue"; 
+const menuListRef = ref(menuList)
+const menuActive = ref('')
 const handleOpen = (key: string, keyPath: string[]) => {
 	console.log(key, keyPath);
 };

@@ -70,7 +70,7 @@ const routes = [
                 path: 'index',
                 name: 'userIndex',
                 meta: {
-                    title: '用户中心', 
+                    title: '个人中心', 
                 },
                 component: () => import('@/views/user/index/index.vue'),
             },

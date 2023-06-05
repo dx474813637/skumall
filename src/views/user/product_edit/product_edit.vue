@@ -132,13 +132,22 @@
             </el-radio-group>
         </el-form-item>
 
-        <el-form-item label="商品规格" prop="domains">
-            <el-button :icon="CirclePlus" type="primary" plain @click.prevent="addDomain('')">添加新的规格</el-button>
-            <el-button :icon="FolderOpened" type="warning" plain @click.prevent="addDomain('')">引用规格模板</el-button>
-            <!-- <el-button :icon="Refresh" type="danger" plain @click="render" v-if="dynamicValidateForm.domains.length > 0">生成价格与库存表单</el-button> -->
-        </el-form-item>
-        <el-form-item v-if="dynamicValidateForm.domains.length > 0">
+        <el-form-item label="商品规格" prop="domains"> 
+            <div class="u-flex u-flex-between u-m-b-15" style="width: 100%;">
+                <div class="u-flex">
+                    <el-button :icon="CirclePlus" type="primary" plain @click.prevent="addDomain('')">添加新的规格</el-button>
+                    <el-button :icon="FolderOpened" type="warning" plain @click.prevent="addDomain('')">引用规格模板</el-button>
+                </div> 
+                <div >
+                    <el-text type="warning" tag="i">
+                        <el-icon class="u-p-r-5"><i-ep-Warning /></el-icon>
+                        商品规格的增删会对价格与库存表格数据初始化！
+                    </el-text>
+                </div>
+            </div>
+            
             <el-tabs 
+                v-if="dynamicValidateForm.domains.length > 0"
                 v-model="domainsTabsValue" 
                 type="border-card" 
                 class="demo-tabs" 
@@ -172,7 +181,7 @@
                         }">
                         <el-row style="width: 100%;" :gutter="10">
                             <el-col :span="8"> 
-                                <el-input v-model="domain.label" placeholder="输入自定义规格名" /> 
+                                <el-input v-model="domain.label" placeholder="输入自定义规格名" @blur="render({prop: 'text', positionArr: [index, -1]})" /> 
                             </el-col>
                             <el-col :span="8">
                                 <el-switch 
@@ -199,7 +208,7 @@
                                             message: '规格值不能为空',
                                             trigger: 'blur',
                                         }">
-                                         <el-input v-model="domainValue.value" placeholder="输入规格值" />
+                                         <el-input v-model="domainValue.value" placeholder="输入规格值" @blur="render({prop: 'text', positionArr: [index, i]})" />
                                     </el-form-item>
 
                                    
@@ -224,7 +233,7 @@
                                     :headers="configHeader" 
                                     :limit="1"
                                     :on-exceed="function (files, uploadFiles) { return handlePictureExceed(files, uploadFiles, domainValue.filesList) }"
-                                    :http-request="function (options: UploadRequestOptions) { return upload(options, domainValue.filesList) }"
+                                    :http-request="function (options: UploadRequestOptions) { return upload(options, domainValue.filesList, i) }"
                                     :before-upload="beforeUpload"> 
                                     <el-icon size="16">
                                         <Plus />
@@ -238,7 +247,7 @@
                                                     <el-icon><zoom-in /></el-icon>
                                                 </span>
                                                 <span v-if="!disabled" class="el-upload-list__item-delete"
-                                                    @click="handleRemove(file, i, uploadRefs1)">
+                                                    @click="handleRemove(file, i, uploadRefs1, dynamicValidateForm.domains[0].values[i], true)">
                                                     <el-icon>
                                                         <Delete />
                                                     </el-icon>
@@ -302,7 +311,7 @@
                                                 <el-icon><zoom-in /></el-icon>
                                             </span>
                                             <span v-if="!disabled" class="el-upload-list__item-delete"
-                                                @click="handleRemove(file, $index, uploadRefs2)">
+                                                @click="handleRemove(file, $index, uploadRefs2, row)">
                                                 <el-icon>
                                                     <Delete />
                                                 </el-icon>
@@ -555,16 +564,22 @@ const quickEditForm = reactive({
         show: false,
         value: ''
     },
-})
-
+})  
+let uploadImgIndex = ref(-1)
 watch(
-    () => dynamicValidateForm.domains,
+    () => [ 
+        // ...dynamicValidateForm.domains.map(ele => ele.label) ,
+        // ...dynamicValidateForm.domains.map(ele => ele.values.map(item => item.value)) 
+        ...dynamicValidateForm.domains.map(ele => ele.valuesIndex) 
+    ],
     (newVal, oldVal) => {
-        console.log('深度');
-        render()
+        console.log('deep watch; render valuesIndex' );
+        render({type: 'all'})
     },
-    {deep: true}
-)
+    {
+        deep: true
+    }
+)  
 
 interface SpanMethodProps {
 //   row: User
@@ -612,14 +627,15 @@ interface Domain2PricesItem {
 }
 const setUploadRef = (el: any, index: string, prop) => {
     if (el) { 
-        prop[index] = el
+        prop[index] = el 
     }
 }
 const removeDomain = (item: DomainItem, index: string | undefined) => {
     if (index) {
         const i = (dynamicValidateForm.domains as any)[index].values.indexOf(item)
         if (i !== -1) {
-            (dynamicValidateForm.domains as any)[index].values.splice(i, 1)
+            (dynamicValidateForm.domains as any)[index].values.splice(i, 1);
+            (dynamicValidateForm.domains as any)[index].valuesIndex --
         }
     }
     else {
@@ -648,7 +664,7 @@ const addDomain = (index: string | undefined) => {
             filesList: [],
             key: item.valuesIndex,
             parentKey: item.key
-        })
+        }) 
     }
     else {
         // addTab('')
@@ -692,24 +708,31 @@ const removeTab = (targetName: string) => {
     domainsTabsValue.value = activeName
     dynamicValidateForm.domains = tabs.filter((tab) => tab.name !== targetName)
 }
-async function upload(param: any , propName) {
-    // console.log(index)
-    // console.log(param, index)
+async function upload(param: any , propName, index:any) {
+    // console.log(propName) 
     const formData = new FormData()
     formData.append('file', param.file)
     const res = await $api.upimg(formData)
     // console.log(res)
     if (res.code == 1) {
+        if(typeof index != 'undefined') {
+            uploadImgIndex.value = index
+            render({prop:'img', positionArr: [0, index]})
+        }
         propName[propName.length - 1].url = res.list[0];  
         ElMessage.success('图片上传成功')
         return true
     }
     return false
 }
-const handleRemove = (file: UploadFile, index: string, propName ) => {
-    // console.log(uploadRefs[index])
+const handleRemove = (file: UploadFile, index: string, propName, propName2, quick = false ) => { 
     if(typeof(index) != "undefined") {
         propName[index].clearFiles(); 
+        propName2.filesList = []
+        if(quick) {
+            uploadImgIndex.value = +index
+            render({prop:'img', positionArr: [0, index]})
+        }
     }else {
         console.log(file)
         let i = dynamicValidateForm[propName].findIndex(ele => ele.url == file.url)
@@ -772,49 +795,84 @@ const resetForm = (formEl: FormInstance | undefined) => {
     formEl.resetFields()
 }
 
-function render() {
-    dynamicValidateForm.domains2Price = [];
-    uploadRefs2 = []
-    let index = -1
-    let arr = dynamicValidateForm.domains.map((ele, i) => {
-        return ele.values.map(item => {
+function render({type, prop, positionArr}={} ) {  
+    console.log(type, prop, positionArr)
+    if(type != 'all') {  
+        let item = dynamicValidateForm.domains[positionArr[0]]
+        if(positionArr[1] == -1) { 
+            console.log(1)
+            let keys = dynamicValidateForm.domains[positionArr[0]].values.map(ele => `${ele.parentKey},${ele.key}`) 
+            console.log(keys)
+            dynamicValidateForm.domains2Price.forEach((ele, i) => { 
+                if(prop == 'text') {
+                    let keysIndex = -1
+                    keysIndex = keys.findIndex(item => ele.keys.includes(item))
+                    let keys2 = keys[keysIndex].slice(-1)
+                    let value = dynamicValidateForm.domains[positionArr[0]].values.filter(item => item.key == keys2)[0].value
+                    ele[dynamicValidateForm.domains[positionArr[0]].label] = value
+                    console.log(value)
+                }
+                
+            })
+        }else {
+            item = item.values[positionArr[1]]
+            let keystr = `${item.parentKey},${item.key}` 
+            let textIndex 
+            dynamicValidateForm.domains2Price.forEach((ele, index) => {
+                if(ele.keys.includes(keystr)) {
+                    if(prop == 'text') {
+                        // ele.label = item.value 
+                        ele[dynamicValidateForm.domains[positionArr[0]].label] = item.value 
+                        ele.sku[dynamicValidateForm.domains[positionArr[0]].label] = item.value 
+                    }
+                    if(prop == 'img') {
+                        ele.filesList = item.filesList
+                    }
+                    
+                }
+            }) 
+        }
+        
+ 
+        
+    }
+    else { 
+        dynamicValidateForm.domains2Price = [];
+        // uploadRefs2 = [] 
+        let arr = dynamicValidateForm.domains.map((ele, i) => {
+            return ele.values.map(item => {
+                let base =  {
+                    value: item.value,
+                    title: ele.label,
+                    key: item.key,
+                    parentKey: item.parentKey, 
+                }
+                if(ele.isMainKey) {  
+                    base.filesList = item.filesList 
+                }
+                return base
+            })
+        })  
+        let SpecPrices: any = [];
+        let SpecPricesItem = {};
+        console.log(arr)
+        toSpecPrices(arr, 0, SpecPrices, SpecPricesItem)
+        console.log(SpecPrices)
+        dynamicValidateForm.domains2Price = SpecPrices.map((ele: any) => {
             let base =  {
-                value: item.value,
-                title: ele.label,
-                key: item.key,
-                parentKey: item.parentKey, 
+                sku: ele, 
+                ...ele,
+                filesList: [],
+                stock: 0,
+                price: 0,
+                keys: ele.keys.join('|'), 
             }
-            if(ele.isMainKey) {
-                index = i
-                base.filesList = item.filesList
+            if(ele.hasOwnProperty('filesList')) {
+                base.filesList = ele.filesList
             }
             return base
         })
-    }) 
-    // if(index != -1) { 
-    //     let item = deepClone(arr[index])
-    //     arr.splice(index, 1)
-    //     arr.unshift(item)
-    // }
-    let SpecPrices: any = [];
-    let SpecPricesItem = {};
-    console.log(arr)
-    toSpecPrices(arr, 0, SpecPrices, SpecPricesItem)
-    console.log(SpecPrices)
-    dynamicValidateForm.domains2Price = SpecPrices.map((ele: any) => {
-        let base =  {
-            sku: ele, 
-            ...ele,
-            filesList: [],
-            stock: 0,
-            price: 0,
-            keys: ele.keys.join('|'), 
-        }
-        if(ele.hasOwnProperty('filesList')) {
-            base.filesList = ele.filesList
-        }
-        return base
-    })
+    }
     console.log(dynamicValidateForm)
 }
 async function submitApi(data) { 
