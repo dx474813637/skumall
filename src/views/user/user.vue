@@ -7,68 +7,56 @@
 				<el-menu
 					:default-active="menuActive"
 					class="el-menu-vertical-demo"
+					router
 					@open="handleOpen"
 					@close="handleClose"
 				>
 					<template  v-for="item in menuListRef" >
-						<el-sub-menu  v-if="item.children && item.children.length > 0" :index="item.index" :key="item.index">
+						<el-sub-menu  
+							v-if="item.children && item.children.length > 0" 
+							:index="item.index" 
+							:key="item.index"
+							>
 							<template #title>
-								<i class="custom-icon" :class="item.icon" v-if="item.icon" ></i>
+								<el-icon>
+									<component :is="item.icon"></component>
+								</el-icon>
+								
 								<span class="menu-title" slot="title">{{item.label}}</span>
 							</template>
-							<el-menu-item v-for="ele in item.children" :index="ele.index" :key="ele.index">
+							<el-menu-item 
+								v-for="ele in item.children" 
+								:index="ele.index" 
+								:key="ele.index"
+								:route="ele.route" 
+								>
 								
 								<!-- <i class="custom-icon" :class="ele.icon" v-if="ele.icon" ></i>
 								<span slot="title">{{ele.label}}</span> -->
-								
-								<view class="u-flex u-row-between" slot="title">
-									<view class="item-left">
-										<i class="custom-icon" :class="ele.icon" v-if="ele.icon" ></i>
-										<span>{{ele.label}}</span>
+								<template #title>
+									<view class="u-flex u-row-between" >
+										<view class="item-left">
+											<i class="custom-icon" :class="ele.icon" v-if="ele.icon" ></i>
+											<span>{{ele.label}}</span>
+										</view>
+										<!-- <view class="item-right">
+											<template v-if="ele.active == 'cart'">
+												<text class="num" v-if="cartNumTotal > 0">{{cartNumTotal}}</text>
+											</template>
+											
+										</view> -->
 									</view>
-									<!-- <view class="item-right">
-										<template v-if="ele.active == 'cart'">
-											<text class="num" v-if="cartNumTotal > 0">{{cartNumTotal}}</text>
-										</template>
-										
-									</view> -->
-								</view>
+								</template>
+								
 							</el-menu-item>
 						</el-sub-menu>
-						<el-menu-item v-else :index="item.index" :key="item.index">
-							<i class="custom-icon" :class="item.icon" v-if="item.icon" ></i>
+						<el-menu-item v-else @click="logout" class="logout">
+							<el-icon>
+								<component :is="item.icon"></component>
+							</el-icon>
 							<span slot="title">{{item.label}}</span>
 						</el-menu-item>
-					</template>
-					<el-sub-menu index="1">
-						<template #title>
-							<el-icon><location /></el-icon>
-							<span>Navigator One</span>
-						</template>
-						<el-menu-item-group title="Group One">
-							<el-menu-item index="1-1">item one</el-menu-item>
-							<el-menu-item index="1-2">item two</el-menu-item>
-						</el-menu-item-group>
-						<el-menu-item-group title="Group Two">
-							<el-menu-item index="1-3">item three</el-menu-item>
-						</el-menu-item-group>
-						<el-sub-menu index="1-4">
-							<template #title>item four</template>
-							<el-menu-item index="1-4-1">item one</el-menu-item>
-						</el-sub-menu>
-					</el-sub-menu>
-					<el-menu-item index="2">
-						<el-icon><icon-menu /></el-icon>
-						<span>Navigator Two</span>
-					</el-menu-item>
-					<el-menu-item index="3" disabled>
-						<el-icon><document /></el-icon>
-						<span>Navigator Three</span>
-					</el-menu-item>
-					<el-menu-item index="4">
-						<el-icon><setting /></el-icon>
-						<span>Navigator Four</span>
-					</el-menu-item>
+					</template> 
 				</el-menu>
 			</div>
 			<div class="item item-main u-m-l-15 u-radius-5 ">
@@ -81,26 +69,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, markRaw  } from "vue";
 import menuList from "@/utils/menuList"
-import {
-	Document,
-	Menu as IconMenu,
-	Location,
-	Setting,
-} from "@element-plus/icons-vue"; 
+import router from "@/router/guard" 
 const menuListRef = ref(menuList)
 const menuActive = ref('')
 const handleOpen = (key: string, keyPath: string[]) => {
-	console.log(key, keyPath);
+	// console.log(key, keyPath);
 };
 const handleClose = (key: string, keyPath: string[]) => {
-	console.log(key, keyPath);
+	// console.log(key, keyPath);
 };
+
+const menuClick = (e) => {
+	console.log(e)
+	router.push({
+		name: e.active.route.name
+	})
+}
 </script>
 <style lang="scss" scoped> 
+ 
+.el-menu {
+	border-right: 0;
+}
 .user-wrap {
 	width: 100%;
+	::v-deep {
+		.el-menu-item {
+			color: #888;
+			&.is-active {
+				color: $uni-color-primary;
+			}
+		}
+		.el-sub-menu__title,
+		.logout {
+			font-weight: bold;
+			color: #333;
+		}
+	}
 }
 .item-menus {
 	background-color: #fff;	

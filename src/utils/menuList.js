@@ -1,129 +1,100 @@
+
+import {
+	User, Setting, Handbag, Pointer
+} from "@element-plus/icons-vue"; 
 export default [
 	{
 		label: '账号管理',
 		type: 'title',
-		icon: 'custom-icon-user',
+		icon: User,
 		index: '1',
 		children: [
 			{
-				label: '个人中心',
-				type: 'link-navigator',
-				url: '/pages/user/user',
+				label: '个人中心', 
 				icon: '',
-				active: 'user',
+				active: 'user_index',
 				index: '1-1',
+				route: {
+					name: 'user_info'
+				}
 			},
 			{
-				label: '账号信息',
-				type: 'link-navigator',
-				url: '/pages/memberInfo/memberInfo',
+				label: '账号信息', 
 				icon: '',
-				active: 'info',
+				active: 'user_info',
 				index: '1-2',
+				route: {
+					name: 'user_info'
+				}
+			}, 
+		]
+	},
+	{
+		label: 'sku管理',
+		type: 'title',
+		index: '2',
+		icon: Setting,
+		children: [
+			{
+				label: '商品列表', 
+				icon: '',
+				active: 'product_list',
+				index: '2-1',
+				route: {
+					name: 'product_list'
+				}
 			},
-			// {
-			// 	label: '账号安全',
-			// 	type: 'link-navigator',
-			// 	url: '/pages/memberSafe/memberSafe',
-			// 	icon: '',
-			// 	active: 'safe',
-			// 	index: '1-3',
-			// },
-			// {
-			// 	label: '登录明细',
-			// 	type: 'link-navigator',
-			// 	url: '/pages/log/log',
-			// 	icon: '',
-			// 	active: 'log',
-			// 	index: '1-4',
-			// },
+			{
+				label: 'sku列表', 
+				icon: '',
+				active: 'sku_list',
+				index: '2-2',
+				route: {
+					name: 'sku_list'
+				}
+			}, 
 		]
 	},
 	{
 		label: '商城管理',
 		type: 'title',
-		index: '2',
-		icon: 'custom-icon-shopping',
+		index: '3',
+		icon: Handbag,
 		children: [
 			{
 				label: '订单管理',
-				type: 'link-navigator',
-				url: '/pages/orderList/orderList',
 				icon: '',
-				active: 'orderList',
-				index: '2-1',
+				active: 'order_list',
+				index: '3-1',
+				route: {
+					name: 'order_list'
+				} 
 			},
 			{
-				label: '购物车',
-				type: 'link-navigator',
-				url: '/pages/cart/cart',
+				label: '购物车', 
 				icon: '',
 				active: 'cart',
-				index: '2-2',
-			},
-			{
-				label: '地址管理',
-				type: 'link-navigator',
-				url: '/pages/addr/addr',
-				icon: '',
-				active: 'addr',
-				index: '2-3',
-			},
-			{
-				label: '优惠券',
-				type: 'link-navigator',
-				url: '/pages/coupon/coupon',
-				icon: '',
-				active: 'coupon',
-				index: '2-4',
-			},
-		]
-	},
-	{
-		label: '资金管理',
-		type: 'title',
-		index: '3',
-		icon: 'custom-icon-transaction',
-		children: [
-			{
-				label: '资金中心',
-				type: 'link-navigator',
-				url: '/pages/money_center/money_center',
-				icon: '',
-				active: 'money_center',
-				index: '3-1',
-			},
-			{
-				label: '支付平台账号',
-				type: 'link-navigator',
-				url: '/pages/sinopay/sinopay',
-				icon: '',
-				active: 'sinopay',
 				index: '3-2',
+				route: {
+					name: 'cart'
+				} 
 			},
 			{
-				label: '我的现金账户',
-				type: 'link-navigator',
-				url: '/pages/sinopay_account/sinopay_account',
+				label: '地址管理', 
 				icon: '',
-				active: 'sinopay_account',
+				active: 'address_list',
 				index: '3-3',
-			},
-			{
-				label: '现金付款明细',
-				type: 'link-navigator',
-				url: '/pages/sinopay_pay_list/sinopay_pay_list',
-				icon: '',
-				active: 'sinopay_pay_list',
-				index: '3-4',
-			},
+				route: {
+					name: 'address_list'
+				} 
+			}, 
 		]
-	},
+	}, 
 	{
 		label: '安全登出',
 		type: 'func',
 		index: '4',
 		active: 'logout',
-		icon: 'custom-icon-logout',
+		icon: Pointer,
 	}
 ]

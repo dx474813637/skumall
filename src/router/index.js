@@ -68,7 +68,7 @@ const routes = [
         children: [
             {
                 path: 'index',
-                name: 'userIndex',
+                name: 'user_index',
                 meta: {
                     title: '个人中心', 
                 },
