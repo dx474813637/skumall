@@ -6,6 +6,7 @@
         border 
         :highlight-current-row="isRadioGroup"
         @current-change="handleCurrentTableChange"
+        max-height="80vh"
         > 
         <el-table-column fixed="left" label="ID" :width="isRadioGroup ?70:50" >
             <template #default="{ row }">
@@ -28,7 +29,11 @@
             </template>
         </el-table-column>
         <el-table-column prop="recommend_remark" label="商家推荐语" width="120" />
-        <el-table-column prop="freight_id" label="运费模板" width="100" />
+        <el-table-column label="运费模板" width="100" >
+            <template #default="{row}">
+                {{ freight_list.filter(ele => ele.value == row.freight_id)[0].label }} 
+            </template>
+        </el-table-column>
         <el-table-column prop="weight" label="重量" width="120" />
         <el-table-column prop="delivery_delay_day" label="承诺发货时间" width="160" />
         <el-table-column label="更新时间" width="100" >
@@ -49,7 +54,7 @@
                     active-text="上架中"
                     inactive-text="未上架" 
                     :loading="row.switchLoading" 
-                    :before-change="beforeProdOnChange(row)"
+                    :before-change="() => beforeProdOnChange(row)"
                     /> 
             </template>
             
@@ -60,7 +65,7 @@
                     link 
                     type="primary" 
                     size="small" 
-                    @click="router.push({name: 'sku_edit', params: {id: row.id}})"
+                    @click="router.push({name: 'product_edit', params: {id: row.id}})"
                     >编辑</el-button> 
             </template>
             
@@ -83,9 +88,12 @@
 </template>
 
 <script setup lang='ts'>
-import { reactive,ref,computed, inject, onBeforeMount } from 'vue'
+import { reactive,ref,computed, inject, onBeforeMount, toRefs } from 'vue'
 import { ElNotification } from 'element-plus'
 import router from "@/router/guard" 
+import { cateStore } from '@/stores/cate' 
+const cate = cateStore()
+const { freight_list } = toRefs(cate)
 const props = defineProps({
     isRadioGroup: {
         type: Boolean,
@@ -149,29 +157,29 @@ const handleCurrentTableChange = (val: User | undefined) => {
 }
 
 const beforeProdOnChange = async (item) => {
-    item.switchLoading = true 
-    console.log(item)
-    return false
-    // return new Promise(async (resolve, reject)=>{
+    item.switchLoading = true  
+    return new Promise(async (resolve, reject)=>{
         
-    //     let res = await changeProductOnStatus(item) 
-    //     item.switchLoading = false
-    //     if(res.code == 1) { 
-    //         ElNotification({
-    //             title: '商品上架状态',
-    //             message: res.msg,
-    //             type: 'error',
-    //         })
-    //         return resolve(true)
-    //     }else { 
-    //         ElNotification({
-    //             title: '商品上架状态',
-    //             message: res.msg,
-    //             type: 'success',
-    //         })
-    //         return resolve(false)
-    //     } 
-    // })
+        let res = await changeProductOnStatus(item) 
+        item.switchLoading = false
+        if(res.code == 1) { 
+            ElNotification({
+                title: '系统消息',
+                message: res.msg,
+                type: 'success',
+                position: 'bottom-right',
+            })
+            return resolve(true)
+        }else { 
+            ElNotification({
+                title: '系统消息',
+                message: res.msg,
+                type: 'success',
+                position: 'bottom-right',
+            })
+            return resolve(false)
+        } 
+    })
     
 }
 

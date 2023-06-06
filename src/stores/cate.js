@@ -9,6 +9,13 @@ export const cateStore = defineStore('cate', {
 		return {
 			cate_list: [],
 			cate_loading: false,
+			freight_list: [
+				{
+					label: '包邮',
+					value: '0'
+				}
+			],
+			freight_loading: false,
 		};
 	},
 	getters: {
@@ -24,7 +31,15 @@ export const cateStore = defineStore('cate', {
 			if(res.code == 1) {
 				this.cate_list = res.list 
 			} 
-		}
+		},
+		async getFreightData() {
+			this.freight_loading = true
+			const res = await apis.freight_list();
+			this.freight_loading = false
+			if(res.code == 1) {
+				this.freight_list = res.list 
+			} 
+		},
 	},
 });
  

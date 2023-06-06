@@ -100,7 +100,7 @@
         <el-form-item prop="freight_id" label="运费模板">
             <el-cascader 
                 v-model="dynamicValidateForm.freight_id" 
-                :options="freightRef"
+                :options="freight_list"
                 placeholder="请选择运费模板"
                 :props="{
                     value: 'value',
@@ -432,18 +432,24 @@ import toSpecPrices from '@/utils/toSpecPrices'
 import { deepClone } from '@/utils' 
 const { configHeader } = baseStore()
 const cate = cateStore()
-const { cate_list } = toRefs(cate)
+const { cate_list, freight_list } = toRefs(cate)
 const $api: any = inject('$api')
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 const disabled = ref(false)
 const formRef = ref<FormInstance>()
-const freightRef = ref([
-    {
-        label: '包邮',
-        value: '0'
-    }
-])
+// const freightRef = ref([
+//     {
+//         label: '包邮',
+//         value: '0'
+//     }
+// ])
+const props = defineProps({
+    id: {
+        type: String,
+        default: ''
+    }, 
+}); 
 let uploadRefs1: any = []
 let uploadRefs2: any = []
 const dynamicValidateForm = reactive<{

@@ -60,6 +60,21 @@
 				</el-menu>
 			</div>
 			<div class="item item-main u-m-l-15 u-radius-5">
+				<el-page-header class="u-p-10 u-p-t-20" title="后退"  @back="onBack"> 
+					<template #icon >
+						<el-icon>
+							<i-ep-ArrowLeft></i-ep-ArrowLeft>
+						</el-icon>
+					</template>
+					<template #content>
+						<el-text class="u-font-18" tag="b"> {{ useSettings.title }} </el-text>
+						<el-text class="u-font-14 u-m-l-20" type="info"> {{ subTitle }} </el-text>
+					</template>
+					<!-- <div class="mt-4 text-sm font-bold">
+						Your additional content can be added with default slot, You may put as
+						many content as you want here.
+					</div> -->
+				</el-page-header>
 				<router-view style="width: 100%;"></router-view>
 			</div>
 		</div>
@@ -69,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch  } from "vue";
+import { ref, watch, computed  } from "vue";
 import menuList from "@/utils/menuList"
 import router from "@/router/guard" 
 import {useSettingsStore} from '@/stores/settings'
@@ -82,20 +97,33 @@ const handleOpen = (key: string, keyPath: string[]) => {
 const handleClose = (key: string, keyPath: string[]) => {
 	// console.log(key, keyPath);
 };
+const subTitle = computed(() => {
+	return menuList.filter(ele => {
+		return ele.children && ele.children.some(item => {
+			return item.index == menuActive.value
+		})
+	})[0].label
+})
+// const subTitle = computed(() => menuList.filter(ele => ele?.children.some(item => item.index == menuActive.value))[0].label)
 
 watch(
 	() => router.currentRoute.value,
 	(newValue:any) => {
-		console.log(newValue)
+		console.log(newValue.name) 
 		menuActive.value = newValue.name
 	},
-	{immediate: true}
+	{immediate: true, deep: true}
 )
 
 const logout = () => {
 	useSettings.logout()
 	useSettings.goLogin()
 }
+
+const onBack = () => {
+	router.go(-1) 
+}
+
 </script>
 <style lang="scss" scoped> 
  
@@ -127,5 +155,12 @@ const logout = () => {
 	flex: 0 0 calc(100% - $user-menus-w);
 	width: calc(100% - $user-menus-w);
 	
+}
+.el-page-header {
+	::v-deep {
+		.el-page-header__title {
+			color: #999;
+		}
+	}
 }
 </style>

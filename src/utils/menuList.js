@@ -34,6 +34,14 @@ export default [
 		icon: Setting,
 		children: [
 			{
+				label: '商品发布', 
+				icon: '',
+				index: 'product_add', 
+				route: {
+					name: 'product_add'
+				}
+			},
+			{
 				label: '商品列表', 
 				icon: '',
 				index: 'product_list', 

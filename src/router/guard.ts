@@ -6,7 +6,7 @@ import {useSettingsStore} from '@/stores/settings'
 const useSettings = useSettingsStore(pinia)
 router.beforeEach(async (to, from, next) => {
     start()
-    console.log(to, from)
+    // console.log(to, from)
     if(to?.meta?.isAuth && to.matched.some(ele => ele.meta.isAuth) && !localStorage.getItem('token')) {
         // router.push({ name: 'login' })
         useSettings.goLogin()

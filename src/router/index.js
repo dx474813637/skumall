@@ -61,10 +61,10 @@ const routes = [
         component: () => import('@/views/user/user.vue'),
         // props:true  //传值1.props值为true时，将path里面的id传递给component里面的User.vue里面。 
         //下面是通过props传id和title。
-        props: (route) => ({
-            id: route.params.id,
-            title: route.query.title
-        }),
+        // props: (route) => ({
+        //     id: route.params.id,
+        //     title: route.query.title
+        // }),
         children: [
             {
                 path: 'index',
@@ -88,6 +88,7 @@ const routes = [
                 meta: {
                     title: '编辑商品', 
                 },
+                props:true, 
                 component: () => import('@/views/user/product_edit/product_edit.vue'),
             },
             {
