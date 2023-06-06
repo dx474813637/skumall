@@ -59,7 +59,7 @@
 					</template> 
 				</el-menu>
 			</div>
-			<div class="item item-main u-m-l-15 u-radius-5 ">
+			<div class="item item-main u-m-l-15 u-radius-5">
 				<router-view style="width: 100%;"></router-view>
 			</div>
 		</div>
@@ -69,11 +69,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, markRaw  } from "vue";
+import { ref, watch  } from "vue";
 import menuList from "@/utils/menuList"
 import router from "@/router/guard" 
+import {useSettingsStore} from '@/stores/settings'
+const useSettings = useSettingsStore()
 const menuListRef = ref(menuList)
-const menuActive = ref('')
+const menuActive = ref('user_index')
 const handleOpen = (key: string, keyPath: string[]) => {
 	// console.log(key, keyPath);
 };
@@ -81,11 +83,18 @@ const handleClose = (key: string, keyPath: string[]) => {
 	// console.log(key, keyPath);
 };
 
-const menuClick = (e) => {
-	console.log(e)
-	router.push({
-		name: e.active.route.name
-	})
+watch(
+	() => router.currentRoute.value,
+	(newValue:any) => {
+		console.log(newValue)
+		menuActive.value = newValue.name
+	},
+	{immediate: true}
+)
+
+const logout = () => {
+	useSettings.logout()
+	useSettings.goLogin()
 }
 </script>
 <style lang="scss" scoped> 
@@ -117,5 +126,6 @@ const menuClick = (e) => {
 	background-color: #fff;
 	flex: 0 0 calc(100% - $user-menus-w);
 	width: calc(100% - $user-menus-w);
+	
 }
 </style>

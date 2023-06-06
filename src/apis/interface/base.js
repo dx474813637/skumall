@@ -27,6 +27,9 @@ export const upimg = (data, config) => axios.post('Userapi/upimg', data, config)
 // cate_list 分类
 export const cate_list = (data) => axios.get('Userapi/cate_list', data) 
 
+// change_product_status 商品上下架 参数id  商品id
+export const change_product_status = (data) => axios.get('Userapi/change_product_status', data) 
+
 // save_product 保存商品 
     // 参数：`id 有id更新没有id新增`,`name`, `cate分类id`, `price`, `pic`商品轮播图, `description商品描述，目前只支持图片。多张图片用|分开。
     // 这个是抖店的详情`, `recommend_remark商家推荐语`, `freight_id运费模板id，传0表示包邮`, `weight重量`, 

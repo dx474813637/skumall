@@ -94,12 +94,10 @@ export const createAxiosByinterceptors = (
                 }
                 else if (code === 9) {
                     // jumpLogin();
-                    console.log('清除token 登录过期')
-                    localStorage.removeItem('token')
-                    localStorage.removeItem('login')
+                    useSettings.logout() 
+                    useSettings.setPrevPage(router.currentRoute.value)
                     ElMessage.error(msg);
                     useSettings.goLogin()
-                    useSettings.setPrevPage(router.currentRoute.value)
                     return Promise.reject(response.data);
                 } else {
                     ElMessage.error(msg);

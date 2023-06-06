@@ -15,8 +15,8 @@
                 <el-pagination
                     v-model:current-page="currentPage1"
                     :page-size="100"
-                    :small="small" 
-                    :background="true" 
+                    small 
+                    background
                     layout="total, prev, pager, next"
                     :total="1000"
                     @size-change="handleSizeChange"
@@ -33,10 +33,7 @@
 import { ref, inject } from "vue";
 const currentPage1 = ref(5)
 const small = ref(false) 
-const $api = inject('$api'); 
-$api.product()
-$api.login_sku()
-$api.cate_list()
+const $api = inject('$api');  
 const handleSizeChange = (val: number) => {
   console.log(`${val} items per page`)
 }

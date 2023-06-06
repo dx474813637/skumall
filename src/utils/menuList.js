@@ -12,8 +12,7 @@ export default [
 			{
 				label: '个人中心', 
 				icon: '',
-				active: 'user_index',
-				index: '1-1',
+				index: 'user_index', 
 				route: {
 					name: 'user_info'
 				}
@@ -21,8 +20,7 @@ export default [
 			{
 				label: '账号信息', 
 				icon: '',
-				active: 'user_info',
-				index: '1-2',
+				index: 'user_info', 
 				route: {
 					name: 'user_info'
 				}
@@ -38,8 +36,7 @@ export default [
 			{
 				label: '商品列表', 
 				icon: '',
-				active: 'product_list',
-				index: '2-1',
+				index: 'product_list', 
 				route: {
 					name: 'product_list'
 				}
@@ -47,8 +44,7 @@ export default [
 			{
 				label: 'sku列表', 
 				icon: '',
-				active: 'sku_list',
-				index: '2-2',
+				index: 'sku_list', 
 				route: {
 					name: 'sku_list'
 				}
@@ -64,8 +60,7 @@ export default [
 			{
 				label: '订单管理',
 				icon: '',
-				active: 'order_list',
-				index: '3-1',
+				index: 'order_list', 
 				route: {
 					name: 'order_list'
 				} 
@@ -73,8 +68,7 @@ export default [
 			{
 				label: '购物车', 
 				icon: '',
-				active: 'cart',
-				index: '3-2',
+				index: 'cart', 
 				route: {
 					name: 'cart'
 				} 
@@ -82,8 +76,7 @@ export default [
 			{
 				label: '地址管理', 
 				icon: '',
-				active: 'address_list',
-				index: '3-3',
+				index: 'address_list', 
 				route: {
 					name: 'address_list'
 				} 
@@ -92,9 +85,8 @@ export default [
 	}, 
 	{
 		label: '安全登出',
-		type: 'func',
-		index: '4',
-		active: 'logout',
+		type: 'func', 
+		index: 'logout',
 		icon: Pointer,
 	}
 ]
