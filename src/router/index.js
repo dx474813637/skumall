@@ -78,7 +78,7 @@ const routes = [
                 path: 'product_list',
                 name: 'product_list',
                 meta: {
-                    title: '商品列表', 
+                    title: '商品管理', 
                 },
                 component: () => import('@/views/user/product_list/product_list.vue'),
             },
@@ -103,7 +103,7 @@ const routes = [
                 path: 'sku_list',
                 name: 'sku_list',
                 meta: {
-                    title: 'SKU列表', 
+                    title: 'SKU管理', 
                 },
                 component: () => import('@/views/user/sku_list/sku_list.vue'),
             },
@@ -114,6 +114,38 @@ const routes = [
                     title: '编辑SKU', 
                 },
                 component: () => import('@/views/user/sku_edit/sku_edit.vue'),
+            },
+            {
+                path: 'address_list',
+                name: 'address_list',
+                meta: {
+                    title: '地址管理', 
+                },
+                component: () => import('@/views/user/address_list/address_list.vue'),
+            },
+            // {
+            //     path: 'address_edit/:id',
+            //     name: 'address_edit',
+            //     meta: {
+            //         title: '地址编辑', 
+            //     },
+            //     component: () => import('@/views/user/address_edit/address_edit.vue'),
+            // },
+            // {
+            //     path: 'address_add',
+            //     name: 'address_add',
+            //     meta: {
+            //         title: '新增地址', 
+            //     },
+            //     component: () => import('@/views/user/address_edit/address_edit.vue'),
+            // },
+            {
+                path: 'info',
+                name: 'user_info',
+                meta: {
+                    title: '账号信息', 
+                },
+                component: () => import('@/views/user/info/info.vue'),
             },
         ]
     },

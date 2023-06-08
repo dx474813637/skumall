@@ -10,7 +10,7 @@
 					router
 					@open="handleOpen"
 					@close="handleClose"
-				>
+					>
 					<template  v-for="item in menuListRef" >
 						<el-sub-menu  
 							v-if="item.children && item.children.length > 0" 
@@ -70,6 +70,14 @@
 						<el-text class="u-font-18" tag="b"> {{ useSettings.title }} </el-text>
 						<el-text class="u-font-14 u-m-l-20" type="info"> {{ subTitle }} </el-text>
 					</template>
+					<template #extra>
+						<el-button 
+							type="primary" 
+							plain 
+							v-if="btnActive" 
+							@click="router.push({name: btnActive.to.name})"
+							>{{ btnActive.title }}</el-button>
+					</template>
 					<!-- <div class="mt-4 text-sm font-bold">
 						Your additional content can be added with default slot, You may put as
 						many content as you want here.
@@ -91,6 +99,25 @@ import {useSettingsStore} from '@/stores/settings'
 const useSettings = useSettingsStore()
 const menuListRef = ref(menuList)
 const menuActive = ref('user_index')
+const addBtnList = [
+	// {
+	// 	name: 'address_list',
+	// 	title: '新增地址',
+	// 	to: {
+	// 		name: 'address_add'
+	// 	}
+	// },
+	{
+		name: 'product_list',
+		title: '新增商品',
+		to: {
+			name: 'product_add'
+		}
+	},
+]
+const btnActive = computed(() => { 
+	return addBtnList.filter(ele => ele.name == menuActive.value)[0]
+})
 const handleOpen = (key: string, keyPath: string[]) => {
 	// console.log(key, keyPath);
 };
@@ -102,7 +129,7 @@ const subTitle = computed(() => {
 		return ele.children && ele.children.some(item => {
 			return item.index == menuActive.value
 		})
-	})[0].label
+	})[0]?.label
 })
 // const subTitle = computed(() => menuList.filter(ele => ele?.children.some(item => item.index == menuActive.value))[0].label)
 
@@ -154,7 +181,10 @@ const onBack = () => {
 	background-color: #fff;
 	flex: 0 0 calc(100% - $user-menus-w);
 	width: calc(100% - $user-menus-w);
-	
+	min-height: 80vh;
+	padding-left: 10px;
+	padding-right: 10px;
+	@extend %box-sizing;
 }
 .el-page-header {
 	::v-deep {

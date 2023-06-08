@@ -16,6 +16,8 @@ export const cateStore = defineStore('cate', {
 				}
 			],
 			freight_loading: false,
+			regional_list: [],
+			regional_loading: false,
 		};
 	},
 	getters: {
@@ -38,6 +40,15 @@ export const cateStore = defineStore('cate', {
 			this.freight_loading = false
 			if(res.code == 1) {
 				this.freight_list = res.list 
+			} 
+		},
+		async getRegionalData() {
+			this.regional_loading = true
+			const res = await apis.addressDetail();
+			this.regional_loading = false
+			if(res.code == 1) {
+				console.log(JSON.parse(res.regional_list))
+				this.regional_list = res.list 
 			} 
 		},
 	},

@@ -14,7 +14,7 @@ export default [
 				icon: '',
 				index: 'user_index', 
 				route: {
-					name: 'user_info'
+					name: 'user_index'
 				}
 			},
 			{

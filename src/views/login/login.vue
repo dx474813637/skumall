@@ -66,9 +66,9 @@
 
 					<div class="login-btn">
 						<el-button type="primary" @click="submitForm(form)">登 录</el-button>
-						<div class="u-p-t-10">
+						<!-- <div class="u-p-t-10">
 							<a class="reg-link" href="https://element-plus.org" target="_blank">立即注册</a> 
-						</div>
+						</div> -->
 					</div>
 				</div>
 
@@ -89,9 +89,9 @@
 <script setup lang="ts">
 import Vcode from "vue3-puzzle-vcode";
 import type { TabsPaneContext, FormRules, FormInstance } from "element-plus";
-import { ref, reactive, computed, inject } from "vue";
-import { ElMessage } from "element-plus";
+import { ref, reactive, computed, inject } from "vue"; 
 import {useSettingsStore} from '@/stores/settings'
+import { ElLoading, ElMessage  } from "element-plus";
 const useSettings = useSettingsStore()
 // console.log(router)
 // import { createLoadingComponent } from "element-plus/es/components/loading/src/loading";
@@ -103,6 +103,18 @@ const formData = reactive({
 	phone: "",
 	code: "",
 });
+const params = computed(() => {
+	if(activeName.value == 'account_login') {
+		return { 
+			login: formData.login,
+			passwd: formData.passwd
+		}
+	}
+	return {
+		login: formData.phone,
+		msgcode: formData.code
+	}
+})
 const form = ref<FormInstance>()
 const countValue = ref(0)
 const getCodeDisabled = computed(() => { 
@@ -165,10 +177,12 @@ const submitForm = (formEl: FormInstance | undefined) => {
 	formEl.validate((valid) => {
 		if (valid) {
 			console.log('submit!')
-			if (activeName.value = 'account_login') {
+			if (activeName.value == 'account_login') {
 				PuzzleIsOpen()
 			}
-
+			else {
+				login()
+			}
 		} else {
 			console.log('error submit!')
 			return false
@@ -190,14 +204,25 @@ async function getCodeBtn() {
 }
 const isShow = ref(false)
 // 用户通过了验证
-function success(msg) {
+async function success(msg) {
 	console.log('验证通过' + msg);
 	isShow.value = false; // 通过验证后，需要手动隐藏模态框
 	if (activeName.value == 'phone_login') {
+		await getCode()
 		setCountValue()
 		return
 	}
 	login()
+}
+async function getCode() {
+	const res = await $api.msgcode({
+		params: {
+			login: formData.phone
+		}
+	})
+	if(res.code == 1) {
+		ElLoading.success(res.msg)
+	}
 }
 // 用户点击遮罩层，应该关闭模态框
 function close() {
@@ -213,7 +238,7 @@ function countDownFinish() {
 async function login() {
 	const res = await $api.syblogin({
 		params: {
-			...formData
+			...params.value
 		}
 	})
 	if(res.code == 1) {

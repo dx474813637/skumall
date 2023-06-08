@@ -4,6 +4,7 @@
         :data="skuList" 
         style="width: 100%" 
         border 
+        :maxHeight="maxHeight"
         :highlight-current-row="isRadioGroup"
         @current-change="handleCurrentTableChange"
         > 
@@ -58,6 +59,11 @@
 <script setup lang='ts'>
 import { reactive,ref,computed, inject, onBeforeMount } from 'vue'
 import router from "@/router/guard" 
+import { deepClone } from '@/utils';
+import useProductSku from '@/hook/useProductSku'
+const {
+    sku2treeData
+} = useProductSku()
 const props = defineProps({
     isRadioGroup: {
         type: Boolean,
@@ -67,7 +73,12 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    maxHeight: {
+        type: [String, Number],
+        default: '80vh'
+    }
 });
+const emit = defineEmits(["setCurrentRow"]);
 const currentRow = ref()
 const $api = inject('$api')
 const skuList = ref([])
@@ -96,18 +107,7 @@ const getData = async () => {
     skuList.value = res.list.map(ele => ({...ele, sku: sku2treeData(ele.sku)}))
     total.value = +res.total
 }
-
-const sku2treeData = (skuStr) => {
-    let arr = []
-    arr = skuStr.split('^').map(ele => {
-        let obj = {};
-        let item = ele.split('|')
-        obj.label = item[0]
-        obj.children = item[1].split(',').map(item => ({label: item}))
-        return obj
-    })
-    return arr
-}
+ 
 const handleSizeChange = (val: number) => {
   console.log(`${val} items per page`)
 }
@@ -118,6 +118,7 @@ const handleCurrentChange = (val: number) => {
 const handleCurrentTableChange = (val: User | undefined) => { 
     if(!props.isRadioGroup) return 
     currentRow.value = val
+    emit('setCurrentRow', {value: deepClone(currentRow.value)})
 }
 
 </script>

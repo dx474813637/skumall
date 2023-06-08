@@ -136,13 +136,15 @@
             <div class="u-flex u-flex-between u-m-b-15" style="width: 100%;">
                 <div class="u-flex">
                     <el-button :icon="CirclePlus" type="primary" plain @click.prevent="addDomain('')">添加新的规格</el-button>
-                    <el-button :icon="FolderOpened" type="warning" plain @click.prevent="addDomain('')">引用规格模板</el-button>
+                    <el-button :icon="FolderOpened" type="warning" plain @click.prevent="dialogVisible2 = true">引用规格模板</el-button>
+                     
+                    
                 </div> 
                 <div >
-                    <el-text type="warning" tag="i">
+                    <!-- <el-text type="warning" tag="i">
                         <el-icon class="u-p-r-5"><i-ep-Warning /></el-icon>
-                        商品规格的增删会对价格与库存表格数据初始化！
-                    </el-text>
+                        引用规格模板会初始化价格与库存表格数据！
+                    </el-text> -->
                 </div>
             </div>
             
@@ -181,7 +183,7 @@
                         }">
                         <el-row style="width: 100%;" :gutter="10">
                             <el-col :span="8"> 
-                                <el-input v-model="domain.label" placeholder="输入自定义规格名" @blur="render({prop: 'text', positionArr: [index, -1]})" /> 
+                                <el-input v-model="domain.label" placeholder="输入自定义规格名" @focus="setOldText($event)" @blur="render({prop: 'text', positionArr: [index, -1]})" /> 
                             </el-col>
                             <el-col :span="8">
                                 <el-switch 
@@ -417,10 +419,29 @@
     <el-dialog v-model="dialogVisible">
         <img w-full style="width: 100%" :src="dialogImageUrl" alt="Preview Image" />
     </el-dialog>
+    <el-dialog v-model="dialogVisible2" title="商品规格模板" width="70%" > 
+        <table-sku
+            isRadioGroup
+            maxHeight="50vh"
+            @setCurrentRow="setCurrentRow"
+        ></table-sku> 
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="dialogVisible2 = false">退出</el-button>
+                <el-tooltip 
+                    effect="dark"
+                    content="该操作会初始化价格与库存数据"
+                    placement="top-end" 
+                    >
+                    <el-button type="primary" @click="skuTableConfirm">选择该模板</el-button> 
+                </el-tooltip>
+            </span>
+        </template>
+    </el-dialog>
 </template>
   
 <script lang="ts" setup>
-import { reactive, ref, inject, toRefs, watch  } from 'vue'
+import { reactive, ref, inject, toRefs, watch, nextTick  } from 'vue'
 import { genFileId, ElMessage } from 'element-plus'
 import type { FormInstance, UploadFile, UploadRequestOptions, UploadRawFile, UploadProps, FormRules, TableColumnCtx  } from 'element-plus'
 import {
@@ -430,12 +451,18 @@ import { baseStore } from '@/stores/main'
 import { cateStore } from '@/stores/cate'
 import toSpecPrices from '@/utils/toSpecPrices' 
 import { deepClone } from '@/utils' 
+import useProductSku from '@/hook/useProductSku'
+const {
+    skuTable2domains,
+    sku2domains
+} = useProductSku()
 const { configHeader } = baseStore()
 const cate = cateStore()
 const { cate_list, freight_list } = toRefs(cate)
 const $api: any = inject('$api')
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
+const dialogVisible2 = ref(false)
 const disabled = ref(false)
 const formRef = ref<FormInstance>()
 // const freightRef = ref([
@@ -489,6 +516,8 @@ const dynamicValidateForm = reactive<{
     // spec_prices: '',
     // specs: '',
 })
+const detail_spec_prices = ref('')
+const currentRow = ref()
 const rules = reactive<FormRules>({
     name: [
         {
@@ -572,6 +601,16 @@ const quickEditForm = reactive({
     },
 })  
 let uploadImgIndex = ref(-1)
+
+watch(
+    () => props.id,
+    (newVal ) => {
+        // console.log('id:' +newVal );
+        if(!newVal) return
+        getProductData()
+    },
+    {immediate: true}
+)
 watch(
     () => [ 
         // ...dynamicValidateForm.domains.map(ele => ele.label) ,
@@ -579,13 +618,24 @@ watch(
         ...dynamicValidateForm.domains.map(ele => ele.valuesIndex) 
     ],
     (newVal, oldVal) => {
-        console.log('deep watch; render valuesIndex' );
-        render({type: 'all'})
+        console.log('deep watch; render valuesIndex');
+        render({type: 'all'});
+        setDomains2PriceData()
     },
     {
         deep: true
     }
 )  
+watch(
+    () => dynamicValidateForm.domains2Price,
+    (newVal, oldVal) => { 
+        detail_spec_prices.value = newVal
+        // setOldPrice('set price')
+    }, 
+    {
+        deep: true
+    }
+)
 
 interface SpanMethodProps {
 //   row: User
@@ -735,10 +785,10 @@ const handleRemove = (file: UploadFile, index: string, propName, propName2, quic
     if(typeof(index) != "undefined") {
         propName[index].clearFiles(); 
         propName2.filesList = []
-        if(quick) {
-            uploadImgIndex.value = +index
-            render({prop:'img', positionArr: [0, index]})
-        }
+        // if(quick) {
+        //     uploadImgIndex.value = +index
+        //     render({prop:'img', positionArr: [0, index]})
+        // }
     }else {
         console.log(file)
         let i = dynamicValidateForm[propName].findIndex(ele => ele.url == file.url)
@@ -802,23 +852,23 @@ const resetForm = (formEl: FormInstance | undefined) => {
 }
 
 function render({type, prop, positionArr}={} ) {  
-    console.log(type, prop, positionArr)
+    // console.log(type, prop, positionArr)
     if(type != 'all') {  
         let item = dynamicValidateForm.domains[positionArr[0]]
-        if(positionArr[1] == -1) { 
-            console.log(1)
+        if(positionArr[1] == -1) {  
             let keys = dynamicValidateForm.domains[positionArr[0]].values.map(ele => `${ele.parentKey},${ele.key}`) 
-            console.log(keys)
+            // console.log(keys)
             dynamicValidateForm.domains2Price.forEach((ele, i) => { 
                 if(prop == 'text') {
                     let keysIndex = -1
                     keysIndex = keys.findIndex(item => ele.keys.includes(item))
                     let keys2 = keys[keysIndex].slice(-1)
                     let value = dynamicValidateForm.domains[positionArr[0]].values.filter(item => item.key == keys2)[0].value
-                    ele[dynamicValidateForm.domains[positionArr[0]].label] = value
-                    console.log(value)
-                }
-                
+                    ele[dynamicValidateForm.domains[positionArr[0]].label] = value 
+                    ele.sku[dynamicValidateForm.domains[positionArr[0]].label] = value 
+                    delete ele.sku[oldDomainLable.value]
+                    delete ele[oldDomainLable.value]
+                } 
             })
         }else {
             item = item.values[positionArr[1]]
@@ -837,10 +887,7 @@ function render({type, prop, positionArr}={} ) {
                     
                 }
             }) 
-        }
-        
- 
-        
+        } 
     }
     else { 
         dynamicValidateForm.domains2Price = [];
@@ -861,9 +908,9 @@ function render({type, prop, positionArr}={} ) {
         })  
         let SpecPrices: any = [];
         let SpecPricesItem = {};
-        console.log(arr)
+        // console.log(arr)
         toSpecPrices(arr, 0, SpecPrices, SpecPricesItem)
-        console.log(SpecPrices)
+        // console.log(SpecPrices)
         dynamicValidateForm.domains2Price = SpecPrices.map((ele: any) => {
             let base =  {
                 sku: ele, 
@@ -881,6 +928,12 @@ function render({type, prop, positionArr}={} ) {
     }
     console.log(dynamicValidateForm)
 }
+
+const oldDomainLable = ref('')
+function setOldText(e) { 
+    oldDomainLable.value = e.target.value 
+}
+
 async function submitApi(data) { 
     const res = await $api.save_product({
         ...data
@@ -906,7 +959,7 @@ function formParams2apiParams() {
         delete obj.sku.keys 
         return obj
     })
-    console.log(tar)
+    // console.log(tar)
     formParams.spec_prices = JSON.stringify(tar)
     formParams.specs = formParams.domains.map(ele => {
         let right = ele.values.map(item => item.value).join(',')
@@ -914,6 +967,7 @@ function formParams2apiParams() {
     }).join('^')
     formParams.domains = ''
     formParams.domains2Price = ''
+    if(props.id) formParams.id = props.id
     return formParams
 }
 
@@ -926,13 +980,11 @@ function mainKeyChange(value, domain, index) {
             }
         })
         if(index>0) {
-            dynamicValidateForm.domains.splice(index, 1)
-            setTimeout(() => {
-                dynamicValidateForm.domains.unshift(domain) 
-            }, 0)
-        }
-        
-       
+            dynamicValidateForm.domains.splice(index, 1) 
+            nextTick(() => {
+                dynamicValidateForm.domains.unshift(domain)  
+            })
+        } 
     }
     // console.log(dynamicValidateForm.domains)
 }
@@ -940,15 +992,92 @@ function quickEdit(key) {
     dynamicValidateForm.domains2Price.forEach(ele => ele[key] = quickEditForm[key].value)
     quickEditForm[key].show = false
 }
+function setCurrentRow({value}) {
+    currentRow.value = value
+}
+function skuTableConfirm() {
+    console.log(currentRow.value); 
+    let {arr, newTabName} = skuTable2domains(currentRow.value.sku)   
+    domainsTabsValue.value = newTabName
+    domainIndex = arr.length 
+    dynamicValidateForm.domains = arr
+    dialogVisible2.value = false;
+}
+
+async function getProductData () {
+    const res = await $api.product_detail({params: {id: props.id}})
+    if(res.code == 1) {
+        let {arr, newTabName} = sku2domains(res.list.sku);
+        let data = res.list 
+        dynamicValidateForm.name = data.name 
+        dynamicValidateForm.cate = data.cate 
+        dynamicValidateForm.delivery_delay_day = data.delivery_delay_day 
+        dynamicValidateForm.freight_id = data.freight_id 
+        dynamicValidateForm.on = data.on 
+        dynamicValidateForm.price = data.price 
+        dynamicValidateForm.recommend_remark = data.recommend_remark 
+        dynamicValidateForm.weight = data.weight 
+        dynamicValidateForm.weight_unit = data.weight_unit  
+        dynamicValidateForm.domains = arr
+        dynamicValidateForm.description = data.description.split('|').map(ele => ({url: ele})) 
+        dynamicValidateForm.pic = data.pic.split('|').map(ele => ({url: ele}))   
+        domainsTabsValue.value = newTabName;
+        domainIndex = newTabName
+        detail_spec_prices.value = res.spec_prices
+    }
+}
+
+function setDomains2PriceData() { 
+    if(!detail_spec_prices.value) return
+    let arr = deepClone(detail_spec_prices.value); 
+    console.log('set', arr)
+    dynamicValidateForm.domains2Price.forEach(ele => {
+        let i = -1
+        let count = 0
+        let isOld = false
+        arr.some((item, index) => { 
+            count++
+            let flag = true
+            let keyname = 'specs'
+            if(!item.hasOwnProperty('id')) {
+                keyname = 'sku'
+                delete item.sku.keys
+                isOld = true
+            } 
+            for(let key in item[keyname]) {   
+                if(item[keyname][key] !== ele[key] ) { 
+                    flag = false;
+                    break;
+                } 
+                
+            }  
+            if(flag) {
+                ele.stock = item.stock;
+                ele.price = item.price;
+                if(item.img) ele.filesList = [{url: item.img}];
+                if(item.filesList && item.filesList.length != 0) ele.filesList = item.filesList;
+                i = index
+            }
+            return flag
+        })  
+        if(i != -1 && !isOld) arr.splice(i, 1)
+    })
+    detail_spec_prices.value = ''
+}
+
+function setOldPrice(data) {
+    console.log('1',data, detail_spec_prices.value)
+}
+
 </script>
   
 <style lang='scss' scoped>
 .domains2Price-rows {
     @include flex(x, start, start);
     width: 100%;
-}
-
+}  
 ::v-deep {
+    
     .el-table {
         // --el-table-border-color: #dcdfe6;
         thead tr th{

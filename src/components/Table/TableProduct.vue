@@ -6,7 +6,7 @@
         border 
         :highlight-current-row="isRadioGroup"
         @current-change="handleCurrentTableChange"
-        max-height="80vh"
+        :max-height="maxHeight"
         > 
         <el-table-column fixed="left" label="ID" :width="isRadioGroup ?70:50" >
             <template #default="{ row }">
@@ -74,13 +74,11 @@
     <div class="list-page-box u-p-t-20 u-p-b-20">
         <el-pagination
             v-model:current-page="curP"
-            :page-size="pageSize"
+            v-model:page-size="pageSize"
             small
             background
             layout="prev, pager, next, slot"
-            :total="total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
+            :total="total" 
         >
             <span class="u-p-l-10">共 {{ total }} 条数据</span>
         </el-pagination>
@@ -92,6 +90,10 @@ import { reactive,ref,computed, inject, onBeforeMount, toRefs } from 'vue'
 import { ElNotification } from 'element-plus'
 import router from "@/router/guard" 
 import { cateStore } from '@/stores/cate' 
+import useProductSku from '@/hook/useProductSku'
+const {
+    sku2treeData
+} = useProductSku()
 const cate = cateStore()
 const { freight_list } = toRefs(cate)
 const props = defineProps({
@@ -103,6 +105,10 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    maxHeight: {
+        type: [String, Number],
+        default: '80vh'
+    }
 });
 const currentRow = ref()
 const $api = inject('$api')
@@ -132,18 +138,7 @@ const getData = async () => {
     skuList.value = res.list.map(ele => ({...ele, switchLoading: false, sku: sku2treeData(ele.sku)}))
     total.value = +res.total
 }
-
-const sku2treeData = (skuStr) => {
-    let arr = []
-    arr = skuStr.split('^').map(ele => {
-        let obj = {};
-        let item = ele.split('|')
-        obj.label = item[0]
-        obj.children = item[1].split(',').map(item => ({label: item}))
-        return obj
-    })
-    return arr
-}
+ 
 const handleSizeChange = (val: number) => {
   console.log(`${val} items per page`)
 }

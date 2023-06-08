@@ -10,10 +10,12 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
     ElCascader: typeof import('element-plus/es')['ElCascader']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElCountdown: typeof import('element-plus/es')['ElCountdown']
     ElDialog: typeof import('element-plus/es')['ElDialog']
+    ElEmpty: typeof import('element-plus/es')['ElEmpty']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
@@ -33,6 +35,7 @@ declare module '@vue/runtime-core' {
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElText: typeof import('element-plus/es')['ElText']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ElTree: typeof import('element-plus/es')['ElTree']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     FooterBase: typeof import('./src/components/Footer/FooterBase.vue')['default']
@@ -41,7 +44,6 @@ declare module '@vue/runtime-core' {
     HeaderUser: typeof import('./src/components/Header/HeaderUser.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     IEpArrowLeft: typeof import('~icons/ep/arrow-left')['default']
-    IEpArrowLeftBold: typeof import('~icons/ep/arrow-left-bold')['default']
     IEpCircleCheck: typeof import('~icons/ep/circle-check')['default']
     IEpCloseBold: typeof import('~icons/ep/close-bold')['default']
     IEpDelete: typeof import('~icons/ep/delete')['default']
