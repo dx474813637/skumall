@@ -89,7 +89,7 @@
             <span class="u-p-l-10">共 {{ total }} 条数据</span>
         </el-pagination>
     </div> 
-	<el-dialog title="编辑收货地址" v-model="dialogFormVisible" @close="handleResetForm(ruleForm)">
+	<el-dialog title="编辑收货地址" v-model="dialogFormVisible" @close="handleResetForm(ruleForm)" @open="() => {ruleForm.clearValidate()}">
 		<el-form :model="addrForm" :rules="rules" ref="ruleForm" label-width="100px">
 			<el-form-item label="收货人" prop="name">
 				<el-input v-model="addrForm.name"></el-input>
@@ -97,18 +97,18 @@
 			<el-form-item label="联系方式" prop="mobile">
 				<el-input v-model="addrForm.mobile"></el-input>
 			</el-form-item>
-			<el-form-item label="所在地区" prop="regional_name">
-				<!-- <el-input v-model="addrForm.regional_name"></el-input> -->
-				<!-- <el-cascader 
+			<el-form-item label="所在地区" prop="regional_name"> 
+				<el-cascader 
+					style="width: 100%;"
 					v-model="addrForm.regional_name" 
-					:options="options" 
-					@change="handleChange"
+					:options="regional_list"   
+					placeholder="请选择"
 					:props="{
 						value: 'id',
 						label: 'value',
 						children: 'childs'
 					}"
-				></el-cascader> -->
+				></el-cascader>
 			</el-form-item>
 			<el-form-item label="详细地址" prop="address">
 				<el-input type="textarea" v-model="addrForm.address"></el-input>
@@ -148,7 +148,7 @@ async function getData() {
 		p: curP.value,
 	} });
 	if(res.code == 1) {
-		list.value = res.list.list.filter(ele => ele.id != -1);
+		list.value = res.list.list.filter(ele => ele.id != -1).map(ele => ({...ele, regional: ele.regional.toString().slice(2)}));
 		total.value = res.list.pw_rec_total;
 	}
 }
@@ -200,7 +200,7 @@ const beforeAutoAddressChange = async (item) => {
     addressLoading.value = true  
 	let flag = item.auto == 0? true: false
     return new Promise(async (resolve, reject)=>{
-        console.log(item)
+        // console.log(item)
         let res = await addressChange(item) 
         addressLoading.value = false
         if(res.code == 1) {  
@@ -231,10 +231,11 @@ const beforeAutoAddressChange = async (item) => {
 
 
 const handleResetForm = (formName) => {
-	console.log(formName)
+	// console.log(formName)
 	renderFormData({
 		regional: ""
 	})
+	formName.clearValidate()
 	nextTick(() => {
 		formName.clearValidate()
 	})
@@ -242,17 +243,17 @@ const handleResetForm = (formName) => {
 }
 
 function renderFormData(data) {
-	let regional = data.regional.toString();
+	let regional = data.regional //.toString(); 
 	let newArr = []
 	for (let i = 0; i < regional.length ;) {
 		newArr.push(regional.slice(0,i+=2))
-	}
+	} 
 	addrForm.id = data.id
 	addrForm.mobile = data.mobile
 	addrForm.name = data.name
 	addrForm.regional_name = newArr
 	addrForm.address = data.address
-	addrForm.auto = data.auto == '1' ? true : false
+	addrForm.auto = data.auto 
 }
 function editAddr(data) {
 	renderFormData(data)
@@ -284,7 +285,7 @@ async function handleChangeAddr() {
 		params: {
 			name: addr.name,
 			mobile: addr.mobile,
-			regional: addr.regional_name[addr.regional_name.length - 1],
+			regional: '11' + addr.regional_name[addr.regional_name.length - 1],
 			address: addr.address,
 			address_id: addr.id,
 			auto: addr.auto ,

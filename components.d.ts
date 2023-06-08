@@ -50,7 +50,6 @@ declare module '@vue/runtime-core' {
     IEpEdit: typeof import('~icons/ep/edit')['default']
     IEpPictureFilled: typeof import('~icons/ep/picture-filled')['default']
     IEpSelect: typeof import('~icons/ep/select')['default']
-    IEpWarning: typeof import('~icons/ep/warning')['default']
     ProductCard: typeof import('./src/components/ProductCard/ProductCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

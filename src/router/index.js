@@ -75,6 +75,14 @@ const routes = [
                 component: () => import('@/views/user/index/index.vue'),
             },
             {
+                path: 'cart',
+                name: 'cart',
+                meta: {
+                    title: '采购车', 
+                },
+                component: () => import('@/views/user/cart/cart.vue')
+            },
+            {
                 path: 'product_list',
                 name: 'product_list',
                 meta: {
@@ -106,15 +114,7 @@ const routes = [
                     title: 'SKU管理', 
                 },
                 component: () => import('@/views/user/sku_list/sku_list.vue'),
-            },
-            {
-                path: 'sku_edit/:id',
-                name: 'sku_edit',
-                meta: {
-                    title: '编辑SKU', 
-                },
-                component: () => import('@/views/user/sku_edit/sku_edit.vue'),
-            },
+            }, 
             {
                 path: 'address_list',
                 name: 'address_list',
@@ -122,23 +122,24 @@ const routes = [
                     title: '地址管理', 
                 },
                 component: () => import('@/views/user/address_list/address_list.vue'),
-            },
-            // {
-            //     path: 'address_edit/:id',
-            //     name: 'address_edit',
-            //     meta: {
-            //         title: '地址编辑', 
-            //     },
-            //     component: () => import('@/views/user/address_edit/address_edit.vue'),
-            // },
-            // {
-            //     path: 'address_add',
-            //     name: 'address_add',
-            //     meta: {
-            //         title: '新增地址', 
-            //     },
-            //     component: () => import('@/views/user/address_edit/address_edit.vue'),
-            // },
+            }, 
+            {
+                path: 'order_list',
+                name: 'order_list',
+                meta: {
+                    title: '订单管理', 
+                },
+                component: () => import('@/views/user/order_list/order_list.vue'),
+            }, 
+            {
+                path: 'order/:id',
+                name: 'order',
+                meta: {
+                    title: '订单详情', 
+                },
+                props:true, 
+                component: () => import('@/views/user/order/order.vue'),
+            }, 
             {
                 path: 'info',
                 name: 'user_info',

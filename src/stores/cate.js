@@ -46,9 +46,9 @@ export const cateStore = defineStore('cate', {
 			this.regional_loading = true
 			const res = await apis.addressDetail();
 			this.regional_loading = false
-			if(res.code == 1) {
-				console.log(JSON.parse(res.regional_list))
-				this.regional_list = res.list 
+			if(res.code == 1) { 
+				this.regional_list = JSON.parse(res.regional_list) 
+				console.log(this.regional_list)
 			} 
 		},
 	},

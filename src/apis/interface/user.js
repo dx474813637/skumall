@@ -24,3 +24,12 @@ export const addressDetail = (data) => axios.get('Userapi/addressDetail', data)
 // 		address_id  地址列表中的地址ID值  选填  修改时原有数据时需要带上，否则是新添加数据
 // 		auto  0 1
 export const address_change = (data) => axios.get('Userapi/address_change', data) 
+
+
+// `create_order` 生成订单 参数pid_array  address_id
+// json格式，每一条记录包含： cid表示旺铺ID，pid商品ID，num表示购买的商品数量
+export const create_order = (data) => axios.get('Userapi/create_order', data) 
+// `order_list` 订单列表 参数p  type  订单类型 选填(系统默认4全部订单)  1待付款2待发货3待收货4全部订单
+export const order_list = (data) => axios.get('Userapi/order_list', data) 
+// `order_detail` 订单详情 参数order_id
+export const order_detail = (data) => axios.get('Userapi/order_detail', data) 
