@@ -17,7 +17,7 @@
         <div class="header-main">
             <div class="home-w">
                 <div class="main-logo">
-                    <a href="/" title="衢链通"><img src="http://zc.toocle.com//Public/attached/2022/08/22/6302e8d2c9965.jpg"
+                    <a href="/" title="衢链通"><img src="logo.png"
                             class="logo" alt="衢链通"></a>
                 </div>
                 <div class="main-search u-flex-1">

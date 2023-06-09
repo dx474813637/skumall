@@ -30,10 +30,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject } from "vue";
+import { ref, inject, onMounted } from "vue";
 const currentPage1 = ref(5)
 const small = ref(false) 
 const $api = inject('$api');  
+onMounted(() => {
+    $api.web_product()
+})
 const handleSizeChange = (val: number) => {
   console.log(`${val} items per page`)
 }

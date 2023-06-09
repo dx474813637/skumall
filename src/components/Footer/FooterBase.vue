@@ -1,4 +1,10 @@
 <template>
+	<div class="ad-box">
+		<div class="home-w">
+			<img src="ad-banner1.jpg" width="100%" alt="">
+		</div>
+	</div>
+	
 	<footer class="footer">
 		<div class="home-w">
 			<div class="footer-main">
@@ -164,6 +170,12 @@
 
 <script setup lang="ts"></script>
 <style lang="scss" scoped>
+.ad-box {
+	background-color: #fff;
+	img {
+		display: block;
+	}
+}
 .footer-list-wrap {
 	@include flex(x, between, start);
 	.list-item-title {
@@ -175,8 +187,7 @@
 }
 .footer {
 	min-height: 120px;
-	background-color: #fff;
-	border-top: 1px solid #f8f8f8;
+	background-color: #fff; 
 }
 
 @media (max-width: 768px) {

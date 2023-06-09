@@ -30,6 +30,16 @@ const routes = [
         },
         component: () => import('@/views/list/list.vue')
     },
+    {
+        path: '/product/:id',
+        name: 'product',
+        meta: {
+            title: '商品详情',
+            cache: true,
+        },
+        props:true, 
+        component: () => import('@/views/product/product.vue')
+    },
     // {
     //     path: '/home',
     //     component: () => import('@/views/home/home.vue')

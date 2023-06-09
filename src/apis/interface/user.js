@@ -1,10 +1,16 @@
 import axios from '@/request/index';
 
-// `my_card`个人信息
-export const my_card = (data) => axios.get('Userapi/my_card', data) 
-
-// `edit_card`个人信息
+// `my_card` 买卖方名片
+export const my_card = (data) => axios.get('Userapi/my_card', data)  
+// `edit_card` 编辑买卖方名片
 export const edit_card = (data, config) => axios.post('Userapi/edit_card', data, config) 
+
+// my_company 卖家企业信息
+export const my_company = (data, config) => axios.post('Userapi/my_company', data, config) 
+// save_company 编辑卖家企业信息 `company`公司名称, `img`logo, `info`介绍, `phone`联系电话, `address`地址, contacts联系人
+export const save_company = (data, config) => axios.post('Userapi/save_company', data, config) 
+
+
 // `addresss_list` 地址列表 参数p
 export const addresss_list = (data) => axios.get('Userapi/addresss_list', data) 
 // `address_detail` 地址详情 参数address_id

@@ -1,4 +1,5 @@
-import { ref, onMounted, onUnmounted, Ref } from 'vue';
+import { ref, onMounted, onUnmounted, Ref, inject } from 'vue';
+const $api = inject('$api')
 
 function useProductSku(): any {
     const sku2treeData = (skuStr: String) => {
@@ -66,12 +67,15 @@ function useProductSku(): any {
         })
         return {arr, newTabName}
     }
-
+    const getPriceStockBySkuId = async (skuId: String) => {
+		return await $api.web_pid_sku1({params: {id: skuId}})
+    }
 
     return {
         sku2treeData,
         skuTable2domains,
-        sku2domains
+        sku2domains,
+        getPriceStockBySkuId
     }
 }
 

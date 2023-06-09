@@ -22,6 +22,9 @@ export const sku_detail = (data) => axios.get('Userapi/sku_detail', data)
 export const save_sku = (data) => axios.get('Userapi/save_sku', data) 
 // pid_sku 单个商品某个规格的库存 参数pid sku json格式的字符串  { '颜色': '红色', '尺码': 'S' } 这个接口好像后台用不到，前台详情里面的。
 export const pid_sku = (data) => axios.get('Userapi/pid_sku', data) 
+// web_pid_sku1 参数id 多id “,” 隔开
+export const web_pid_sku = (data) => axios.get('Userapi/web_pid_sku', data)
+export const web_pid_sku1 = (data) => axios.get('Userapi/web_pid_sku1', data) 
 // upimg 上传图片
 export const upimg = (data, config) => axios.post('Userapi/upimg', data, config) 
 // cate_list 分类
@@ -61,3 +64,13 @@ export const save_product = (data, config) => axios.post('Userapi/save_product',
 
 // 弃用 save_stock 保存某一个规格的库存和价格 参数id 库存id stock price img
 export const save_stock = (data) => axios.get('Userapi/save_stock', data) 
+
+
+// `home` 参数p term（ 搜索关键字） tags（分类名称）term、tags两个不能同时有效，传tags了term就无效。
+export const home = (data) => axios.get('Userapi/home', data) 
+// `web_product` 参数p term（ 搜索关键字） tags（分类名称）term、tags两个不能同时有效，传tags了term就无效。
+export const web_product = (data) => axios.get('Userapi/web_product', data) 
+// `web_product_detail` 参数id
+export const web_product_detail = (data) => axios.get('Userapi/web_product_detail', data) 
+// `sign_out` 生意宝账号退出
+export const sign_out = (data) => axios.get('Userapi/sign_out', data) 

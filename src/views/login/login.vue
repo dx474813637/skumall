@@ -7,7 +7,7 @@
 				<div class="login-tabs u-p-10">
 					<el-tabs v-model="activeName" class="demo-tabs" @tabClick="handleClick">
 						<el-tab-pane label="账户登录" name="account_login"></el-tab-pane>
-						<el-tab-pane label="短信登录" name="phone_login"></el-tab-pane>
+						<el-tab-pane label="免密登录" name="phone_login"></el-tab-pane>
 					</el-tabs>
 				</div>
 
@@ -82,7 +82,7 @@
 
 		</div>
 	</div>
-	<footer-base></footer-base>
+	<footer-help></footer-help>
 	<Vcode :show="isShow" @success="success" @close="close" @fail='fail'></Vcode>
 </template>
 

@@ -1,29 +1,11 @@
 <template>
-	<header class="header" id="header">
-		<div class="header-top">
-			<div class="home-w">
-				<div class="top-left">
-					<p class="u-p-r-10">您好！欢迎光临-衢链通</p>
-					<a href="login.html" target="_blank" class="login u-m-r-5"
-						>登录</a
-					>
-					<a href="reg.html" target="_blank" class="reg u-p-l-5"
-						>免费注册</a
-					>
-				</div>
-				<div class="top-right">
-					<span class="item">合作入驻</span>
-					<span class="item">智能门店招商</span>
-					<span class="item">客服：15957197946</span>
-				</div>
-			</div>
-		</div>
+	<header class="header" id="header"> 
 		<div class="header-main">
 			<div class="home-w">
 				<div class="main-logo">
 					<a href="/" title="衢链通"
 						><img
-							src="http://zc.toocle.com//Public/attached/2022/08/22/6302e8d2c9965.jpg"
+							src="logo.png"
 							class="logo"
 							alt="衢链通"
 					/></a>

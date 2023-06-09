@@ -88,7 +88,7 @@
 		</div>
 	</div>
 	
-	<footer-base></footer-base>
+	<footer-help></footer-help>
 </template>
 
 <script setup lang="ts">
