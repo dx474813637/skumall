@@ -5,9 +5,9 @@ import './style.css'
 import App from './App.vue'
 import axios from '@/request/index' 
 import apis from '@/apis/index'
-import 'element-plus/dist/index.css' 
+import 'element-plus/dist/index.css'  
 const app = createApp(App)
-app.use(pinia)
+app.use(pinia) 
 app.use(router)
 app.provide('$api', apis); 
 app.provide('$axios', axios);

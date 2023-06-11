@@ -1,6 +1,7 @@
 import {
 	defineStore
 } from 'pinia';
+import { ElMessage } from "element-plus";
 
 
 export const baseStore = defineStore('base', {
@@ -28,6 +29,18 @@ export const baseStore = defineStore('base', {
 	// 也可以这样定义
 	// state: () => ({ count: 0 })
 	actions: { 
+		beforeUpload(rawFile) {
+			//   if (rawFile.type !== 'image/jpeg' ) {
+			// console.log(rawFile.type)
+			if (!/(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(rawFile.type)) {
+				ElMessage.error('图片格式有误！请检查！')
+				return false
+			} else if (rawFile.size / 1024 / 1024 > 2) {
+				ElMessage.error('图片大小请勿超过2MB！')
+				return false
+			}
+			return true
+		}
 	},
 });
  

@@ -18,11 +18,19 @@ export default [
 				}
 			},
 			{
-				label: '账号信息', 
+				label: '个人名片', 
 				icon: '',
 				index: 'user_info', 
 				route: {
 					name: 'user_info'
+				}
+			}, 
+			{
+				label: '企业信息', 
+				icon: '',
+				index: 'cpy_info', 
+				route: {
+					name: 'cpy_info'
 				}
 			}, 
 		]
@@ -74,7 +82,7 @@ export default [
 				} 
 			},
 			{
-				label: '购物车', 
+				label: '采购车', 
 				icon: '',
 				index: 'cart', 
 				route: {

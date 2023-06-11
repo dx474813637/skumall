@@ -21,7 +21,14 @@
                 
             </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="name" label="商品名" width="200" />
+        <el-table-column fixed="left"  label="商品名" width="200" >
+            <template #default="{row}">
+                <router-link target="_blank" tag="a" :to="`/product/${row.id}`">
+                    <el-text type="primary" >{{ row.name }}</el-text>
+                </router-link>
+                
+            </template>
+        </el-table-column>
         <el-table-column prop="cate" label="分类" width="100" />
         <el-table-column prop="sku" label="商品规格" width="200" >
             <template #default="{ $index }">

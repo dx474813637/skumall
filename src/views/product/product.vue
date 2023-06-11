@@ -47,10 +47,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch, onMounted, onBeforeMount, inject } from 'vue';
+import { reactive, ref, watch, onMounted, onUnmounted, inject } from 'vue';
 import { cartStore } from '@/stores/cart'
+import { ElMessage } from 'element-plus'
 const cart = cartStore()
-import useProductSku from '@/hook/useProductSku'
+import useProductSku from '@/hook/useProductSku.ts'
 const {
     sku2treeData,
 	getPriceStockBySkuId
@@ -61,7 +62,7 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
-});
+});     
 const product_base_data = ref({})
 const spec_prices_data = ref([])
 const product_shop_data = ref({})
@@ -77,20 +78,21 @@ const product_num_max = ref(Infinity)
 watch(
 	() => product_base_data.value.sku,
 	(val) => {
-		console.log(val);
+		// console.log(val);
 		product_sku.data = sku2treeData(val)
 		product_sku.data.forEach(ele => {
 			product_sku.form[ele.label] = ''
 		})
-		console.log(product_sku.form)
+		// console.log(product_sku.form)
 	}
 )
-
-onBeforeMount(() => {
-	console.log('2.组件挂载页面之前执行----onBeforeMount')
-})
+ 
 onMounted(async () => {
 	await getData()
+	window.addEventListener('storage', cart.addEventLocalStorage)  
+})
+onUnmounted(() => {
+	window.removeEventListener('storage', cart.addEventLocalStorage)
 })
 
 const getData = async () => {
@@ -124,12 +126,15 @@ const addCartBtn = () => {
 	if(i == -1) return
 	skuItem = {
 		...spec_prices_data.value[i],
+		img: spec_prices_data.value[i].img ? spec_prices_data.value[i].img : spec_prices_data.value[i].pic.split('|')[0],
 		shop: product_shop_data.value || {},
 		name: product_base_data.value.name,
 		freight_id: product_base_data.value.freight_id,
-		num: product_num.value
+		num: product_num.value,
+		checked: false,
 	}
 	cart.addProduct2Cart(skuItem)
+	ElMessage.success('操作成功')
 }
 
 </script>

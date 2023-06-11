@@ -39,3 +39,5 @@ export const create_order = (data) => axios.get('Userapi/create_order', data)
 export const order_list = (data) => axios.get('Userapi/order_list', data) 
 // `order_detail` 订单详情 参数order_id
 export const order_detail = (data) => axios.get('Userapi/order_detail', data) 
+// `orderConfirm`  
+export const orderConfirm = (data) => axios.get('Userapi/orderConfirm', data) 

@@ -8,7 +8,9 @@ export const userStore = defineStore('user', {
 	state: () => {
 		return {
 			user_info: {},
-			user_loading: false
+			user_loading: false,
+			cpy_info: {},
+			cpy_loading: false,
 		};
 	},
 	getters: {
@@ -23,6 +25,14 @@ export const userStore = defineStore('user', {
 			this.user_loading = false
 			if(res.code == 1) {
 				this.user_info = res.list 
+			} 
+		}, 
+		async getCpyData(needLoading = false) {
+			this.cpy_loading = true
+			const res = await apis.my_company({needLoading});
+			this.cpy_loading = false
+			if(res.code == 1) {
+				this.cpy_info = res.list || {}
 			} 
 		}, 
 	},

@@ -182,8 +182,8 @@ const onBack = () => {
 	flex: 0 0 calc(100% - $user-menus-w);
 	width: calc(100% - $user-menus-w);
 	min-height: 80vh;
-	padding-left: 10px;
-	padding-right: 10px;
+	// padding-left: 10px;
+	// padding-right: 10px;
 	@extend %box-sizing;
 }
 .el-page-header {

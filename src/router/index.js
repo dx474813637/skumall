@@ -142,6 +142,14 @@ const routes = [
                 component: () => import('@/views/user/order_list/order_list.vue'),
             }, 
             {
+                path: 'order_create',
+                name: 'order_create',
+                meta: {
+                    title: '订单创建', 
+                }, 
+                component: () => import('@/views/user/order_create/order_create.vue'),
+            }, 
+            {
                 path: 'order/:id',
                 name: 'order',
                 meta: {
@@ -154,9 +162,17 @@ const routes = [
                 path: 'info',
                 name: 'user_info',
                 meta: {
-                    title: '账号信息', 
+                    title: '个人名片', 
                 },
                 component: () => import('@/views/user/info/info.vue'),
+            },
+            {
+                path: 'cpy_info',
+                name: 'cpy_info',
+                meta: {
+                    title: '企业信息', 
+                },
+                component: () => import('@/views/user/cpy_info/cpy_info.vue'),
             },
         ]
     },
