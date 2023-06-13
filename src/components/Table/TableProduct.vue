@@ -93,7 +93,7 @@
 </template>
 
 <script setup lang='ts'>
-import { reactive,ref,computed, inject, onBeforeMount, toRefs } from 'vue'
+import { reactive,ref,computed, inject, onMounted, toRefs } from 'vue'
 import { ElNotification } from 'element-plus'
 import router from "@/router/guard" 
 import { cateStore } from '@/stores/cate' 
@@ -133,7 +133,7 @@ const defaultProps = {
   children: 'children',
   label: 'label',
 }
-onBeforeMount(async () => {
+onMounted(async () => {
     loading.value = true; 
     await getData()
     loading.value = false;

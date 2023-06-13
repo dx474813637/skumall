@@ -154,7 +154,7 @@ export default [
 				} 
 			},
 			{
-				label: '授信申请', 
+				label: '授信申请历史', 
 				icon: '',
 				index: 'pacc_query_list', 
 				route: {

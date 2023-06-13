@@ -2,6 +2,7 @@ import {
 	defineStore
 } from 'pinia';
 import apis from '@/apis/index'
+import {exchangeRegionalData} from '@/utils'
 // import { useStoreB } from '@/store/modules/page_b';
 // const storeB = useStoreB();
 // let { pniaBcuntData } = storeToRefs(storeB);
@@ -37,6 +38,8 @@ export const useFinanceStore = defineStore('finance', {
 			],
 			bank_list: [],
 			bank_loading: false, 
+			regional_list: [],
+			regional_loading: false, 
 		}
 	}, 
 	actions: {    
@@ -66,6 +69,15 @@ export const useFinanceStore = defineStore('finance', {
 				this.bank_list = res.list.bank_list
 			} 
 		},  
+		async getRegionalData(needLoading = false) {
+			this.regional_loading = true 
+			const res = await apis.get_regional({needLoading});
+			this.regional_loading = false
+			if(res.code == 1) { 
+				this.regional_list = exchangeRegionalData( 'items', res.list)   
+			} 
+		},  
+
 	},
 });
  

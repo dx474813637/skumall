@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang='ts'>
-import { reactive,ref,computed, inject, onBeforeMount } from 'vue'
+import { reactive,ref,computed, inject, onMounted } from 'vue'
 import router from "@/router/guard" 
 import { deepClone } from '@/utils';
 import useProductSku from '@/hook/useProductSku'
@@ -95,7 +95,7 @@ const defaultProps = {
   children: 'children',
   label: 'label',
 }
-onBeforeMount(async () => {
+onMounted(async () => {
     loading.value = true; 
     await getData()
     loading.value = false;

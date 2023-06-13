@@ -126,4 +126,16 @@ export function toGuid(len = 32, firstU = true, radix = null) {
 	return uuid.join('')
 }
 
- 
+export function exchangeRegionalData(keyname, origin) {
+    let arr = deepClone(origin[keyname]).map(ele => ({label: ele.name, value: ele.code}));
+    arr.forEach(ele => {
+        let key = 'items'+ele.value
+        let item = origin[key] 
+        if(item) {
+            ele.children = exchangeRegionalData(key, origin)
+        }
+    });
+
+    return arr
+
+}

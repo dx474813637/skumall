@@ -8,7 +8,7 @@ let timeout = null
  * @param {Boolean} immediate 是否立即执行
  * @return null
  */
-function debounce(func, wait = 500, immediate = false) {
+function debounce(func, wait = 500, immediate = false, ...arg) {
     // 清除定时器
     if (timeout !== null) clearTimeout(timeout)
     // 立即执行，此类情况一般用不到
@@ -17,11 +17,11 @@ function debounce(func, wait = 500, immediate = false) {
         timeout = setTimeout(() => {
             timeout = null
         }, wait)
-        if (callNow) typeof func === 'function' && func()
+        if (callNow) typeof func === 'function' && func(...arg)
     } else {
         // 设置定时器，当最后一次操作后，timeout不会再被清除，所以在延时wait毫秒后执行func回调方法
         timeout = setTimeout(() => {
-            typeof func === 'function' && func()
+            typeof func === 'function' && func(...arg)
         }, wait)
     }
 }
