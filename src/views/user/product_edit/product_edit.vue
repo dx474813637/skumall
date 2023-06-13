@@ -951,7 +951,7 @@ function formParams2apiParams() {
     let tar = formParams.domains2Price.map(ele => { 
         let obj = {
             sku: deepClone(ele.sku),
-            img: ele.filesList[0].url,
+            img: ele.filesList[0]?.url,
             stock: ele.stock,
             price: ele.price,
         }

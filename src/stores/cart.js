@@ -1,24 +1,33 @@
 import {
-	defineStore
+	defineStore,
+	storeToRefs
 } from 'pinia';
 import apis from '@/apis/index'
 import { deepMerge, deepClone } from '@/utils'
+import { userStore } from '@/stores/user';
+const user = userStore();
+let { login } = storeToRefs(user); 
 
-
+let cart_list = [];
+if(localStorage.getItem('cart_list')) cart_list = JSON.parse(localStorage.getItem('cart_list'))[login.value] || []
+console.log(cart_list)
 export const cartStore = defineStore('cart', {
 	state: () => {
 		return { 
-			cart_list: JSON.parse(localStorage.getItem('cart_list')) || []
+			cart_list: cart_list
 		};
 	},
 	getters: { 
 		cart_list_num() {
+			if(!this.cart_list || this.cart_list.length == 0) return 0
 			return this.cart_list.map(ele => ele.products.reduce((sum, item) => sum += +item.num, 0)).reduce((sum, item) => sum += item, 0)
 		},
 		cart_list_checked_num() {
+			if(!this.cart_list || this.cart_list.length == 0) return 0
 			return this.cart_list.map(ele => ele.products.filter(item => item.checked).reduce((sum, item) => sum += Number(item.num), 0)).reduce((sum, item) => sum += item, 0) 
 		},
 		cart_list_checked_price() {
+			if(!this.cart_list || this.cart_list.length == 0) return 0
 			return this.cart_list.map(ele => ele.products.filter(item => item.checked).reduce((sum, item) => sum += (item.num*item.price), 0)).reduce((sum, item) => sum += item, 0) 
 		},
 	}, 
@@ -30,10 +39,15 @@ export const cartStore = defineStore('cart', {
 			}
 		},
 		saveCartData2LocalStorage() {
-			localStorage.setItem('cart_list', JSON.stringify(this.cart_list))
+			let oridinData = JSON.parse(localStorage.getItem('cart_list')) || {}
+			oridinData[login.value] = this.cart_list
+			localStorage.setItem('cart_list', JSON.stringify(oridinData))
 		},
 		saveLocalStorage2CartData() {
-			this.cart_list = JSON.parse(localStorage.getItem('cart_list')) || []
+			if(localStorage.getItem('cart_list')) {
+				this.cart_list = JSON.parse(localStorage.getItem('cart_list'))[login.value] || []
+			}
+			
 			
 		},
 		removeCartData() {
@@ -96,11 +110,11 @@ export const cartStore = defineStore('cart', {
  
 			this.saveCartData2LocalStorage()
 		},
-		setPidSku(arr) {
-			this.cart_list.some((cart ) => {
-				return cart.products.some((item) => {
+		setPidSku(arr, idStr) { 
+			this.cart_list.forEach((cart ) => {
+				cart.products.forEach((item) => {
 					let itemIndex = arr.findIndex((ele) => ele.id == item.id)
-					if(itemIndex != -1) {
+					if(itemIndex != -1) { 
 						let itemObj = arr[itemIndex]
 						item = {
 							...item,
@@ -108,22 +122,52 @@ export const cartStore = defineStore('cart', {
 							stock: itemObj.stock,
 							num: +(itemObj.stock > item.num? item.num : itemObj.stock),
 							price: itemObj.price
-						}
-						return true
-					}
-					return  false
+						} 
+					}else if(idStr.includes(item.id)) { 
+						item.disabled = true
+						item.checked = false
+					} 
 				}) 
 			})
+			// console.log(this.cart_list)
 		},
-		async getPidSku(idStr) {
+		async getPidSku(idStr) { 
 			if(!idStr) return 
-			const res = await apis.web_pid_sku1({
+			let obj = {}
+			obj = await apis.web_pid_sku1({
 				params: { id: idStr }
 			})
-			if(res.code == 1) {
-				// let idArr = res.list.map((r) => r.id); 
-				this.setPidSku(res.list)
-			}
+			.then( res => {
+				this.setPidSku(res.list, idStr)
+				this.saveCartData2LocalStorage()
+				return {
+					res: res.list
+				}
+			})
+			.catch(res => {
+				this.setPidSku([], idStr)
+				this.saveCartData2LocalStorage()
+				return {
+					res: []
+				}
+			})
+			console.log(obj)
+			return obj
+			
+			 
+		},
+		removeProductsById(arr) { 
+			let data = deepClone(this.cart_list)
+			data.forEach((cart, index ) => {
+				cart.products.forEach((item, i) => {
+					let itemIndex = arr.findIndex((id) => id == item.id)
+					if(itemIndex != -1) {   
+						data[index].products[i] = false 
+					} 
+				}) 
+			})
+			this.cart_list = data.map(ele =>( {...ele, products: ele.products.filter(item => item)})).filter(ele => ele.products.length != 0)
+			console.log(this.cart_list)
 		}
 	},
 });

@@ -21,11 +21,6 @@ export const useSettingsStore = defineStore(
                 this.title = title
                 useDynamicTitle();
             },
-            logout() {
-                console.log('清除token 登录过期')
-                localStorage.removeItem('token')
-                localStorage.removeItem('login')
-            },
             goLogin() {
                 router.push({ name: 'login' }) 
             },

@@ -5,9 +5,7 @@
 
 <script setup lang='ts'>
 import { reactive,ref, inject} from 'vue'  
-const $api: any = inject('$api')
-$api.my_card() 
-$api.bank_buy_all()
+const $api: any = inject('$api') 
 </script>
 <style lang='scss' scoped>
 </style>

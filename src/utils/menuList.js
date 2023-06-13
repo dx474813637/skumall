@@ -1,6 +1,6 @@
 
 import {
-	User, Setting, Handbag, Pointer
+	User, Setting, Handbag, Pointer, Postcard, Files
 } from "@element-plus/icons-vue"; 
 export default [
 	{
@@ -82,6 +82,14 @@ export default [
 				} 
 			},
 			{
+				label: '融资记录',
+				icon: '',
+				index: 'order_list', 
+				route: {
+					name: 'order_list'
+				} 
+			},
+			{
 				label: '采购车', 
 				icon: '',
 				index: 'cart', 
@@ -95,6 +103,84 @@ export default [
 				index: 'address_list', 
 				route: {
 					name: 'address_list'
+				} 
+			}, 
+		]
+	}, 
+	{
+		label: '身份认证中心',
+		type: 'title',
+		index: '4',
+		icon: Postcard,
+		children: [
+			{
+				label: '认证信息',
+				icon: '',
+				index: 'finance_account', 
+				route: {
+					name: 'finance_account'
+				} 
+			},
+			{
+				label: '个人认证', 
+				icon: '',
+				index: 'user_apply', 
+				route: {
+					name: 'user_apply'
+				} 
+			},
+			{
+				label: '企业认证', 
+				icon: '',
+				index: 'company_apply', 
+				route: {
+					name: 'company_apply'
+				} 
+			} 
+		]
+	}, 
+	{
+		label: '授信签约中心',
+		type: 'title',
+		index: '5',
+		icon: Files,
+		children: [
+			{
+				label: '融资产品',
+				icon: '',
+				index: 'query_product_list', 
+				route: {
+					name: 'query_product_list'
+				} 
+			},
+			{
+				label: '授信申请', 
+				icon: '',
+				index: 'pacc_query_list', 
+				route: {
+					name: 'pacc_query_list'
+				} 
+			},
+			{
+				label: '授信记录', 
+				icon: '',
+				index: 'pacc_type_detail1', 
+				route: {
+					name: 'pacc_type_detail',
+					params: {
+						type: 1
+					}
+				} 
+			}, 
+			{
+				label: '签约记录', 
+				icon: '',
+				index: 'pacc_type_detail2', 
+				route: {
+					name: 'pacc_type_detail',
+					params: {
+						type: 2
+					}
 				} 
 			}, 
 		]

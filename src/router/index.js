@@ -174,6 +174,110 @@ const routes = [
                 },
                 component: () => import('@/views/user/cpy_info/cpy_info.vue'),
             },
+            {
+                path: 'finance',
+                name: 'finance',
+                meta: {
+                    title: '融资中心', 
+                    isFinanceAuth: true,
+                },
+                component: () => import('@/views/user/finance/finance.vue'),
+                children: [
+                    {
+                        path: 'finance_account',
+                        name: 'finance_account',
+                        meta: {
+                            title: '认证信息', 
+                        },
+                        props: true,
+                        component: () => import('@/views/user/finance/account/account.vue'),
+                    },
+                    {
+                        path: 'user_apply',
+                        name: 'user_apply',
+                        meta: {
+                            title: '个人认证表单', 
+                        },
+                        component: () => import('@/views/user/finance/user_apply/user_apply.vue'),
+                    },
+                    {
+                        path: 'user_verify',
+                        name: 'user_verify',
+                        meta: {
+                            title: '个人验证', 
+                        },
+                        component: () => import('@/views/user/finance/user_verify/user_verify.vue'),
+                    },
+                    {
+                        path: 'company_apply',
+                        name: 'company_apply',
+                        meta: {
+                            title: '企业认证表单', 
+                        },
+                        component: () => import('@/views/user/finance/company_apply/company_apply.vue'),
+                    },
+                    {
+                        path: 'company_verify',
+                        name: 'company_verify',
+                        meta: {
+                            title: '企业验证', 
+                        },
+                        component: () => import('@/views/user/finance/company_verify/company_verify.vue'),
+                    },
+                    {
+                        path: 'query_product_list',
+                        name: 'query_product_list',
+                        meta: {
+                            title: '融资产品列表', 
+                        },
+                        component: () => import('@/views/user/finance/query_product_list/query_product_list.vue'),
+                    },
+                    {
+                        path: 'query_product/:id',
+                        name: 'query_product',
+                        meta: {
+                            title: '融资产品详情', 
+                        },
+                        props: true,
+                        component: () => import('@/views/user/finance/query_product/query_product.vue'),
+                    },
+                    {
+                        path: 'pacc_query_edit/:id',
+                        name: 'pacc_query_edit',
+                        meta: {
+                            title: '预授信申请表单', 
+                        },
+                        props: true,
+                        component: () => import('@/views/user/finance/pacc_query_edit/pacc_query_edit.vue'),
+                    },
+                    {
+                        path: 'pacc_query_list',
+                        name: 'pacc_query_list',
+                        meta: {
+                            title: '授信申请列表', 
+                        },
+                        component: () => import('@/views/user/finance/pacc_query_list/pacc_query_list.vue'),
+                    },
+                    {
+                        path: 'pacc_query/:id',
+                        name: 'pacc_query',
+                        meta: {
+                            title: '授信申请详情', 
+                        },
+                        props: true,
+                        component: () => import('@/views/user/finance/pacc_query/pacc_query.vue'),
+                    },
+                    {
+                        path: 'pacc_type_detail/:type',
+                        name: 'pacc_type_detail',
+                        meta: {
+                            title: '授信签约详情', 
+                        },
+                        props: true,
+                        component: () => import('@/views/user/finance/pacc_type_detail/pacc_type_detail.vue'),
+                    },
+                ]
+            },
         ]
     },
     {

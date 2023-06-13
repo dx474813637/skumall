@@ -101,6 +101,7 @@
 				<el-cascader 
 					style="width: 100%;"
 					v-model="addrForm.regional_name" 
+					@change="value=> console.log(value)"
 					:options="regional_list"   
 					placeholder="请选择"
 					:props="{
@@ -148,7 +149,7 @@ async function getData() {
 		p: curP.value,
 	} });
 	if(res.code == 1) {
-		list.value = res.list.list.filter(ele => ele.id != -1).map(ele => ({...ele, regional: ele.regional.toString().slice(2)}));
+		list.value = res.list.list.filter(ele => ele.id != -1);
 		total.value = res.list.pw_rec_total;
 	}
 }
@@ -285,7 +286,7 @@ async function handleChangeAddr() {
 		params: {
 			name: addr.name,
 			mobile: addr.mobile,
-			regional: '11' + addr.regional_name[addr.regional_name.length - 1],
+			regional: addr.regional_name[addr.regional_name.length - 1],
 			address: addr.address,
 			address_id: addr.id,
 			auto: addr.auto ,

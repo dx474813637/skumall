@@ -97,6 +97,8 @@ import menuList from "@/utils/menuList"
 import router from "@/router/guard" 
 import {useSettingsStore} from '@/stores/settings'
 const useSettings = useSettingsStore()
+import {userStore} from '@/stores/user'
+const user = userStore()
 const menuListRef = ref(menuList)
 const menuActive = ref('user_index')
 const addBtnList = [
@@ -143,7 +145,7 @@ watch(
 )
 
 const logout = () => {
-	useSettings.logout()
+	user.logout()
 	useSettings.goLogin()
 }
 

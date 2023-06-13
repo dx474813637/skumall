@@ -35,9 +35,15 @@ export const address_change = (data) => axios.get('Userapi/address_change', data
 // `create_order` 生成订单 参数pid_array  address_id
 // json格式，每一条记录包含： cid表示旺铺ID，pid商品ID，num表示购买的商品数量
 export const create_order = (data) => axios.get('Userapi/create_order', data) 
-// `order_list` 订单列表 参数p  type  订单类型 选填(系统默认4全部订单)  1待付款2待发货3待收货4全部订单
+// `order_list` 订单列表  参数type 1待付款 2待收货 3已完成 role=1 卖家的订单列表 不传或传其他值 买家的订单列表 p页数
 export const order_list = (data) => axios.get('Userapi/order_list', data) 
 // `order_detail` 订单详情 参数order_id
 export const order_detail = (data) => axios.get('Userapi/order_detail', data) 
 // `orderConfirm`  
 export const orderConfirm = (data) => axios.get('Userapi/orderConfirm', data) 
+
+
+// order_score 订单评分 参数order_id score 1-5
+export const order_score = (data) => axios.get('Userapi/order_score', data) 
+// login_role 角色权限
+export const login_role = (data) => axios.get('Userapi/login_role', data) 

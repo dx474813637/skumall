@@ -2,7 +2,9 @@ import {
 	defineStore
 } from 'pinia';
 import apis from '@/apis/index'
-
+// import { useStoreB } from '@/store/modules/page_b';
+// const storeB = useStoreB();
+// let { pniaBcuntData } = storeToRefs(storeB);
 
 export const userStore = defineStore('user', {
 	state: () => {
@@ -11,6 +13,7 @@ export const userStore = defineStore('user', {
 			user_loading: false,
 			cpy_info: {},
 			cpy_loading: false,
+			login: localStorage.getItem('login') || ''
 		};
 	},
 	getters: {
@@ -18,7 +21,13 @@ export const userStore = defineStore('user', {
 	},
 	// 也可以这样定义
 	// state: () => ({ count: 0 })
-	actions: { 
+	actions: {  
+		logout() {
+			console.log('清除token 登录过期')
+			this.login = ''
+			localStorage.removeItem('token')
+			localStorage.removeItem('login')
+		},
 		async getUserData(needLoading = false) {
 			this.user_loading = true
 			const res = await apis.my_card({needLoading});
