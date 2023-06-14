@@ -3,13 +3,21 @@ import pinia from '@/stores/index.js';
 import router from '@/router/guard'
 import './style.css'
 import App from './App.vue'
-import axios from '@/request/index' 
+import axios from '@/request/index'
 import apis from '@/apis/index'
-import 'element-plus/dist/index.css'  
+import 'element-plus/dist/index.css'
+
+import filters from '@/plugins/filters'
+declare module '@vue/runtime-core' {
+	interface ComponentCustomProperties {
+		$filters: Record<string, any>
+	}
+}
 const app = createApp(App)
-app.use(pinia) 
+app.use(pinia)
 app.use(router)
-app.provide('$api', apis); 
+app.use(filters)
+app.provide('$api', apis);
 app.provide('$axios', axios);
 app.mount('#app')
 

@@ -268,14 +268,31 @@ const routes = [
                         component: () => import('@/views/user/finance/pacc_query/pacc_query.vue'),
                     },
                     {
-                        path: 'pacc_type_detail/:type',
-                        name: 'pacc_type_detail',
+                        path: 'order_bank_list',
+                        name: 'order_bank_list',
                         meta: {
-                            title: '授信签约详情', 
+                            title: '融资请求列表', 
+                        },
+                        component: () => import('@/views/user/finance/order_bank_list/order_bank_list.vue'),
+                    },
+                    {
+                        path: 'order_bank/:id',
+                        name: 'order_bank',
+                        meta: {
+                            title: '融资请求详情', 
                         },
                         props: true,
-                        component: () => import('@/views/user/finance/pacc_type_detail/pacc_type_detail.vue'),
+                        component: () => import('@/views/user/finance/order_bank/order_bank.vue'),
                     },
+                    // {
+                    //     path: 'pacc_type_detail/:type',
+                    //     name: 'pacc_type_detail',
+                    //     meta: {
+                    //         title: '授信签约详情', 
+                    //     },
+                    //     props: true,
+                    //     component: () => import('@/views/user/finance/pacc_type_detail/pacc_type_detail.vue'),
+                    // },
                 ]
             },
         ]

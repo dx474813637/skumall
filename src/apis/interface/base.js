@@ -20,6 +20,8 @@ export const login_sku = (data) => axios.get('Userapi/login_sku', data)
 export const sku_detail = (data) => axios.get('Userapi/sku_detail', data) 
 // save_sku 保存sku 参数id name sku 有id更新没有id新增
 export const save_sku = (data) => axios.get('Userapi/save_sku', data) 
+// del_sku 删除sku 参数id
+export const del_sku = (data) => axios.get('Userapi/del_sku', data) 
 // pid_sku 单个商品某个规格的库存 参数pid sku json格式的字符串  { '颜色': '红色', '尺码': 'S' } 这个接口好像后台用不到，前台详情里面的。
 export const pid_sku = (data) => axios.get('Userapi/pid_sku', data) 
 // web_pid_sku1 参数id 多id “,” 隔开

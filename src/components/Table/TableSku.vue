@@ -39,6 +39,11 @@
             </template>
             
         </el-table-column>
+        <template #empty>
+            <div class="u-flex u-flex-center u-p-t-20 u-p-b-20">
+                <el-empty description="无数据" />
+            </div>
+        </template>
     </el-table>
     <div class="list-page-box u-p-t-20 u-p-b-20">
         <el-pagination

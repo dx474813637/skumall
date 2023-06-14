@@ -82,14 +82,6 @@ export default [
 				} 
 			},
 			{
-				label: '融资记录',
-				icon: '',
-				index: 'order_list', 
-				route: {
-					name: 'order_list'
-				} 
-			},
-			{
 				label: '采购车', 
 				icon: '',
 				index: 'cart', 
@@ -108,10 +100,10 @@ export default [
 		]
 	}, 
 	{
-		label: '身份认证中心',
+		label: '融资中心',
 		type: 'title',
 		index: '4',
-		icon: Postcard,
+		icon: Files,
 		children: [
 			{
 				label: '认证信息',
@@ -136,15 +128,7 @@ export default [
 				route: {
 					name: 'company_apply'
 				} 
-			} 
-		]
-	}, 
-	{
-		label: '授信签约中心',
-		type: 'title',
-		index: '5',
-		icon: Files,
-		children: [
+			} ,
 			{
 				label: '融资产品',
 				icon: '',
@@ -154,7 +138,7 @@ export default [
 				} 
 			},
 			{
-				label: '授信申请历史', 
+				label: '授信申请', 
 				icon: '',
 				index: 'pacc_query_list', 
 				route: {
@@ -162,29 +146,61 @@ export default [
 				} 
 			},
 			{
-				label: '授信记录', 
+				label: '融资记录',
 				icon: '',
-				index: 'pacc_type_detail1', 
+				index: 'order_bank_list', 
 				route: {
-					name: 'pacc_type_detail',
-					params: {
-						type: 1
-					}
+					name: 'order_bank_list'
 				} 
-			}, 
-			{
-				label: '签约记录', 
-				icon: '',
-				index: 'pacc_type_detail2', 
-				route: {
-					name: 'pacc_type_detail',
-					params: {
-						type: 2
-					}
-				} 
-			}, 
+			},
 		]
 	}, 
+	// {
+	// 	label: '授信签约中心',
+	// 	type: 'title',
+	// 	index: '5',
+	// 	icon: Files,
+	// 	children: [
+	// 		{
+	// 			label: '融资产品',
+	// 			icon: '',
+	// 			index: 'query_product_list', 
+	// 			route: {
+	// 				name: 'query_product_list'
+	// 			} 
+	// 		},
+	// 		{
+	// 			label: '授信申请', 
+	// 			icon: '',
+	// 			index: 'pacc_query_list', 
+	// 			route: {
+	// 				name: 'pacc_query_list'
+	// 			} 
+	// 		},
+	// 		// {
+	// 		// 	label: '授信记录', 
+	// 		// 	icon: '',
+	// 		// 	index: 'pacc_type_detail1', 
+	// 		// 	route: {
+	// 		// 		name: 'pacc_type_detail',
+	// 		// 		params: {
+	// 		// 			type: 1
+	// 		// 		}
+	// 		// 	} 
+	// 		// }, 
+	// 		// {
+	// 		// 	label: '签约记录', 
+	// 		// 	icon: '',
+	// 		// 	index: 'pacc_type_detail2', 
+	// 		// 	route: {
+	// 		// 		name: 'pacc_type_detail',
+	// 		// 		params: {
+	// 		// 			type: 2
+	// 		// 		}
+	// 		// 	} 
+	// 		// }, 
+	// 	]
+	// }, 
 	{
 		label: '安全登出',
 		type: 'func', 

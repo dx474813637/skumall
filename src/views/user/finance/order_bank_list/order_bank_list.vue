@@ -4,7 +4,7 @@
 		<div class="u-flex u-flex-between u-m-b-20">
 			<div class="item"></div>
 			<div class="item">
-				<el-select v-model="value" placeholder="授信状态筛选" size="large">
+				<el-select v-model="value" placeholder="状态筛选" size="large">
 					<el-option
 						v-for="item in tabs_list"
 						:key="item.value"
@@ -15,9 +15,9 @@
 				</el-select>
 			</div>
 		</div>
-		<table-query
+		<table-order-bank
 			:customParams="customParams"
-			></table-query>
+			></table-order-bank>
 	</div>
 </template>
   
@@ -26,19 +26,18 @@ import { computed, ref, inject } from 'vue'
 const $api: any = inject('$api')
 const tabs_list = ref([
 	{ label: '全部', value: '' },
-	{ label: '授信申请中', value: '1' },
-	{ label: '授信已递交', value: '2' },
-	{ label: '授信签约取消中', value: '3' },
-	{ label: '授信失败', value: '4' },
-	{ label: '授信通过，签约中', value: '5' },
-	{ label: '授信通过，贷款企业已签约', value: '6' },
-	{ label: '授信通过，签约通过', value: '7' },
-	{ label: '授信通过，贷款账户已激活', value: '8' },
+	{ label: '融资申请中', value: '1' },
+	{ label: '流程暂停', value: '2' },
+	{ label: '财务已拒绝', value: '3' },
+	{ label: '放款机构已同意', value: '4' },
+	{ label: '放款机构已拒绝', value: '5' },
+	{ label: '提款成功', value: '6' },
+	{ label: '提款失败', value: '7' }, 
 ])
 const value = ref('');
 const customParams = computed(() => {
 	return {
-		status: value.value
+		rz_status: value.value
 	}
 })
 </script>
