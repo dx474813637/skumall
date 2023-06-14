@@ -10,7 +10,7 @@ export const query_product_detail = (data) => axios.get('Userapi/query_product_d
 export const pacc_detail = (data) => axios.get('Userapi/pacc_detail', data)
 
 // pacc    三(2)、预授信申请提交  
-export const pacc = (data) => axios.get('Userapi/pacc', data)
+export const pacc = (data, config) => axios.post('Userapi/pacc', data, config)
 
 // pacc_businessProvince 35个省级数据
 export const pacc_businessProvince = (data) => axios.get('Userapi/pacc_businessProvince', data)

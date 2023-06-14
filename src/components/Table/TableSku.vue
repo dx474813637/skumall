@@ -28,14 +28,36 @@
             </template>
         </el-table-column>
         <el-table-column prop="uptime" label="更新时间" width="200" />
-        <el-table-column label="操作" width="120" v-if="isEditBtn"> 
+        <el-table-column label="操作" width="90" align="center" v-if="isEditBtn"> 
             <template #default="{row}">
-                <el-button 
+                <div class="u-flex">
+                    <el-button 
                     link 
                     type="primary" 
                     size="small" 
                     @click="router.push({name: 'sku_edit', params: {id: row.id}})"
-                    >编辑</el-button> 
+                    >编辑</el-button>  
+
+                    <el-popconfirm 
+                        title="移除确认" 
+                        @confirm="deleteSku(row.id)"
+                        confirm-button-text="确认"
+                        cancel-button-text="取消"
+                        >
+                        <template #reference>
+                            <el-button 
+                                class="u-m-l-8"
+                                link 
+                                type="danger" 
+                                size="small"  
+                                >删除</el-button> 
+                        </template>
+                    </el-popconfirm>
+
+
+                
+                </div>
+                
             </template>
             
         </el-table-column>
@@ -64,6 +86,7 @@
 <script setup lang='ts'>
 import { reactive,ref,computed, inject, onMounted } from 'vue'
 import router from "@/router/guard" 
+import { ElMessage } from "element-plus";
 import { deepClone } from '@/utils';
 import useProductSku from '@/hook/useProductSku'
 const {
@@ -101,12 +124,14 @@ const defaultProps = {
   label: 'label',
 }
 onMounted(async () => {
+    refreshData()
+})
+async function refreshData() {
+    
     loading.value = true; 
     await getData()
     loading.value = false;
-
-})
-
+}
 const getData = async () => { 
     const res = await $api.login_sku({params: paramsObj.value, loading: false}) 
     skuList.value = res.list.map(ele => ({...ele, sku: sku2treeData(ele.sku)}))
@@ -124,6 +149,13 @@ const handleCurrentTableChange = (val: User | undefined) => {
     if(!props.isRadioGroup) return 
     currentRow.value = val
     emit('setCurrentRow', {value: deepClone(currentRow.value)})
+}
+const deleteSku = async (id) => {
+    const res = await $api.del_sku({params: {id}});
+    if(res.code == 1){
+        ElMessage.success(res.msg)
+        refreshData()
+    }
 }
 
 </script>

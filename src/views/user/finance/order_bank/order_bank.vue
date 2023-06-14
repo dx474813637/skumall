@@ -1,49 +1,229 @@
 <!--  -->
 <template>
-	<div class="u-p-10 box">
-		<div class="u-flex u-flex-between u-m-b-20">
-			<div class="item"></div>
-			<div class="item">
-				<el-select v-model="value" placeholder="授信状态筛选" size="large">
-					<el-option
-						v-for="item in tabs_list"
-						:key="item.value"
-						:label="item.label"
-						:value="item.value"
-						/>
-					<template #prefix><i-ep-search /></template>
-				</el-select>
-			</div>
-		</div>
-		<table-query
-			:customParams="customParams"
-			></table-query>
+	<div class="u-p-20 box">
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">融资ID</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">{{ list.id }}</div>
+			</el-col>
+		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">来源订单</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">
+					<el-link :underline="false">
+						<el-text type="primary" @click="router.push({name: 'order', params: {id: list.order_id}})">{{ list.order_id }}</el-text>
+					</el-link>
+					
+				</div>
+			</el-col>
+		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">卖家</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">{{ list.sell_company }}</div>
+			</el-col>
+		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">买家</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">{{ list.buy_company }}</div>
+			</el-col>
+		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">订单商品</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">{{ list.order?.product_names }}</div>
+			</el-col>
+		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">融资金额</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">{{ list.price }}元</div>
+			</el-col>
+		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">放款银行</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">
+					<el-link :underline="false">
+						<el-text type="primary" @click="router.push({name: 'pacc_query', params: {id: list.bank_pacc?.id}})">{{ list.bank_zxrz?.bank_name }}</el-text>
+					</el-link>
+				</div>
+			</el-col>
+		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">融资时间</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">{{ list.post_time }} </div>
+			</el-col>
+		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">融资期限</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">{{list.bank_pacc?.credit_termMonth}}月</div>
+			</el-col>
+		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">融资状态</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content u-flex" v-loading="loading_status"> 
+					<el-text type="danger" v-if="list.status == '4'">{{ $filters.order_rz_status(list.rz_status) }}</el-text>
+					<el-text type="success" v-else-if="list.rz_status == '8'">{{ $filters.order_rz_status(list.rz_status) }}</el-text>
+					<el-text type="warning" v-else>{{ $filters.order_rz_status(list.rz_status) }}</el-text> 
+
+					<el-button type="primary" plain size="small" class="u-m-l-30" @click="updateStatusBtn">更新</el-button>
+				</div>
+			</el-col>
+		</el-row> 
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">订单支付状态</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content u-flex" v-loading="loading_status"> 
+                <el-text type="danger" v-if="list.status == '6'">{{ $filters.order_pay_status(list.status) }}</el-text>
+                <el-text type="success" v-else-if="list.status == '5'" >{{ $filters.order_pay_status(list.status) }}</el-text>
+                <el-text type="warning" v-else >{{ $filters.order_pay_status(list.status) }}</el-text>
+
+					<el-button type="primary" plain size="small" class="u-m-l-30" @click="updateStatusBtn">更新</el-button>
+				</div>
+			</el-col>
+		</el-row> 
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">受托支付账户卡号</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">{{list.bank_account?.cardNo}}</div>
+			</el-col>
+		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">受托支付账户开户行</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">{{list.bank_account?.subbranch}}</div>
+			</el-col>
+		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label">备注</div>
+			</el-col>
+			<el-col :span="19">
+				<div class="grid-content content">{{list.remark}}</div>
+			</el-col>
+		</el-row>
 	</div>
 </template>
-  
+
 <script setup lang='ts'>
-import { computed, ref, inject } from 'vue'
-const $api: any = inject('$api')
-const tabs_list = ref([
-	{ label: '全部', value: '' },
-	{ label: '授信申请中', value: '1' },
-	{ label: '授信已递交', value: '2' },
-	{ label: '授信签约取消中', value: '3' },
-	{ label: '授信失败', value: '4' },
-	{ label: '授信通过，签约中', value: '5' },
-	{ label: '授信通过，贷款企业已签约', value: '6' },
-	{ label: '授信通过，签约通过', value: '7' },
-	{ label: '授信通过，贷款账户已激活', value: '8' },
-])
-const value = ref('');
-const customParams = computed(() => {
-	return {
-		status: value.value
-	}
+import { reactive, ref, inject, onMounted } from 'vue'
+import { ElMessage, ElNotification } from 'element-plus'
+import router from "@/router/guard"  
+const $api: any = inject('$api') 
+const list = ref<any>({})
+const props = defineProps({
+	id: String
 })
+
+const loading_status = ref(false)
+onMounted(async () => {
+	if(!props.id) {
+		ElMessage.error('参数有误')
+		return
+	}
+	await getData()
+})
+
+async function getData() {
+	const res = await $api.order_bank_detail({params: {id: props.id}})
+	if(res.code == 1) {
+		list.value = res.list
+	}
+}
+
+async function updateStatus() {
+	try {
+		const res = await $api.order_bank_query({params: {order_id: list.value.order_id}, loading: false})
+		if(res.code == 1) {
+			ElNotification({
+				title: '系统消息',
+				message: '状态已更新', 
+				type: 'success',
+				position: 'bottom-right',
+			})
+		}
+	} catch (error) { 
+		loading_status.value = false
+		ElNotification({
+			title: '系统消息',
+			message: error.msg,
+			type: 'error',
+			position: 'bottom-right',
+		})
+	}
+	
+}
+async function updateStatusBtn() {
+	loading_status.value = true
+	await updateStatus()
+	loading_status.value = false
+	await getData()
+}
+
 </script>
 <style lang='scss' scoped>
 .box {
 	@extend %box-sizing;
+}
+.el-row {
+	// margin-bottom: 6px;
+	padding: 6px;
+	border-radius: 5px;
+	transition: all .3s;
+	&:hover {
+		background-color: #f8f8f8;
+		.grid-content.content {
+			box-shadow: 0 0 10px rgba(0,0,0,.1);
+		}
+	}
+}
+.grid-content {
+	height: 35px;
+	line-height: 35px;
+	border-radius: 4px;
+	font-size: 15px;
+	&.label {
+		color: #666;
+		// text-align: right;
+		
+	}
+	&.content {
+		@extend %box-sizing;
+		background-color: #f9fafc; 
+		padding: 0px 20px;
+		transition: all .3s;;
+	}
 }
 </style>

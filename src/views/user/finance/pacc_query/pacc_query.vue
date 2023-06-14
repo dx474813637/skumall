@@ -157,19 +157,24 @@
 								<span>{{ item.name }}</span> 
 								<span class="u-font-12">[点击查看]</span> 
 							</el-link> 
+							<el-link :href="item.pdf_http" target="_blank" v-else-if="item.pdf_http">
+								<el-icon class="u-p-b-4 u-m-r-4"><i-ep-Document /></el-icon>
+								<span>{{ item.name }}</span> 
+								<span class="u-font-12">[点击查看]</span> 
+							</el-link> 
 							<el-text v-else>
 								<el-icon class="u-p-b-4 u-m-r-4"><i-ep-Document /></el-icon>
 								<span>{{ item.name }}</span> 
 							</el-text>
 						</span> 
 					</div>
-					<div class="u-flex u-p-b-10">
+					<div class="u-flex u-p-b-15 u-p-t-10">
 						<div class="item u-p-r-10" v-if="!item.signflows_id">
 							<el-button  
 								plain
 								type="warning" 
 								size="small"  
-								@click="getyiqianbao(item.contract_id, item.loading)" 
+								@click="getyiqianbao(item)" 
 								>开始签约</el-button> 
 						</div>
 						<div class="item u-p-r-10" v-if="item.signflows_state == 1 || item.signflows_state == 2">
@@ -177,8 +182,8 @@
 								plain
 								type="warning" 
 								size="small"  
-								@click="updateyiqianbao(item.contract_id, item.loading)" 
-								>更新签状态</el-button> 
+								@click="updateyiqianbao(item)" 
+								>更新签约状态</el-button> 
 						</div>
 					</div>
 					
@@ -245,12 +250,22 @@ async function getData() {
 	}
 }
 async function updateStatus() {
-	const res = await $api.pacc_query({params: {pacc_id: list.value.pacc_id}, loading: false})
-	if(res.code == 1) {
+	try {
+		const res = await $api.pacc_query({params: {pacc_id: list.value.pacc_id}, loading: false})
+		if(res.code == 1) {
+			ElNotification({
+				title: '系统消息',
+				message: '授信状态已更新', 
+				type: 'success',
+				position: 'bottom-right',
+			})
+		}
+	} catch (error) { 
+		loading_status.value = false
 		ElNotification({
 			title: '系统消息',
-			message: '授信状态已更新', 
-			type: 'success',
+			message: error.msg,
+			type: 'error',
 			position: 'bottom-right',
 		})
 	}
@@ -270,19 +285,33 @@ async function getMoneyBtn() {
 		loans.value = res.list.money
 	}
 }
-async function getyiqianbao(contract_id, loading) {
-	loading = true
-	const res = await $api.yiqianbao_start({params: {id: list.value.id, contract_id}})
-	loading = false
+async function getyiqianbao({contract_id, name}) {
+	let index = fileList.value.findIndex(ele => ele.contract_id == contract_id)
+	fileList.value[index].loading = true
+	const res = await $api.yiqianbao_start({params: {id: list.value.id, contract_id}, loading: false})
+	fileList.value[index].loading = false
 	if(res.code == 1) { 
+		ElNotification({
+			title: '系统消息',
+			message: '签约状态已更新', 
+			type: 'success',
+			position: 'bottom-right',
+		})
 		await getData() 
 	}
 } 
-async function updateyiqianbao(contract_id, loading) {
-	loading = true
-	const res = await $api.query_signflows({params: {id: list.value.id, contract_id}})
-	loading = false
+async function updateyiqianbao({contract_id, name}) {
+	let index = fileList.value.findIndex(ele => ele.contract_id == contract_id)
+	fileList.value[index].loading = true
+	const res = await $api.query_signflows({params: {id: list.value.id, contract_id}, loading: false})
+	fileList.value[index].loading = false
 	if(res.code == 1) { 
+		ElNotification({
+			title: '系统消息',
+			message: `${name}签约状态已更新`, 
+			type: 'success',
+			position: 'bottom-right',
+		})
 		await getData() 
 	}
 }

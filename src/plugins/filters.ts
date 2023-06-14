@@ -4,6 +4,15 @@ import type { App } from 'vue'
 export default {
 	install: (app: App) => {
 		app.config.globalProperties.$filters = {
+			idType2Str(value: string | number | undefined) {
+				let text = value
+				if(value == 'CRED_PSN_CH_IDCARD') text = '中国大陆身份证'
+				else if(value == 'CRED_PSN_CH_TWCARD') text = '台湾来往大陆通行证'
+				else if(value == 'CRED_PSN_CH_MACAO') text = '澳门来往大陆通行证'
+				else if(value == 'CRED_PSN_CH_HONGKONG') text = '香港来往大陆通行证'
+				else if(value == 'CRED_PSN_PASSPORT') text = '护照' 
+				return text
+			},
 			pacc_query_status(status: string | number | undefined) {
 				let text = status
 				if(status == '1') text = '授信申请中'

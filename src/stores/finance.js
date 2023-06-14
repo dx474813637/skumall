@@ -45,7 +45,7 @@ export const useFinanceStore = defineStore('finance', {
 	actions: {    
 		async getAccountData(needLoading = false) {
 			this.account_loading = true
-			await apis.get('verify_account_3')
+			await apis.verify_account_3()
 			const res = await apis.account({needLoading});
 			this.account_loading = false
 			if(res.code == 1) {
@@ -54,7 +54,7 @@ export const useFinanceStore = defineStore('finance', {
 		},  
 		async getCpyData(needLoading = false) {
 			this.organizations_loading = true
-			await apis.get('query_organizations')
+			await apis.query_organizations()
 			const res = await apis.organizations({needLoading});
 			this.organizations_loading = false
 			if(res.code == 1) {
