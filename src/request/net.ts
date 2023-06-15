@@ -4,9 +4,9 @@ import { downloadFile, toGuid } from "@/utils";
 
 import router from "@/router/guard" 
 import {useSettingsStore} from '@/stores/settings'
-const useSettings = useSettingsStore()
 import {userStore} from '@/stores/user'
-const user = userStore()
+// const useSettings = useSettingsStore()
+// const user = userStore()
 // import { ElLoadingComponent } from "element-plus";
 // import vm from "@/main";  
 let loadingInstance:any = null;
@@ -96,7 +96,9 @@ export const createAxiosByinterceptors = (
                 }
                 else if (code === 9) {
                     // jumpLogin();
+                    const user = userStore()
                     user.logout() 
+                    const useSettings = useSettingsStore()
                     useSettings.setPrevPage(router.currentRoute.value)
                     ElMessage.error(msg);
                     useSettings.goLogin()

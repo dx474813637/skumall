@@ -100,7 +100,7 @@ export default [
 		]
 	}, 
 	{
-		label: '融资中心',
+		label: '身份认证',
 		type: 'title',
 		index: '4',
 		icon: Files,
@@ -129,30 +129,30 @@ export default [
 					name: 'company_apply'
 				} 
 			} ,
-			{
-				label: '融资产品',
-				icon: '',
-				index: 'query_product_list', 
-				route: {
-					name: 'query_product_list'
-				} 
-			},
-			{
-				label: '授信申请', 
-				icon: '',
-				index: 'pacc_query_list', 
-				route: {
-					name: 'pacc_query_list'
-				} 
-			},
-			{
-				label: '融资记录',
-				icon: '',
-				index: 'order_bank_list', 
-				route: {
-					name: 'order_bank_list'
-				} 
-			},
+			// {
+			// 	label: '融资产品',
+			// 	icon: '',
+			// 	index: 'query_product_list', 
+			// 	route: {
+			// 		name: 'query_product_list'
+			// 	} 
+			// },
+			// {
+			// 	label: '授信申请', 
+			// 	icon: '',
+			// 	index: 'pacc_query_list', 
+			// 	route: {
+			// 		name: 'pacc_query_list'
+			// 	} 
+			// },
+			// {
+			// 	label: '融资记录',
+			// 	icon: '',
+			// 	index: 'order_bank_list', 
+			// 	route: {
+			// 		name: 'order_bank_list'
+			// 	} 
+			// },
 		]
 	}, 
 	// {

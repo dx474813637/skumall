@@ -35,12 +35,22 @@ export const address_change = (data) => axios.get('Userapi/address_change', data
 // `create_order` 生成订单 参数pid_array  address_id
 // json格式，每一条记录包含： cid表示旺铺ID，pid商品ID，num表示购买的商品数量
 export const create_order = (data) => axios.get('Userapi/create_order', data) 
-// `order_list` 订单列表  参数type 1待付款 2待收货 3已完成 role=1 卖家的订单列表 不传或传其他值 买家的订单列表 p页数
+// `order_list` 订单列表  参数type 1待付款 2待收货 3已完成 role=1 买家的订单列表 不传或传其他值 卖家的订单列表 p页数
 export const order_list = (data) => axios.get('Userapi/order_list', data) 
 // `order_detail` 订单详情 参数order_id
-export const order_detail = (data) => axios.get('Userapi/order_detail', data) 
-// `orderConfirm`  
-export const orderConfirm = (data) => axios.get('Userapi/orderConfirm', data) 
+export const order_detail = (data) => axios.get('Userapi/order_detail', data)  
+ 
+// `orderConfirm` 订单详情 参数order_id
+export const orderConfirm = (data) => axios.get('Userapi/orderConfirm', data)  
+ 
+// rz_pay 融资支付  order_id
+export const rz_pay = (data) => axios.get('Userapi/rz_pay', data) 
+ 
+// 订单状态  0 待付款 1付款成功 2待收货 3订单完成 4评分完成 5支付中 6支付失败
+// 状态0或6的时候能发起支付 1的时候在卖家端出现发货 2的时候在买家端出现确认收货 3的时候买家端出现评分
+ 
+// change_order_status  改变订单状态（收货/发货） 参数order_id 
+export const change_order_status = (data) => axios.get('Userapi/change_order_status', data) 
 
 
 // order_score 订单评分 参数order_id score 1-5
