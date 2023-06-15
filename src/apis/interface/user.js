@@ -46,8 +46,12 @@ export const orderConfirm = (data) => axios.get('Userapi/orderConfirm', data)
 // rz_pay 融资支付  order_id
 export const rz_pay = (data) => axios.get('Userapi/rz_pay', data) 
  
-// 订单状态  0 待付款 1付款成功 2待收货 3订单完成 4评分完成 5支付中 6支付失败
-// 状态0或6的时候能发起支付 1的时候在卖家端出现发货 2的时候在买家端出现确认收货 3的时候买家端出现评分
+// 订单状态  0 待付款 1付款成功 2待收货 3订单完成 
+// 4评分完成 5支付中 6支付失败
+// 状态0或6的时候能发起支付 
+// 1的时候在卖家端出现发货 
+// 2的时候在买家端出现确认收货 
+// 3的时候买家端出现评分
  
 // change_order_status  改变订单状态（收货/发货） 参数order_id 
 export const change_order_status = (data) => axios.get('Userapi/change_order_status', data) 

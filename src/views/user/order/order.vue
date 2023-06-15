@@ -24,9 +24,9 @@
 							<el-table-column label="商品信息">
 								<template #default="{ row }">
 									<div>
-										<!-- <router-link :to="{name: 'product', params: {id: row.pid}}"> -->
-										<el-text tag="b" size="large">{{ row.name }}</el-text>
-										<!-- </router-link> -->
+										<router-link tag="a" :to="{name: 'product', params: {id: row.pid}}">
+											<el-text tag="b" size="large">{{ row.name }}</el-text>
+										</router-link>
 									</div>
 									<div>
 										<el-text type="info" size="small" v-for="item in row.specs_arr">
@@ -109,8 +109,9 @@
 				<div class="grid-content label">总金额</div>
 			</el-col>
 			<el-col :span="19">
-				<div class="grid-content content">
+				<div class="grid-content content u-flex">
 					<el-statistic :precision="2" :value="list.total_fee" value-style="font-size: 14px" />
+					<el-text type="info" class="u-m-l-10">元</el-text>
 				</div>
 			</el-col>
 		</el-row>
@@ -125,27 +126,93 @@
 				</div>
 			</el-col>
 		</el-row>
+		<el-row :gutter="10">
+			<el-col :span="5">
+				<div class="grid-content label"></div>
+			</el-col>
+			<el-col :span="19" class="u-flex">
+				<div class="item u-m-r-10" v-show="(list.status == 0 || list.status == 6)  && login == buy_info.login">
+					<el-popconfirm 
+						title="支付确认" 
+						@confirm="orderBuyBtn"
+						confirm-button-text="确认"
+						cancel-button-text="取消"
+						>
+						<template #reference>
+							<el-button plain type="primary" >订单支付</el-button>	
+						</template>
+					</el-popconfirm>
+					
+				</div>
+				<div class="item u-m-r-10" v-show="list.status == 3 && login == buy_info.login">
+				<!-- <div class="item u-m-r-10" > -->
+					<el-button plain type="primary" @click="scoreBtn">我要评分</el-button>	
+				</div>
+				<div class="item u-m-r-10" v-show="list.status == 2 && login == buy_info.login">
+					<el-popconfirm 
+						title="收货确认" 
+						@confirm="confirmReceiveBtn"
+						confirm-button-text="确认"
+						cancel-button-text="取消"
+						>
+						<template #reference>
+							<el-button plain type="primary" >确认收货</el-button>	
+						</template>
+					</el-popconfirm>
+					
+				</div>
+				<div class="item u-m-r-10" v-show="list.status == 1 && login == sell_info.login">
+					<el-popconfirm 
+						title="发货确认" 
+						@confirm="confirmSendBtn"
+						confirm-button-text="确认"
+						cancel-button-text="取消"
+						>
+						<template #reference>
+							<el-button plain type="primary" >确认发货</el-button>	
+						</template>
+					</el-popconfirm>
+				</div>
+				
+			</el-col>
+		</el-row>
 	</div>
+	<el-dialog v-model="showRate" title="请鼠标点击对应星级并确认进行订单评分" width="30%" center>
+		<div class="u-flex u-flex-center">
+			<el-rate v-model="score" :texts="['1分', '2分', '3分', '4分', '5分']" size="large"  />
+		</div>
+		<template #footer>
+			<span class="dialog-footer">
+				<el-button @click="showRate = false">取消</el-button>
+				<el-button type="primary" @click="confirmScoreBtn">
+					提交评分
+				</el-button>
+			</span>
+		</template>
+	</el-dialog>
 </template>
 
 <script setup lang='ts'>
 import { reactive, ref, inject, onMounted, toRefs } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox  } from 'element-plus'
 import router from "@/router/guard"
 import {userStore} from '@/stores/user';
-const {login} = userStore()
+const user = userStore()
+const {login} = toRefs(user)
+console.log(user)
 const $api: any = inject('$api')
 const list = ref<any>({})
 const sell_info = ref<any>({})
 const buy_info = ref<any>({})
 const addressData = ref<any>({})
 const address_loading = ref(false)
-
+const showRate = ref(false)
+const score = ref(1)
 const props = defineProps({
 	id: String
 })
 
-onMounted(async () => {
+onMounted(async () => { 
 	if (!props.id) {
 		ElMessage.error('参数有误')
 		return
@@ -173,6 +240,50 @@ async function getAddressData() {
 	const res = await $api.address_detail({ params: { address_id: list.value.address_id }, loading: false })
 	if (res.code == 1) {
 		addressData.value = res.list 
+	}
+}
+async function orderBuyBtn () {
+	const res = await $api.rz_pay({params: {
+		order_id: props.id
+	}})
+	if(res.code == 1) { 
+		ElMessage.success(res.msg)
+		await getData()
+	}
+}
+async function confirmScoreBtn() { 
+	if(score.value == 0) {
+		ElMessage.warning('请先点击星级进行评分')
+		return
+	}
+	await ElMessageBox.confirm(`当前您的评分为：${score.value}分，请确认！` , {'cancelButtonText': '取消', 'confirmButtonText': '确认并提交'})
+    const res = await  $api.order_score({params: {score: score.value, order_id: props.id}});
+	if(res.code == 1) {
+		ElMessage.success(res.msg)
+		await getData()
+	}
+}
+async function scoreBtn () {
+	showRate.value = true
+}
+
+async function confirmReceiveBtn () {
+	await changeStatus()
+	await getData()
+}
+
+async function confirmSendBtn () {
+	await changeStatus()
+	await getData()
+	
+}
+
+async function changeStatus () {
+	const res = await $api.change_order_status({params: {
+		order_id: props.id
+	}})
+	if(res.code == 1) {
+		ElMessage.success(res.msg)
 	}
 }
 

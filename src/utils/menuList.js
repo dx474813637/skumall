@@ -113,46 +113,46 @@ export default [
 					name: 'finance_account'
 				} 
 			},
+			// {
+			// 	label: '个人认证', 
+			// 	icon: '',
+			// 	index: 'user_apply', 
+			// 	route: {
+			// 		name: 'user_apply'
+			// 	} 
+			// },
+			// {
+			// 	label: '企业认证', 
+			// 	icon: '',
+			// 	index: 'company_apply', 
+			// 	route: {
+			// 		name: 'company_apply'
+			// 	} 
+			// } ,
 			{
-				label: '个人认证', 
+				label: '融资产品',
 				icon: '',
-				index: 'user_apply', 
+				index: 'query_product_list', 
 				route: {
-					name: 'user_apply'
+					name: 'query_product_list'
 				} 
 			},
 			{
-				label: '企业认证', 
+				label: '授信申请', 
 				icon: '',
-				index: 'company_apply', 
+				index: 'pacc_query_list', 
 				route: {
-					name: 'company_apply'
+					name: 'pacc_query_list'
 				} 
-			} ,
-			// {
-			// 	label: '融资产品',
-			// 	icon: '',
-			// 	index: 'query_product_list', 
-			// 	route: {
-			// 		name: 'query_product_list'
-			// 	} 
-			// },
-			// {
-			// 	label: '授信申请', 
-			// 	icon: '',
-			// 	index: 'pacc_query_list', 
-			// 	route: {
-			// 		name: 'pacc_query_list'
-			// 	} 
-			// },
-			// {
-			// 	label: '融资记录',
-			// 	icon: '',
-			// 	index: 'order_bank_list', 
-			// 	route: {
-			// 		name: 'order_bank_list'
-			// 	} 
-			// },
+			},
+			{
+				label: '融资记录',
+				icon: '',
+				index: 'order_bank_list', 
+				route: {
+					name: 'order_bank_list'
+				} 
+			},
 		]
 	}, 
 	// {

@@ -3,10 +3,12 @@ import {toRefs} from 'vue'
 // 导入进度条
 import { start, close } from "@/utils/nporgress";
 import pinia from '@/stores/index';  
+import {userStore} from '@/stores/user'
 import {useSettingsStore} from '@/stores/settings'
 import {useFinanceStore} from '@/stores/finance'
 router.beforeEach(async (to, from, next) => {
     const useSettings = useSettingsStore(pinia)
+    const user = userStore(pinia)
     const finance = useFinanceStore(pinia)
     const {account_info} = toRefs(finance)
     
@@ -18,8 +20,8 @@ router.beforeEach(async (to, from, next) => {
         useSettings.setPrevPage(to)
         return
     }
-    else{
-
+    if(!user.login) {
+        user.getUserData()
     }
     // if(to?.meta?.isFinanceAuth && to.matched.some(ele => ele.meta.isFinanceAuth) && !account_info.hasOwnProperty('state')) {
     //     await finance.getAccountData(true);

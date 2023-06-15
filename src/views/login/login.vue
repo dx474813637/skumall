@@ -89,13 +89,13 @@
 <script setup lang="ts">
 import Vcode from "vue3-puzzle-vcode";
 import type { TabsPaneContext, FormRules, FormInstance } from "element-plus";
-import { ref, reactive, computed, inject, toRefs } from "vue"; 
+import { ref, reactive, computed, inject, toRefs, onMounted } from "vue"; 
 import {useSettingsStore} from '@/stores/settings';
 import {userStore} from '@/stores/user';
 import { ElLoading, ElMessage  } from "element-plus";
 const useSettings = useSettingsStore()
 const user = userStore()
-const { login:loginname } = toRefs(user);
+// const { login:loginname } = toRefs(user);
 // console.log(router)
 // import { createLoadingComponent } from "element-plus/es/components/loading/src/loading";
 const $api: any = inject('$api')
@@ -122,6 +122,9 @@ const form = ref<FormInstance>()
 const countValue = ref(0)
 const getCodeDisabled = computed(() => { 
 	return countValue.value > Date.now()
+})
+onMounted(() => {
+	
 })
 const rules = computed<FormRules>(() => {
 	let obj = {
@@ -245,7 +248,7 @@ async function login() {
 		}
 	})
 	if(res.code == 1) {
-		loginname.value = res.login
+		// loginname.value = res.login
 		ElMessage.success('登录成功')
 		useSettings.loginSuccessRoute()
 	}

@@ -2,7 +2,7 @@ import {
 	defineStore
 } from 'pinia';
 import apis from '@/apis/index'
-
+import menuList from '@/utils/menuList'
 
 export const cateStore = defineStore('cate', {
 	state: () => {
@@ -18,6 +18,7 @@ export const cateStore = defineStore('cate', {
 			freight_loading: false,
 			regional_list: [],
 			regional_loading: false,
+			menuList: menuList,
 		};
 	},
 	getters: {

@@ -11,7 +11,7 @@
 					@open="handleOpen"
 					@close="handleClose"
 					>
-					<template  v-for="item in menuListRef" >
+					<template  v-for="item in menuList" >
 						<el-sub-menu  
 							v-if="item.children && item.children.length > 0" 
 							:index="item.index" 
@@ -92,14 +92,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed  } from "vue";
-import menuList from "@/utils/menuList"
+import { ref, watch, computed, onMounted, toRefs  } from "vue";
+// import menuList from "@/utils/menuList"
 import router from "@/router/guard" 
 import {useSettingsStore} from '@/stores/settings'
-const useSettings = useSettingsStore()
+import {cateStore} from '@/stores/cate'
 import {userStore} from '@/stores/user'
-const user = userStore()
-const menuListRef = ref(menuList)
+import {useFinanceStore} from '@/stores/finance'
+const useSettings = useSettingsStore()
+const cate = cateStore()
+const finance = useFinanceStore()
+const {menuList} = toRefs(cate)
+const { account_info, organizations_info } = toRefs(finance)
+const user = userStore() 
 const menuActive = ref('user_index')
 const addBtnList = [
 	// {
@@ -117,6 +122,10 @@ const addBtnList = [
 		}
 	},
 ]
+onMounted(() => {
+	user.getRoleData()
+})
+ 
 const btnActive = computed(() => { 
 	return addBtnList.filter(ele => ele.name == menuActive.value)[0]
 })
@@ -127,7 +136,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 	// console.log(key, keyPath);
 };
 const subTitle = computed(() => {
-	return menuList.filter(ele => {
+	return menuList.value.filter(ele => {
 		return ele.children && ele.children.some(item => {
 			return item.index == menuActive.value
 		})

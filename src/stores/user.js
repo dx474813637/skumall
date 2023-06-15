@@ -12,28 +12,36 @@ export const userStore = defineStore('user', {
 			user_info: {},
 			user_loading: false,
 			cpy_info: {},
-			cpy_loading: false,
-			login: localStorage.getItem('login') || ''
+			cpy_loading: false, 
+			role: '',
 		};
 	},
 	getters: {
-		// doubleCount: (state) => state.counter * 2,
+		login: (state) => state.user_info.poster,
 	},
 	// 也可以这样定义
 	// state: () => ({ count: 0 })
 	actions: {  
 		logout() {
 			console.log('清除token 登录过期')
-			this.login = ''
+			this.user_info = {} 
+			this.cpy_info = {} 
 			localStorage.removeItem('token')
 			localStorage.removeItem('login')
 		},
+		async getRoleData(needLoading = false) { 
+			const res = await apis.login_role({needLoading}); 
+			if(res.code == 1) {
+				this.role = res.role   
+			} 
+		}, 
 		async getUserData(needLoading = false) {
 			this.user_loading = true
 			const res = await apis.my_card({needLoading});
 			this.user_loading = false
 			if(res.code == 1) {
-				this.user_info = res.list 
+				this.user_info = res.list  
+				localStorage.setItem('login', this.login)
 			} 
 		}, 
 		async getCpyData(needLoading = false) {
