@@ -5,6 +5,9 @@ import apis from '@/apis/index'
 import menuList from '@/utils/menuList'
 
 export const cateStore = defineStore('cate', {
+	persist: {
+		enabled: false // true 表示开启持久化保存
+	},
 	state: () => {
 		return {
 			cate_list: [],
@@ -26,32 +29,31 @@ export const cateStore = defineStore('cate', {
 	},
 	// 也可以这样定义
 	// state: () => ({ count: 0 })
-	actions: { 
+	actions: {
 		async getCateData() {
 			this.cate_loading = true
 			const res = await apis.cate_list();
 			this.cate_loading = false
-			if(res.code == 1) {
-				this.cate_list = res.list 
-			} 
+			if (res.code == 1) {
+				this.cate_list = res.list
+			}
 		},
 		async getFreightData() {
 			this.freight_loading = true
 			const res = await apis.freight_list();
 			this.freight_loading = false
-			if(res.code == 1) {
-				this.freight_list = res.list 
-			} 
+			if (res.code == 1) {
+				this.freight_list = res.list
+			}
 		},
 		async getRegionalData() {
 			this.regional_loading = true
 			const res = await apis.addressDetail();
 			this.regional_loading = false
-			if(res.code == 1) { 
-				this.regional_list = JSON.parse(res.regional_list) 
+			if (res.code == 1) {
+				this.regional_list = JSON.parse(res.regional_list)
 				console.log(this.regional_list)
-			} 
+			}
 		},
 	},
 });
- 

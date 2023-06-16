@@ -25,6 +25,7 @@ export const useSettingsStore = defineStore(
                 router.push({ name: 'login' }) 
             },
             setPrevPage(route) { 
+                if(route.name == 'login') return
                 this.loginToPage = route 
             }, 
             loginSuccessRoute() { 
