@@ -3,18 +3,9 @@
 		<div class="product-img">
 			<el-image lazy src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" fit="cover" /> 
 			<div class="product-btns u-flex u-font-12">
-				<div class="item">
-					<span>找同款</span>
-				</div>
-				<div class="item">
-					<span>一键上传</span>
-				</div>
-				<div class="item">
-					<el-icon class="u-font-12">
-						<i-ep-ShoppingCart />
-					</el-icon>
-					<span>进货车</span>
-				</div>
+				<div class="item u-flex-1">
+					<span>友盟鞋业 2023</span>
+				</div> 
 			</div>
 		</div>
 		<div class="product-content u-p-l-10 u-p-r-10 u-p-b-10 u-p-t-5">
@@ -27,27 +18,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="item"></div>
-			</div>
-			<div class="content-item">
-				<div class="item product-title u-line-1">
-					威尔胜（Wilson）篮球 NBA比赛室内外耐磨PU防滑蓝球7号
-					TAKE-OFF系列-实战利器801
-				</div>
-			</div>
-			<div class="content-item">
-				<div class="item shop-name u-line-1">威尔胜（Wilson）京东自营专区</div>
-			</div>
-			<div class="content-item">
-				<div class="item product-eva">
-					<div class="product-eva-num">5000+</div>
-					<div>条评价</div>
-				</div>
 				<div class="item product-eva">
 					<div class="u-m-r-4">已售</div>
 					<div class="product-eva-num">999+</div>
 				</div>
 			</div>
+			  
 		</div>
 	</div>
 </template>
@@ -59,9 +35,9 @@
 	border-radius: 5px;
 	background-color: #fff;
 	transition: all .2s;
-	box-shadow: 0 0 20px rgba(0, 0, 0, 0);
+	// box-shadow: 0 0 20px rgba(0, 0, 0, 0);
 	&:hover {
-		box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+		// box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 	}
 	.product-content {
 		.content-item {
@@ -114,7 +90,7 @@
 		padding-top: 100%;
 		position: relative;
 		overflow: hidden;
-		border-radius: 5px 5px 0 0;
+		border-radius: 5px ;
 		cursor: pointer;
 		.el-image {
 			position: absolute;
@@ -146,9 +122,7 @@
 			transform: translateY(100%);
 			transition: all .2s;
 			.item {
-				@include flex(x, center, center);
-				flex: 0 0 33%;
-				width: 33%; 
+				@include flex(x, center, center);  
 				height: 100%;
 				transition: all .2s;
 				&:hover {

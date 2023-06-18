@@ -5,7 +5,7 @@
             <div class="list-filters-box u-p-t-10 u-p-b-10"></div>
             <div class="list-main-box u-p-t-10 u-p-b-10">
                 <div class="list">
-                    <div class="list-item" v-for="item in 7" :key="item">
+                    <div class="list-item u-m-b-10" v-for="item in 7" :key="item">
                         <product-card></product-card>
                     </div>
                 </div>
@@ -54,7 +54,12 @@ const handleCurrentChange = (val: number) => {
                 @include flex(x, start, start);
                 flex-wrap: wrap;
                 .list-item {
-                    flex: 0 0 20%
+                    flex: 0 0 15%;
+                    width: 15%;
+                    margin-right: 2%;
+                    &:nth-of-type(6n) {
+                        margin-right: 0;
+                    }
                 }
             }
         }

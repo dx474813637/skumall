@@ -14,15 +14,18 @@ router.beforeEach(async (to, from, next) => {
     
     start()
     // console.log(to, from)
-    if(to?.meta?.isAuth && to.matched.some(ele => ele.meta.isAuth) && !localStorage.getItem('token')) {
-        // router.push({ name: 'login' })
-        useSettings.goLogin()
-        useSettings.setPrevPage(to)
-        return
+    if(to?.meta?.isAuth) {
+        if( to.matched.some(ele => ele.meta.isAuth) && !localStorage.getItem('token')) {
+            // router.push({ name: 'login' })
+            useSettings.goLogin()
+            useSettings.setPrevPage(to)
+            return
+        }
+        else if(!user.login && to.name != 'user_index') {
+            user.getUserData()
+        }
     }
-    if(!user.login) {
-        user.getUserData()
-    }
+   
     // if(to?.meta?.isFinanceAuth && to.matched.some(ele => ele.meta.isFinanceAuth) && !account_info.hasOwnProperty('state')) {
     //     await finance.getAccountData(true);
     //     if(account_info.value.organizations_id) { 

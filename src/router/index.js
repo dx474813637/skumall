@@ -63,6 +63,15 @@ const routes = [
         component: () => import('@/views/reg/reg.vue')
     },
     {
+        path: '/rank',
+        name: 'rank',
+        meta: {
+            title: '排行榜',
+            cache: true,
+        },
+        component: () => import('@/views/rank/rank.vue')
+    },
+    {
         path: '/user',  //:id就是动态路由匹配
         name: 'user',
         meta: { 

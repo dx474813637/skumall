@@ -146,18 +146,8 @@ $browser: null;
 	}
 }
 @for $i from 1 through 5 {
-	.u-line-#{$i} {
-		/* #ifdef APP-NVUE */
-		// nvue下，可以直接使用lines属性，这是weex特有样式
-		lines: $i;
-		text-overflow: ellipsis;
-		overflow: hidden;
-		flex: 1;
-		/* #endif */
-
-		/* #ifndef APP-NVUE */
-		// vue下，单行和多行显示省略号需要单独处理
-		@if $i == '1' {
+	.u-line-#{$i} { 
+		@if $i == 1 {
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;
@@ -168,8 +158,7 @@ $browser: null;
 			word-break: break-all;
 			-webkit-line-clamp: $i;
 			-webkit-box-orient: vertical!important;
-		}
-		/* #endif */
+		} 
 	}
 }
 
