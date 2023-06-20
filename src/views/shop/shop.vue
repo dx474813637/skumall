@@ -1,8 +1,29 @@
 <template>
-	<Header-base></Header-base>
+	<Header-shop></Header-shop>
     
 	<div class="list-w">
 		<div class="home-w">
+            <div class="company-box index-box u-m-b-30 u-m-t-30">
+                <div class="box-title u-flex u-flex-center u-flex-items-end u-p-b-20"> 
+                    <div class="item" style="width: 50%">
+                        <el-divider>
+                            <span class="title u-font-20">店铺推荐</span>
+                        </el-divider>
+                    </div> 
+                </div>
+                <div class="box-main ">  
+                    <el-carousel height="300px" indicator-position="outside">
+                        <el-carousel-item v-for="item in 4" :key="item">
+                            <div class="u-flex swiper-list u-flex u-flex-between u-p-l-2- u-p-r-20">
+                                <div class="list-item " v-for="item in 6" :key="item">
+                                    <product-card-simple></product-card-simple>
+                                </div>
+                            </div>
+                            
+                        </el-carousel-item>
+                    </el-carousel>
+                </div>
+            </div>
             <div class="list-filters-box u-p-t-10 u-p-b-10">
                 <div class="tabs-menus-cate">
                     <el-menu
@@ -529,6 +550,17 @@ const handleCheckedChange = (value: string[]) => {
     }
    
 }
+.swiper-list { 
+    height: 100%;
+    .list-item {
+        flex: 0 0 15%;
+        width: 15%;
+        margin-right: 2%;
+        &:nth-of-type(6n) {
+            margin-right: 0;
+        }
+    }
+}
 .list-w {
     .home-w {
         .list-main-box {
@@ -551,4 +583,23 @@ const handleCheckedChange = (value: string[]) => {
         }
     }
 }
+.index-box {
+		::v-deep {
+			.el-divider__text {
+				background-color: #f8f8f8;
+			}
+		}
+		.box-title {
+			.title {
+				color: #000;
+                font-weight: bold
+			}
+			.sub {
+				color: $uni-text-color-grey;
+			}
+		}
+		 .box-main {
+            background-color: #fff;
+         }
+	}
 </style>

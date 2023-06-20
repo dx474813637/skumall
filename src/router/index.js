@@ -22,6 +22,16 @@ const routes = [
         component: () => import('@/views/index/index.vue')
     },
     {
+        path: '/shop/:id',
+        name: 'shop',
+        meta: {
+            title: '店铺',
+            cache: true,
+        }, 
+        props:true, 
+        component: () => import('@/views/shop/shop.vue')
+    },
+    {
         path: '/list',
         name: 'list',
         meta: {
