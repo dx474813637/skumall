@@ -22,7 +22,7 @@
 									<component :is="item.icon"></component>
 								</el-icon>
 								
-								<span class="menu-title" slot="title">{{item.label}}</span>
+								<span class="menu-title" >{{item.label}}</span>
 							</template>
 							<el-menu-item 
 								v-for="ele in item.children" 
@@ -34,7 +34,7 @@
 								<!-- <i class="custom-icon" :class="ele.icon" v-if="ele.icon" ></i>
 								<span slot="title">{{ele.label}}</span> -->
 								<template #title>
-									<view class="u-flex u-row-between" >
+									<view class="u-flex u-flex-between" >
 										<view class="item-left">
 											<i class="custom-icon" :class="ele.icon" v-if="ele.icon" ></i>
 											<span>{{ele.label}}</span>
@@ -54,7 +54,7 @@
 							<el-icon>
 								<component :is="item.icon"></component>
 							</el-icon>
-							<span slot="title">{{item.label}}</span>
+							<span >{{item.label}}</span>
 						</el-menu-item>
 					</template> 
 				</el-menu>

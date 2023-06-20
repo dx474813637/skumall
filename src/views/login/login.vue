@@ -251,6 +251,7 @@ async function login() {
 		// loginname.value = res.login
 		ElMessage.success('登录成功')
 		useSettings.loginSuccessRoute()
+		user.getUserData(true)
 	}
 }
 </script>

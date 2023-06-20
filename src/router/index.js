@@ -27,7 +27,7 @@ const routes = [
         meta: {
             title: '列表',
             cache: true,
-        },
+        }, 
         component: () => import('@/views/list/list.vue')
     },
     {

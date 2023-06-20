@@ -69,7 +69,7 @@
                     </div>
                     <div class="main-user u-p-t-10">
                         <div class="item bg-white pt-1 shop-card">
-                            <div class="shop-card-header dx-flex text-danger">
+                            <div class="shop-card-header dx-flex text-danger" @click="router.push({name: 'cart'})">
                                 <el-icon size="20">
                                     <i-ep-ShoppingCart />
                                 </el-icon>
@@ -287,6 +287,7 @@ header {
                 .shop-card-header {
                     @include flex(x);
                     color: $uni-color-error;
+                    cursor: pointer;
                     .shop-name {
                         font-weight: bold
                     }

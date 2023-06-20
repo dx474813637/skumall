@@ -2,10 +2,13 @@ import {
 	defineStore,
 	storeToRefs
 } from 'pinia';
+import router from '@/router/guard'
 import apis from '@/apis/index'
 import { deepMerge, deepClone } from '@/utils'
 import { userStore } from '@/stores/user';
 const user = userStore();
+import { useSettingsStore } from '@/stores/settings';
+const settings = useSettingsStore();
 let { login } = storeToRefs(user); 
 
 let cart_list = [];
@@ -65,6 +68,13 @@ export const cartStore = defineStore('cart', {
 			return arr
 		},
 		addProduct2Cart(data) {
+			if(!login.value) {
+				settings.setPrevPage(router.currentRoute.value)
+				ElMessage.error('请先登录');
+				settings.goLogin()
+				return
+			}
+			
 			let { id: shopId } = data.shop;
 			data = {
 				...data, 
@@ -99,7 +109,8 @@ export const cartStore = defineStore('cart', {
 					data.specs_arr = this.specs2Obj(data.specs)
 					datas.products.unshift(data)
 				}else {
-					data.num += datas.products[productIndex].num 
+					data.num = (+data.num) + (+datas.products[productIndex].num)
+					console.log(data.num)
 					data.checked = datas.products[productIndex].checked 
 					let item = deepClone(datas.products[productIndex])
 					item = deepMerge(item, data)  
@@ -109,6 +120,8 @@ export const cartStore = defineStore('cart', {
 			}
  
 			this.saveCartData2LocalStorage()
+
+			return true
 		},
 		setPidSku(arr, idStr) { 
 			this.cart_list.forEach((cart ) => {
