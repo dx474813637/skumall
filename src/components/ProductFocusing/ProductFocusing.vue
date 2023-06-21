@@ -18,6 +18,7 @@
 						:zoom-rate="1.2"
 						:preview-src-list="props.imgs"
 						:initial-index="props.index"
+						lazy
 						fit="contain" 
 						> 
 					</el-image> 

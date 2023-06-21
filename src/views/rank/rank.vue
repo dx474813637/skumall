@@ -51,7 +51,10 @@
 							<el-col :span="8">
 								<div class="rank-company u-flex-y u-flex-items-start u-flex-center">
 									<div class="company-name">
-										<el-text class="u-font-18">日韩屋</el-text>
+										<el-link @click="$router.push({name: 'shop', params: {id: 1}})">
+											<el-text class="u-font-18">日韩屋</el-text>
+										</el-link>
+										
 									</div>
 									<div class="company-address">
 										<el-text type="info" class="u-font-12">地址：新金马 网批2F B131-A</el-text>

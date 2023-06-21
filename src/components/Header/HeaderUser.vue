@@ -3,9 +3,9 @@
 		<div class="header-main">
 			<div class="home-w">
 				<div class="main-logo">
-					<a href="/" title="衢链通"
+					<a href="#/" title="衢链通"
 						><img
-							src="logo.png"
+							src="/logo.png"
 							class="logo"
 							alt="衢链通"
 					/></a>

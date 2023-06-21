@@ -131,7 +131,14 @@
 								<div class="shop-logo">
 									<el-avatar  :src="product_shop_data.img" />
 								</div>
-								<div class="shop-name u-m-l-10">{{product_shop_data.company}}</div> 
+								<div class="shop-name u-m-l-10">
+									<el-link @click="$router.push({name: 'shop', params: {id: 1}})">
+										<el-text size="large">
+											{{product_shop_data.company}}
+										</el-text>
+										
+									</el-link>
+								</div> 
 							</div>
 							<div class="shop-row"><el-text size="small">地址：{{ product_shop_data.address }}</el-text></div>
 							<div class="shop-row"><el-text size="small">联系人：{{ product_shop_data.contacts }}</el-text></div>
@@ -149,6 +156,7 @@
 								<div class="u-p-10">
 									<el-image v-for="(item, index) in descriptionArr" :key="index"
 										:src="item"
+										lazy
 										style="width: 100%;"
 									></el-image>
 								</div>

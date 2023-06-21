@@ -1,9 +1,15 @@
 <template>
-	<div class="product-card">
+	<div class="product-card" @click="gotoDetail">
 		<div class="product-img">
-			<el-image lazy src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" fit="cover" /> 
+			<el-image loading="lazy" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" fit="cover" >
+				<template #placeholder>
+					<div class="u-flex u-flex-center"> 
+						<el-image src="/logo.png" class="logo" fit="contain" /> 
+					</div>
+				</template>
+			</el-image>
 			<div class="product-btns u-flex u-font-12">
-				<div class="item u-flex-1">
+				<div class="item u-flex-1" @click.stop="gotoShop">
 					<span>友盟鞋业 2023</span>
 				</div> 
 			</div>
@@ -28,8 +34,53 @@
 	</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import router from '@/router';
+
+const props = defineProps({
+	id: {
+		type: String,
+		default: '1'
+	},
+	sid: {
+		type: String,
+		default: '1'
+	},
+})
+
+
+
+function gotoDetail() {
+	router.push({
+		name: 'product',
+		params: {
+			id: props.id
+		}
+	})
+}
+function gotoShop() {
+	router.push({
+		name: 'shop',
+		params: {
+			id: props.sid
+		}
+	})
+}
+</script>
 <style lang="scss" scoped>
+.logo {
+	opacity: .5;
+	@extend %box-sizing;
+	padding: 10px;
+	width: 100%;
+	height: 100%;
+	-webkit-filter: grayscale(100%);
+	-moz-filter: grayscale(100%);
+	-ms-filter: grayscale(100%);
+	-o-filter: grayscale(100%);
+	filter: grayscale(100%);
+	filter: gray;
+}
 .product-card {
 	width: 100%;
 	border-radius: 5px;

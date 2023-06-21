@@ -1,7 +1,7 @@
 <template>
 	<div class="ad-box u-p-b-10">
 		<div class="home-w">
-			<img src="ad-banner1.jpg"  alt="" />
+			<el-image  loading="lazy" src="/ad-banner1.jpg"  alt="" />
 		</div>
 	</div>
 	
@@ -22,7 +22,7 @@
 				<el-link type="info" :underline="false" href="https://element-plus.org" target="_blank">增值电信业务经营许可证：浙B2-2023</el-link>
 				<el-divider direction="vertical" class="u-m-l-20 u-m-r-20" />
 				<el-link type="info" :underline="false" href="https://element-plus.org" target="_blank">经营性网站备案信息: 浙1CP备2023000-1 </el-link>
-				<el-link type="info" class="u-m-l-20 " :underline="false" href="/" > Copyright @ 2023我要选品 版权所有</el-link> 
+				<el-link type="info" class="u-m-l-20 " :underline="false" href="#/" > Copyright @ 2023我要选品 版权所有</el-link> 
 			 </div>
 		</div>
 	</footer>

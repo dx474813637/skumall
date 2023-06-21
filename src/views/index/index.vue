@@ -16,24 +16,25 @@
 					</div>
 					<div class="main-bottom u-flex u-flex-between">
 						<div class="item">
-							<img src="bg-login1.jpg" alt="">
+							<img src="/bg-login1.jpg" alt="">
 						</div>
 						<div class="item">
-							<img src="bg-login1.jpg" alt="">
+							<img src="/bg-login1.jpg" alt="">
 						</div>
 						<div class="item">
-							<img src="bg-login1.jpg" alt="">
+							<img src="/bg-login1.jpg" alt="">
 						</div>
 					</div>
 				</div>
 				<div class="item item-right u-flex-column">
-					<div class="login-box u-flex-column u-flex-between u-flex-1 u-p-10 u-p-l-20 u-p-r-20">
-						<div class="login-top u-p-t-10">
+					<div class="login-box u-flex-column  u-flex-1 u-p-10 u-p-l-20 u-p-r-20">
+						<div class="login-top u-p-t-10 u-m-b-30">
 							<div class="login-info u-flex u-m-b-10">
-								<el-avatar  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+								<el-avatar  :src="cpy_info.img || user_info.mem_pic || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'" />
 								<div class="u-flex-1 u-m-l-20">
 									<div>
 										<el-text tag="b">Hi</el-text>
+										<el-text tag="b" v-if="login">，{{ cpy_info.company || user_info.name }}</el-text>
 									</div>
 									<div>
 										<el-text type="info">欢迎来到 51选品网</el-text>
@@ -42,14 +43,15 @@
 							</div>
 							<div class="login-btns">
 								<div class="u-m-b-8">
-									<el-button type="primary">登录</el-button>
+									<el-button type="danger" plain v-if="login" @click="user.logout()">登出</el-button>
+									<el-button type="primary" v-else @click="router.push({name: 'login'})">登录</el-button>
 								</div>
-								<div class="u-flex">
+								<div class="u-flex"  v-if="!login">
 									<div class="item u-p-r-4 u-flex-1">
-										<el-button type="primary" plain>注册</el-button> 
+										<el-button type="primary" plain @click="router.push({name: 'login'})">注册</el-button> 
 									</div>
 									<div class="item u-p-l-4 u-flex-1">
-										<el-button type="primary" plain>供应商中心</el-button>
+										<el-button type="primary" plain @click="router.push({name: 'user_index'})">供应商中心</el-button>
 									</div> 
 								</div>
 							</div>
@@ -58,7 +60,7 @@
 							<el-row>
 								<el-col :span="12" class="u-flex u-flex-center">
 									<el-link :underline="false">
-										<div class=" u-flex-column">
+										<div class=" u-flex-column" @click="router.push({name: 'cart'})">
 											<el-icon size="24">
 												<i-ep-ShoppingCart />
 											</el-icon>
@@ -68,7 +70,7 @@
 									
 								</el-col>
 								<el-col :span="12" class="u-flex u-flex-center">
-									<el-link :underline="false">
+									<el-link :underline="false" @click="router.push({name: 'user_index'})">
 										<div class=" u-flex-column">
 											<el-icon size="24">
 												<i-ep-ChatDotSquare />
@@ -108,7 +110,7 @@
 			<div class="tj-box index-box u-m-b-30">
 				<div class="box-title u-flex u-flex-between u-p-b-20">
 					<div class="item">
-						<span class="title u-font-18">实力档口</span>
+						<span class="title u-font-18">优选店铺</span>
 						<span class="sub u-m-l-10 u-font-14">品质好商，生产实力领先</span>
 					</div>
 					<div class="item"></div>
@@ -123,7 +125,7 @@
 							>
 							<div class="tj-list u-p-20 u-flex u-flex-between" v-loading="item.loading">
 								<div class="tj-img u-p-r-10">
-									<el-image :src="item.img" fit="fit" />
+									<el-image loading="lazy" :src="item.img" fit="fill" />
 								</div>
 								<div class="tj-prods u-flex u-flex-wrap ">
 									<div class="prods u-p-l-10 u-p-r-10"
@@ -143,7 +145,7 @@
 					<div class="item u-flex-1"></div>
 					<div class="item u-flex-1">
 						<el-divider>
-							<span class="title u-font-18">实力档口</span>
+							<span class="title u-font-18">推荐店铺</span>
 						</el-divider>
 					</div>
 					<div class="item u-flex u-flex-1 u-flex-end">
@@ -191,7 +193,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeMount, inject, ref } from "vue"; 
+import { onMounted, onBeforeMount, inject, ref, toRefs } from "vue"; 
+import router from '@/router/guard'
+import {userStore} from '@/stores/user'
+const user = userStore();
+const {login, user_info, cpy_info} = toRefs(user)
 const base_list_loading = ref(false)
 const base_list = ref([])
 const base_list_total = ref(30)

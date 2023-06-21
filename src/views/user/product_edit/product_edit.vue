@@ -39,7 +39,7 @@
                 v-model:file-list="dynamicValidateForm.pic"
                 list-type="picture-card" 
                 :headers="configHeader"  
-                :http-request="function (options: UploadRequestOptions) { return upload(options, dynamicValidateForm.pic) }"
+                :http-request="(options) => upload(options, dynamicValidateForm.pic) "
                 :before-upload="beforeUpload">
                 <el-icon>
                     <Plus />
@@ -70,7 +70,7 @@
                 v-model:file-list="dynamicValidateForm.description"
                 list-type="picture-card" 
                 :headers="configHeader"  
-                :http-request="function (options: UploadRequestOptions) { return upload(options, dynamicValidateForm.description) }"
+                :http-request="(options) => upload(options, dynamicValidateForm.description) "
                 :before-upload="beforeUpload">
                 <el-icon>
                     <Plus />
@@ -191,7 +191,7 @@
                                     :name="domain.name"
                                     size="small"
                                     active-text="添加图片规格"
-                                    @change="function(val) {return mainKeyChange(val, domain, index)}" 
+                                    @change="(val) => mainKeyChange(val, domain, index)" 
                                     /> 
                             </el-col>
                             
@@ -234,8 +234,8 @@
                                     list-type="picture-card" 
                                     :headers="configHeader" 
                                     :limit="1"
-                                    :on-exceed="function (files, uploadFiles) { return handlePictureExceed(files, uploadFiles, domainValue.filesList) }"
-                                    :http-request="function (options: UploadRequestOptions) { return upload(options, domainValue.filesList, i) }"
+                                    :on-exceed="(files, uploadFiles) => handlePictureExceed(files, uploadFiles, domainValue.filesList) "
+                                    :http-request="(options) => upload(options, domainValue.filesList, i)"
                                     :before-upload="beforeUpload"> 
                                     <el-icon size="16">
                                         <Plus />
@@ -298,8 +298,8 @@
                                 list-type="picture-card" 
                                 :headers="configHeader" 
                                 :limit="1"
-                                :on-exceed="function (files, uploadFiles) { return handlePictureExceed(files, uploadFiles, row.filesList) }"
-                                :http-request="function (options: UploadRequestOptions) { return upload(options, row.filesList) }"
+                                :on-exceed="(files, uploadFiles) => handlePictureExceed(files, uploadFiles, row.filesList)"
+                                :http-request="(options) => upload(options, row.filesList) "
                                 :before-upload="beforeUpload">
                                 <el-icon>
                                     <Plus />
@@ -447,6 +447,7 @@ import type { FormInstance, UploadFile, UploadRequestOptions, UploadRawFile, Upl
 import {
     Delete, Plus, ZoomIn, CirclePlus, FolderOpened 
 } from '@element-plus/icons-vue'
+import router from '@/router/guard'
 import { baseStore } from '@/stores/main'
 import { cateStore } from '@/stores/cate'
 import toSpecPrices from '@/utils/toSpecPrices' 
@@ -940,6 +941,9 @@ async function submitApi(data) {
     })
     if(res.code == 1) {
         ElMessage.success(res.msg)
+        router.push({
+            name: 'product_list'
+        })
     }
 }
 

@@ -14,7 +14,7 @@
                 <div class="box-main ">  
                     <el-carousel height="300px" indicator-position="outside">
                         <el-carousel-item v-for="item in 4" :key="item">
-                            <div class="u-flex swiper-list u-flex u-flex-between u-p-l-2- u-p-r-20">
+                            <div class="u-flex swiper-list u-flex u-flex-between u-p-l-20 u-p-r-20">
                                 <div class="list-item " v-for="item in 6" :key="item">
                                     <product-card-simple></product-card-simple>
                                 </div>

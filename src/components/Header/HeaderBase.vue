@@ -2,20 +2,26 @@
     <header class="header" id="header">
         <div class="header-top">
             <div class="home-w">
-                <div class="top-left">
-                    <p class="u-p-r-10">您好！欢迎光临-衢链通</p>
-                    <a href="login.html" target="_blank" class="login u-m-r-5">登录</a>
-                    <a href="reg.html" target="_blank" class="reg u-p-l-5">免费注册</a>
+                <div class="top-left u-flex">
+                    <p class="u-p-r-10">您好！欢迎光临-{{ app_title }}</p>
+                    <template v-if="login">
+                        <el-link class="u-font-12" type="primary" :underline="false" @click="router.push({name: 'user_index'})">{{ user_info.name }}</el-link>
+                    </template>
+                    <template v-else>
+                        <a href="#/login/" class="login u-m-r-5">登录</a>
+                        <a href="#/login/" class="reg u-p-l-5">免费注册</a>
+                    </template>
+                    
                 </div>
                 <div class="top-right ">
                     <span class="item">
-                        <el-link :underline="false" href="" target="_blank">选品首页</el-link>
+                        <el-link :underline="false" href="#/" target="_blank">选品首页</el-link>
                     </span> 
                     <span class="item">
-                        <el-link :underline="false" href="" target="_blank">选品车</el-link>
+                        <el-link :underline="false" href="#/user/cart" target="_blank">选品车</el-link>
                     </span> 
                     <span class="item">
-                        <el-link :underline="false" href="" target="_blank">用户中心</el-link>
+                        <el-link :underline="false" href="#/user/" target="_blank">用户中心</el-link>
                     </span> 
                     <span class="item">
                         <el-link :underline="false" href="" target="_blank">供应商中心</el-link>
@@ -32,7 +38,7 @@
         <div class="header-main">
             <div class="home-w">
                 <div class="main-logo">
-                    <a href="/" title="我要选品"><img src="logo.png"
+                    <a href="#/" title="我要选品"><img src="/logo.png"
                             class="logo" alt="我要选品"></a>
                 </div>
                 <div class="main-search u-flex-1 u-flex u-flex-items-center">
@@ -90,7 +96,7 @@
                 </div>
             </div>
         </div>
-        <div class="header-nav">
+        <div class="header-nav u-font-16">
             <div class="home-w">
                 <div class="item">
                     <div class="nav-left-w">
@@ -98,36 +104,39 @@
                             <i-ep-Paperclip />
                             <p>行业分类</p>
                         </div>
+                        <div class="nav-left-more" v-if="router.currentRoute.value.name != 'index'">
+                            <menu-cate></menu-cate>
+                        </div>
                     </div>
                 </div>
                 <div class="item u-flex-1 u-m-l-20 u-m-r-30">
                     <div class="nav-right-w u-flex u-flex-between">
                         <div class="nav-w">
-                            <div class="nav-item">
+                            <div class="nav-item" @click="router.push({name: 'list'})">
                                 <p>全部商品</p>
                             </div>
-                            <div class="nav-item">
+                            <div class="nav-item" @click="router.push({name: 'list'})">
                                 <p>热销</p>
                             </div>
-                            <div class="nav-item">
+                            <div class="nav-item" @click="router.push({name: 'list'})">
                                 <p>新品</p>
                             </div>
-                            <div class="nav-item">
+                            <div class="nav-item" @click="router.push({name: 'list'})">
                                 <p>品牌</p>
                             </div>
-                            <div class="nav-item">
+                            <div class="nav-item" @click="router.push({name: 'list'})">
                                 <p>促销专区</p>
                             </div> 
                         </div>
                         <el-divider direction="vertical" />
                         <div class="nav-w">
-                            <div class="nav-item">
+                            <div class="nav-item" @click="router.push({name: 'rank'})">
                                 <p>供应商排行榜</p>
                             </div>
-                            <div class="nav-item">
+                            <div class="nav-item" @click="router.push({name: 'rank'})">
                                 <p>商品排行榜</p>
                             </div>
-                            <div class="nav-item">
+                            <div class="nav-item" @click="router.push({name: 'list'})">
                                 <p>快捷融资</p>
                             </div> 
                         </div>
@@ -139,8 +148,14 @@
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { onMounted, ref, toRefs } from 'vue'
 import router from '@/router/guard';
+import {baseStore} from '@/stores/main';
+import {userStore} from '@/stores/user';
+const base = baseStore() 
+const user = userStore() 
+const { app_title } = toRefs(base)
+const { login, user_info } = toRefs(user)
 const kw = ref('') 
 const keyActive = ref('product') 
 const keyList = ref([
@@ -157,6 +172,10 @@ const keyList = ref([
         value: 'sku'
     }
 ])
+const url = ref('logo.png')
+onMounted(() => {
+    console.log(url.value)
+})
 </script>  
 <style lang='scss' scoped>
 ::v-deep .input-with-select {
@@ -307,6 +326,7 @@ header {
             }
             .item {
                 .nav-left-w { 
+                    position: relative;
                     .nav-left-header {
                         @extend %box-sizing;
                         @include flex(x);
@@ -336,6 +356,25 @@ header {
                         }
                         p {
                             padding-left: 15px
+                        }
+                    }
+                    .nav-left-more {
+                        @extend %box-sizing;
+                        position: absolute;
+                        top: 100%;
+                        left: 0;
+                        width: 100%;
+                        display: none;
+                        background-color: #fff;
+                        z-index: 50;
+                        box-shadow: 0 5px 10px rgba(0,0,0,.1);
+                        border-radius: 0 0 8px 8px;
+                        padding: 10px;
+                        border-top: 2px solid $uni-color-primary;
+                    }
+                    &:hover {
+                        .nav-left-more {
+                            display: block
                         }
                     }
                 }

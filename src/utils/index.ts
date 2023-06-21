@@ -225,8 +225,7 @@ export function timeFrom(timestamp:any = null, format:any = 'yyyy-mm-dd') {
     // 判断用户输入的时间戳是秒还是毫秒,一般前端js获取的时间戳是毫秒(13位),后端传过来的为秒(10位)
     if (timestamp.toString().length == 10) timestamp *= 1000
     let timer = (new Date()).getTime() - timestamp
-    timer = parseInt(timer / 1000)
-    console.log(timer, timestamp)
+    timer = parseInt(timer / 1000) 
     // 如果小于5分钟,则返回"刚刚",其他以此类推
     let tips = ''
     switch (true) {

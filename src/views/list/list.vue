@@ -471,12 +471,13 @@ const handleCheckedChange = (value: string[]) => {
     console.log(value)
 }
 </script>
-<style lang="scss">
+<style >
     .el-menu--horizontal.el-menu--popup-container {
         border-bottom: none;
-        .el-menu--popup {
-            display: flex;
-        }
+        
+    }
+    .el-menu--horizontal.el-menu--popup-container .el-menu--popup {
+        display: flex;
     }
 </style>
 <style lang="scss" scoped> 

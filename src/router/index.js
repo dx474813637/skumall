@@ -87,6 +87,7 @@ const routes = [
         meta: { 
             isAuth: true,
         },
+        redirect: '/user/index',
         component: () => import('@/views/user/user.vue'),
         // props:true  //传值1.props值为true时，将path里面的id传递给component里面的User.vue里面。 
         //下面是通过props传id和title。

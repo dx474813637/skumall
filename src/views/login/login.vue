@@ -1,7 +1,7 @@
 <template>
 	<header-help></header-help>
 	<div class="login-main">
-		<img src="http://zc.toocle.com/Public/pc/img/login-bg.jpg" alt="" />
+		<img src="https://doudian.y.netsun.com/Public/login-bg.jpg" alt="" />
 		<div class="home-w">
 			<div class="login-box">
 				<div class="login-tabs u-p-10">
@@ -93,9 +93,10 @@ import { ref, reactive, computed, inject, toRefs, onMounted } from "vue";
 import {useSettingsStore} from '@/stores/settings';
 import {userStore} from '@/stores/user';
 import { ElLoading, ElMessage  } from "element-plus";
+import router from "@/router";
 const useSettings = useSettingsStore()
 const user = userStore()
-// const { login:loginname } = toRefs(user);
+const { login:loginStore } = toRefs(user);
 // console.log(router)
 // import { createLoadingComponent } from "element-plus/es/components/loading/src/loading";
 const $api: any = inject('$api')
@@ -123,8 +124,12 @@ const countValue = ref(0)
 const getCodeDisabled = computed(() => { 
 	return countValue.value > Date.now()
 })
-onMounted(() => {
-	
+onMounted(async () => {
+	// await user.getUserData()
+	// if(loginStore.value) {
+	// 	router.push({name: 'user_index'})
+	// 	return
+	// }
 })
 const rules = computed<FormRules>(() => {
 	let obj = {

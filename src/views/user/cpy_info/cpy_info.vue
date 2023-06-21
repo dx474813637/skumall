@@ -20,7 +20,7 @@
 					v-model:file-list="userInfo.img"
 					list-type="picture-card" 
 					:headers="configHeader"  
-					:http-request="function (options: UploadRequestOptions) { return upload(options, userInfo.img) }"
+					:http-request="(options) => upload(options, userInfo.img) "
 					:before-upload="beforeUpload"
 					:limit="1"
 					>

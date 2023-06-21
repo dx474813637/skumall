@@ -1,13 +1,15 @@
 <!--  -->
 <template>
-  <div></div>
+	<div></div>
 </template>
 
 <script setup lang='ts'>
-import { reactive,ref, inject} from 'vue'  
+import { reactive, ref, inject, onMounted } from 'vue'
+import { userStore } from '@/stores/user';
+const user = userStore()
 const $api: any = inject('$api')
-$api.my_card() 
-$api.bank_buy_all()
+onMounted(() => {
+	user.getUserData()
+})
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang='scss' scoped></style>

@@ -1,9 +1,15 @@
 <template>
 	<div class="product-card">
-		<div class="product-img">
-			<el-image lazy src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" fit="cover" /> 
+		<div class="product-img" @click="gotoDetail">
+			<el-image loading="lazy" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" fit="cover" >
+				<template #placeholder>
+					<div class="u-flex u-flex-center"> 
+						<el-image src="/logo.png" class="logo" fit="contain" /> 
+					</div>
+				</template>
+			</el-image>
 			<div class="product-btns u-flex u-font-12">
-				<div class="item">
+				<div class="item" @click.stop="console.log(2)">
 					<span>找同款</span>
 				</div>
 				<div class="item">
@@ -30,15 +36,15 @@
 				<div class="item"></div>
 			</div>
 			<div class="content-item">
-				<div class="item product-title u-line-1">
+				<div class="item product-title u-line-1" @click="gotoDetail">
 					威尔胜（Wilson）篮球 NBA比赛室内外耐磨PU防滑蓝球7号
 					TAKE-OFF系列-实战利器801
 				</div>
 			</div>
 			<div class="content-item">
-				<div class="item shop-name u-line-1">威尔胜（Wilson）京东自营专区</div>
+				<div class="item shop-name u-line-1" @click="gotoShop">威尔胜（Wilson）京东自营专区</div>
 			</div>
-			<div class="content-item">
+			<div class="content-item" @click="gotoDetail">
 				<div class="item product-eva">
 					<div class="product-eva-num">5000+</div>
 					<div>条评价</div>
@@ -52,8 +58,51 @@
 	</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import router from '@/router';
+
+const props = defineProps({
+	id: {
+		type: String,
+		default: '1'
+	},
+	sid: {
+		type: String,
+		default: '1'
+	},
+})
+
+function gotoDetail() {
+	router.push({
+		name: 'product',
+		params: {
+			id: props.id
+		}
+	})
+}
+function gotoShop() {
+	router.push({
+		name: 'shop',
+		params: {
+			id: props.sid
+		}
+	})
+}
+</script>
 <style lang="scss" scoped>
+.logo {
+	opacity: .5;
+	@extend %box-sizing;
+	padding: 10px;
+	width: 100%;
+	height: 100%;
+	-webkit-filter: grayscale(100%);
+	-moz-filter: grayscale(100%);
+	-ms-filter: grayscale(100%);
+	-o-filter: grayscale(100%);
+	filter: grayscale(100%);
+	filter: gray;
+}
 .product-card {
 	width: 100%;
 	border-radius: 5px;

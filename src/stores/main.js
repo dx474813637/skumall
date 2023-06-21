@@ -20,6 +20,7 @@ export const baseStore = defineStore('base', {
 			online: {
 				count: 0, 
 			}, 
+			app_title: import.meta.env.VITE_APP_TITLE,
 			msg: {}
 		};
 	},

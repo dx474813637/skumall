@@ -3,19 +3,19 @@
         <div class="header-top">
             <div class="home-w">
                 <div class="top-left">
-                    <p class="u-p-r-10">您好！欢迎光临-衢链通</p>
-                    <a href="login.html" target="_blank" class="login u-m-r-5">登录</a>
-                    <a href="reg.html" target="_blank" class="reg u-p-l-5">免费注册</a>
+                    <p class="u-p-r-10">您好！欢迎光临-{{ app_title }}</p>
+                    <a href="#/login/" target="_blank" class="login u-m-r-5">登录</a>
+                    <a href="#/login/" target="_blank" class="reg u-p-l-5">免费注册</a>
                 </div>
                 <div class="top-right ">
                     <span class="item">
-                        <el-link :underline="false" href="" target="_blank">选品首页</el-link>
+                        <el-link :underline="false" href="#/" target="_blank">选品首页</el-link>
                     </span> 
                     <span class="item">
-                        <el-link :underline="false" href="" target="_blank">选品车</el-link>
+                        <el-link :underline="false" href="#/user/cart" target="_blank">选品车</el-link>
                     </span> 
                     <span class="item">
-                        <el-link :underline="false" href="" target="_blank">用户中心</el-link>
+                        <el-link :underline="false" href="#/user/" target="_blank">用户中心</el-link>
                     </span> 
                     <span class="item">
                         <el-link :underline="false" href="" target="_blank">供应商中心</el-link>
@@ -32,8 +32,8 @@
         <div class="header-main">
             <div class="home-w u-flex u-flex-between">
                 <div class="main-logo u-flex u-flex-1">
-                    <a href="/" title="我要选品">
-                        <img src="https://www.xiebutou.com/logo.png"  class="logo" alt="我要选品">
+                    <a href="#/" title="我要选品">
+                        <img src="/logo.png"  class="logo" alt="我要选品">
                     </a>
                     <div class="shop-info u-m-l-20">
                         <div class="shop-name u-font-16">店铺名称名称</div>
@@ -113,8 +113,11 @@
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue'
+import { ref, toRefs } from 'vue'
 import router from '@/router/guard';
+import {baseStore} from '@/stores/main';
+const base = baseStore() 
+const { app_title } = toRefs(base)
 const kw = ref('') 
 const keyActive = ref('product') 
 const keyList = ref([

@@ -6,7 +6,7 @@
             v-for="item in props.list"
             :key="item.id"
             >
-            <el-link :underline="false" class="menus-items-title" href="" target="_blank">
+            <el-link :underline="false" class="menus-items-title" href="#/list" >
                 <div class="u-flex u-flex-between menus-items-title-inner ">
                     <div class="item">
                         <img src="" alt="">
@@ -26,7 +26,7 @@
                         v-for="ele in item.children" 
                         :key="ele.id"
                         >
-                        <el-link :underline="false" class="list-item-link u-line-1" href="" target="_blank"> {{ ele.name }} </el-link>
+                        <el-link :underline="false" class="list-item-link u-line-1" href="#/list" > {{ ele.name }} </el-link>
                     </div>
                 </div>
             </div>
