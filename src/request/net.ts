@@ -74,7 +74,7 @@ export const createAxiosByinterceptors = (
 
     // 添加响应拦截器
     instance.interceptors.response.use(
-        function (response) {
+        function (response) { 
             // 对响应数据做点什么
             // console.log("response:", response);
             // const { loading = true } = response.config;
@@ -98,13 +98,18 @@ export const createAxiosByinterceptors = (
                     // jumpLogin();
                     const user = userStore()
                     user.logout() 
-                    const useSettings = useSettingsStore()
-                    useSettings.setPrevPage(router.currentRoute.value)
-                    ElMessage.error(msg);
-                    useSettings.goLogin()
+                    if( !response.config.url?.includes('my_card') ) {
+                        const useSettings = useSettingsStore()
+                        useSettings.setPrevPage(router.currentRoute.value)
+                        ElMessage.error(msg);
+                        useSettings.goLogin()
+                    }
+                    
                     return Promise.reject(response.data);
                 } else {
-                    ElMessage.error(msg);
+                    if( !response.config.url?.includes('my_card') ) {
+                        ElMessage.error(msg);
+                    } 
                     return Promise.reject(response.data);
                 }
             }

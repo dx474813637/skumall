@@ -1,6 +1,4 @@
-<template>
-	<Header-base></Header-base>
-    
+<template> 
 	<div class="list-w">
 		<div class="home-w">
             <div class="list-filters-box u-p-t-10 u-p-b-10">
@@ -57,7 +55,7 @@
                         </template>
                     </el-menu>
                 </div>
-                <div class="tabs-menus-sort u-flex u-flex-between u-p-l-10 u-p-t-10 u-p-b-10" v-if="false">
+                <!-- <div class="tabs-menus-sort u-flex u-flex-between u-p-l-10 u-p-t-10 u-p-b-10">
                     <div class="item">
                         <el-tabs v-model="sort_active" type="border-card" @tab-click="sortTabsClick">
                             <el-tab-pane 
@@ -104,7 +102,7 @@
                     </div>
                     
                 </div>
-            </div>
+            </div> -->
             <div class="list-main-box u-p-t-10 u-p-b-10" v-loading="loading">
                 <div class="list">
                     <template v-if="!product_list || product_list.length == 0">
@@ -121,19 +119,17 @@
             <div class="list-page-box u-p-t-40 u-p-b-40">
                 <el-pagination
                     v-model:current-page="curP"
-                    v-model:page-size="pageSize" 
+                    v-model:page-size="pageSize"
+                    small 
                     hide-on-single-page
                     background
-                    layout="prev, pager, next, slot"
+                    layout="total, prev, pager, next"
                     :total="product_total" 
-                >
-                    <span class="u-p-l-10">共 {{ product_total }} 条数据</span>
-                </el-pagination>
+                />
             </div>
 			
 		</div>
-	</div>
-	<Footer-base></Footer-base>
+	</div> 
 </template>
 
 <script setup lang="ts">
@@ -142,7 +138,7 @@ import {cateStore} from '@/stores/cate'
 const cate = cateStore()
 const {cate_list, cate_list_all, cate_loading} = toRefs(cate)
 import router from '@/router/guard'
-// import {deepClone} from '@/utils/index'
+import {deepClone} from '@/utils/index'
 const curP = ref(1)
 const pageSize = ref(18) 
 const $api = inject('$api');  
@@ -154,70 +150,70 @@ const params = computed(() => {
     }
 })
 const cate_active = ref('')   
-// const sort_active = ref('')
-// const sort_arr = ['asc', 'desc']
-// const sort_tabs_list = ref([
-//     {
-//         name: '综合', 
-//         type: 'sort',
-//         key: '1',
-//         value: '', 
-//     },
-//     {
-//         name: '销量', 
-//         type: 'sort',
-//         key: '2',
-//         value: '', 
-//     },
-//     {
-//         name: '人气', 
-//         type: 'sort',
-//         key: '3',
-//         value: '', 
-//     },
-//     {
-//         name: '退货率', 
-//         type: 'sort',
-//         key: '4',
-//         value: '', 
-//     },
-//     {
-//         name: '上新时间', 
-//         type: 'sort',
-//         key: '5',
-//         value: '', 
-//     }, 
-// ])
-// const checkbox_tabs_list = ref([
-//     {
-//         name: '24H闪发',
-//         value: 'tag_24h',
-//     },
-//     {
-//         name: '视频商品',
-//         value: 'have_video',
-//     },
-//     {
-//         name: '新品',
-//         value: 'tag_season',
-//     },
-// ])
-// const checked_list = ref([])
-// const price_arr = computed({
-//     get() {
-//         return [priceForm.price1, priceForm.price2 || 5000]
-//     },
-//     set(v) {
-//         priceForm.price1 = v[0]
-//         priceForm.price2 = v[1]
-//     }
-// })
+const sort_active = ref('')
+const sort_arr = ['asc', 'desc']
+const sort_tabs_list = ref([
+    {
+        name: '综合', 
+        type: 'sort',
+        key: '1',
+        value: '', 
+    },
+    {
+        name: '销量', 
+        type: 'sort',
+        key: '2',
+        value: '', 
+    },
+    {
+        name: '人气', 
+        type: 'sort',
+        key: '3',
+        value: '', 
+    },
+    {
+        name: '退货率', 
+        type: 'sort',
+        key: '4',
+        value: '', 
+    },
+    {
+        name: '上新时间', 
+        type: 'sort',
+        key: '5',
+        value: '', 
+    }, 
+])
+const checkbox_tabs_list = ref([
+    {
+        name: '24H闪发',
+        value: 'tag_24h',
+    },
+    {
+        name: '视频商品',
+        value: 'have_video',
+    },
+    {
+        name: '新品',
+        value: 'tag_season',
+    },
+])
+const checked_list = ref([])
+const price_arr = computed({
+    get() {
+        return [priceForm.price1, priceForm.price2 || 5000]
+    },
+    set(v) {
+        priceForm.price1 = v[0]
+        priceForm.price2 = v[1]
+    }
+})
 
 // ref([0, 1000])
-// const priceForm = reactive({
-//     price1: '',
-//     price2: '',
-// })
+const priceForm = reactive({
+    price1: '',
+    price2: '',
+})
 const product_list = ref([])
 const product_total = ref(0)
 const loading = ref(false)
@@ -255,15 +251,15 @@ watch(
         deep: true
     }
 )
-// watch(
-//     () => price_arr.value,
-//     (n) => {
+watch(
+    () => price_arr.value,
+    (n) => {
 
-//     },
-//     {
-//         deep: true
-//     }
-// )
+    },
+    {
+        deep: true
+    }
+)
 
 async function getProductData() {
     const res = await $api.web_product({params: params.value, loading: false})

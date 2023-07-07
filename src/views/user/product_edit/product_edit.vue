@@ -21,6 +21,7 @@
                     value: 'id',
                     label: 'name'
                 }"
+                filterable
                 style="width: 100%"
                 >
                 <template #default="{ node, data }">
@@ -130,6 +131,53 @@
                 <el-radio label="1">上架</el-radio>
                 <el-radio label="0">下架</el-radio> 
             </el-radio-group>
+        </el-form-item>
+        <el-form-item prop="attribute" > 
+            <template #label>
+                <div class="u-flex">
+                    <div class="u-m-r-10">商品详细属性自定义</div>
+                    <el-button size="small" type="primary" plain @click="handleAddAttributeItem">新增自定义</el-button>
+                </div>
+            </template>
+            <el-row :gutter="20" class="u-m-b-10" style="width: 100%;"
+                v-for="(item, index) in dynamicValidateForm.attribute"
+                :key="item.id"
+                > 
+                <el-col :span="8" class="u-flex u-flex-items-start">
+                    <el-button
+                        type="danger"
+                        class="u-m-r-10" 
+                        plain 
+                        @click="handleRemoveAttributeItem(item.id)" 
+                        v-show="dynamicValidateForm.attribute.length != 1"
+                        >移除</el-button>
+                    <el-form-item 
+                        class="u-flex-1"
+                        label="" 
+                        :prop="'attribute.' + index + '.name'" 
+                        :rules="{
+                            required: true,
+                            message: '自定义属性名不能为空',
+                            trigger: ['blur', 'change'],
+                        }">
+                        <el-input v-model="item.name" placeholder="自定义属性名" v-trim />    
+                    </el-form-item>
+                    
+                </el-col>
+                <el-col :span="16">
+                    <el-form-item  
+                        label="" 
+                        :prop="'attribute.' + index + '.value'" 
+                        :rules="{
+                            required: true,
+                            message: '自定义属性值不能为空',
+                            trigger: ['blur', 'change'],
+                        }">
+                        <el-input v-model="item.value" placeholder="自定义属性值" v-trim />  
+                    </el-form-item>
+                    
+                </el-col>
+            </el-row>
         </el-form-item>
 
         <el-form-item label="商品规格" prop="domains"> 
@@ -451,7 +499,7 @@ import router from '@/router/guard'
 import { baseStore } from '@/stores/main'
 import { cateStore } from '@/stores/cate'
 import toSpecPrices from '@/utils/toSpecPrices' 
-import { deepClone } from '@/utils' 
+import { deepClone, isNumber } from '@/utils' 
 import useProductSku from '@/hook/useProductSku'
 const {
     skuTable2domains,
@@ -486,8 +534,9 @@ const dynamicValidateForm = reactive<{
     name: string
     cate: string
     price: string
-    pic: array
-    description: array
+    pic: Array<any>
+    description: Array<any>
+    attribute: Array<any>
     recommend_remark: string
     freight_id: string
     weight: string
@@ -513,6 +562,7 @@ const dynamicValidateForm = reactive<{
     delivery_delay_day: '',
     info: '',
     on: '0',
+    attribute: []
     // zt: '',
     // spec_prices: '',
     // specs: '',
@@ -575,7 +625,7 @@ const rules = reactive<FormRules>({
             message: '轮播图不能为空',
             trigger: ['change', 'blur'],
         }
-    ],
+    ], 
     domains: [
         {
             required: true,
@@ -632,6 +682,17 @@ watch(
     (newVal, oldVal) => { 
         detail_spec_prices.value = newVal
         // setOldPrice('set price')
+    }, 
+    {
+        deep: true
+    }
+)
+watch(
+    () => dynamicValidateForm.attribute,
+    (newVal, oldVal) => { 
+        if(newVal.length == 0) {
+            handleAddAttributeItem()
+        }
     }, 
     {
         deep: true
@@ -949,10 +1010,10 @@ async function submitApi(data) {
 
 function formParams2apiParams() {
     let formParams = deepClone(dynamicValidateForm);
-    formParams.pic = formParams.pic.map(ele => ele.url).join('|')
-    formParams.description = formParams.description.map(ele => ele.url).join('|')
+    formParams.pic = formParams.pic.map((ele:any) => ele.url).join('|')
+    formParams.description = formParams.description.map((ele:any) => ele.url).join('|')
     formParams.cate = formParams.cate[formParams.cate.length - 1]
-    let tar = formParams.domains2Price.map(ele => { 
+    let tar = formParams.domains2Price.map((ele:any) => { 
         let obj = {
             sku: deepClone(ele.sku),
             img: ele.filesList[0]?.url,
@@ -965,13 +1026,14 @@ function formParams2apiParams() {
     })
     // console.log(tar)
     formParams.spec_prices = JSON.stringify(tar)
-    formParams.specs = formParams.domains.map(ele => {
-        let right = ele.values.map(item => item.value).join(',')
+    formParams.specs = formParams.domains.map((ele:any) => {
+        let right = ele.values.map((item:any) => item.value).join(',')
         return `${ele.label}|${right}`
     }).join('^')
     formParams.domains = ''
     formParams.domains2Price = ''
     if(props.id) formParams.id = props.id
+    formParams.attribute = JSON.stringify(formParams.attribute.map((ele:any) => ({name: ele.name, value: ele.value})))
     return formParams
 }
 
@@ -1022,9 +1084,10 @@ async function getProductData () {
         dynamicValidateForm.recommend_remark = data.recommend_remark 
         dynamicValidateForm.weight = data.weight 
         dynamicValidateForm.weight_unit = data.weight_unit  
+        dynamicValidateForm.attribute = data.attribute.map((ele:any, index:any) => ({...ele, id: index}))  
         dynamicValidateForm.domains = arr
-        dynamicValidateForm.description = data.description.split('|').map(ele => ({url: ele})) 
-        dynamicValidateForm.pic = data.pic.split('|').map(ele => ({url: ele}))   
+        dynamicValidateForm.description = data.description.split('|').map((ele:any) => ({url: ele})) 
+        dynamicValidateForm.pic = data.pic.split('|').map((ele:any) => ({url: ele}))   
         domainsTabsValue.value = newTabName;
         domainIndex = newTabName
         detail_spec_prices.value = res.spec_prices
@@ -1034,7 +1097,7 @@ async function getProductData () {
 function setDomains2PriceData() { 
     if(!detail_spec_prices.value) return
     let arr = deepClone(detail_spec_prices.value); 
-    console.log('set', arr)
+    // console.log('set', arr)
     dynamicValidateForm.domains2Price.forEach(ele => {
         let i = -1
         let count = 0
@@ -1047,12 +1110,13 @@ function setDomains2PriceData() {
                 keyname = 'sku'
                 delete item.sku.keys
                 isOld = true
-            } 
-            for(let key in item[keyname]) {   
-                if(item[keyname][key] !== ele[key] ) { 
+            }  
+            for(let key in item[keyname]) {    
+                if(isNumber(item[keyname][key]) && isNumber(ele[key]) ? item[keyname][key] != ele[key] : item[keyname][key] !== ele[key]) { 
                     flag = false;
                     break;
-                } 
+                }  
+                
                 
             }  
             if(flag) {
@@ -1069,8 +1133,18 @@ function setDomains2PriceData() {
     detail_spec_prices.value = ''
 }
 
-function setOldPrice(data) {
-    console.log('1',data, detail_spec_prices.value)
+function handleAddAttributeItem() {
+    dynamicValidateForm.attribute.push({
+        name: '',
+        value: '',
+        id: new Date().getTime()
+    })
+}
+
+function handleRemoveAttributeItem(id:any) { 
+    let i = dynamicValidateForm.attribute.findIndex(ele => ele.id == id)
+    if(i == -1) return;
+    dynamicValidateForm.attribute.splice(i, 1)
 }
 
 </script>

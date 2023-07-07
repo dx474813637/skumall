@@ -149,3 +149,14 @@ export const query_verify_organizations = (data) => axios.get('Userapi/query_ver
 
 // pacc_type_detail type=1授信记录 2签约记录 3成功记录
 export const pacc_type_detail = (data) => axios.get('Userapi/pacc_type_detail', data)
+
+
+// create_order_new 参数sell_login name specs num price id有id修改 zt=8的时候可以修改
+// order_shenhe 订单审核 参数order_id sh=1 通过 2拒绝
+// 下面接口跟原来的参数一致
+// order_list_new
+// order_detail_new
+// change_order_status_new
+// order_score_new
+
+// search_company_name 公司名搜索卖家账号(其实产品名称也能搜索) 参数terms

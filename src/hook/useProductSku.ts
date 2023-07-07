@@ -1,4 +1,5 @@
 import { ref, onMounted, onUnmounted, Ref, inject } from 'vue';
+import {isNumber} from '@/utils/index';
 const $api = inject('$api')
 
 function useProductSku(): any {
@@ -8,9 +9,10 @@ function useProductSku(): any {
             let obj = {};
             let item = ele.split('|')
             obj.label = item[0]
-            obj.children = item[1].split(',').map(item => ({label: item}))
+            obj.children = item[1].split(',').map(item => ({label: (isNumber(item)? +item : item), disabled: false}))
             return obj
         })
+        console.log(arr)
         return arr
     }
 

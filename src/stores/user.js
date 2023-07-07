@@ -27,11 +27,23 @@ export const userStore = defineStore('user', {
 			user_loading: false,
 			cpy_info: {},
 			cpy_loading: false,
-			role: '',
+			role: '13',
+			roleStr: [
+				{
+					role: '13',
+					name: '供应商'
+				},
+				{
+					role: '14',
+					name: '采购商'
+				},
+			]
 		};
 	},
 	getters: {
-		login: (state) => state.user_info.poster,
+		login: (state) => state.user_info.poster || localStorage.getItem('login'),
+		roleName:  (state) => state.roleStr.filter(ele => ele.role == state.role)[0].name,
+		roleName2:  (state) => state.roleStr.filter(ele => ele.role != state.role)[0].name,
 	},
 	// 也可以这样定义
 	// state: () => ({ count: 0 })

@@ -4,26 +4,23 @@
 		<div class="home-w">
 			<div class="header-screen u-flex u-m-b-20">
 				<div class="item item-left">
-					<menu-cate height="100%"></menu-cate>
+					<el-scrollbar >
+						<menu-cate height="100%"></menu-cate>
+					</el-scrollbar>
+					
 				</div>
 				<div class="item item-main u-flex-column"> 
 					<div class="main-swiper u-flex-1">
 						<el-carousel height="100%" >
-							<el-carousel-item v-for="item in swiperList" :key="item.id">
-								<el-image class="swiper-img" :src="item.img" fit="fill"></el-image>
+							<el-carousel-item v-for="item in base_home_swiper" :key="item.id">
+								<el-image class="swiper-img" :src="item.img" fit="fill" @click="gotoUrl(item.url)"></el-image>
 							</el-carousel-item>
 						</el-carousel>
 					</div>
 					<div class="main-bottom u-flex u-flex-between">
-						<div class="item">
-							<img src="/bg-login1.jpg" alt="">
-						</div>
-						<div class="item">
-							<img src="/bg-login1.jpg" alt="">
-						</div>
-						<div class="item">
-							<img src="/bg-login1.jpg" alt="">
-						</div>
+						<div class="item" v-for="item in base_home_list" :key="item.id">
+							<img :src="item.img" alt="" @click="gotoUrl(item.url)">
+						</div> 
 					</div>
 				</div>
 				<div class="item item-right u-flex-column">
@@ -85,22 +82,26 @@
 					</div>
 					<div class="main-bottom">
 						<div class="news-box">
-							<div class="box-title u-flex u-flex-between u-p-l-10 u-p-t-10">
+							<div class="box-title u-flex u-flex-between u-p-l-10 u-p-r-10 u-p-t-10">
 								<div class="item">
 									<el-text type="primary">近期公告</el-text>
 								</div> 
+								<div class="item">
+									<el-link href="#/news_list">
+										<el-text type="info" size="small">更多</el-text>
+									</el-link>
+									
+								</div> 
 							</div>
-							<div class="box-main u-p-10">
-								<div class="news-item u-m-b-5">
-									<el-link class="u-line-1">进口量达四级裸考几啊深度克隆贾老师觉得亏拉屎开了多久</el-link>
-								</div>
-								<div class="news-item u-m-b-5">
-									<el-link class="u-line-1">进口量达四级裸考几啊深度克隆贾老师觉得亏拉屎开了多久</el-link>
-								</div>
-								<div class="news-item u-m-b-5">
-									<el-link class="u-line-1">进口量达四级裸考几啊深度克隆贾老师觉得亏拉屎开了多久</el-link>
-								</div>
-								
+							<div class="box-main u-p-10" v-loading="news_list_loading">
+								<template v-if="news_list.length == 0 || !news_list">
+									<div class="u-flex u-flex-center" style="width: 100%; background-color: #fff;">
+										<el-empty :image-size="50" description="公告为空" style="--el-empty-padding: 0px; font-size: 14px" />
+									</div>
+								</template>
+								<div class="news-item u-m-b-5 " v-for="item in news_list" :key="item.id">
+									<el-link class="u-line-1 u-flex-start" @click="router.push({name: 'news', params: {id: item.id}})">{{ item.title }}</el-link>
+								</div>  
 							</div>
 						</div>
 					</div>
@@ -116,23 +117,24 @@
 					<div class="item"></div>
 				</div>
 				<div class="box-main">
-					<el-tabs v-model="tjActive" type="card" @tab-click="handleTjClick">
+					<el-tabs v-model="tjActive" type="card" @tab-change="handleTjClick">
 						<el-tab-pane 
 							:label="item.name" 
-							:name="item.value"
-							v-for="(item, index) in tjList"
-							:key="item.value"
+							:name="item.login"
+							v-for="(item, index) in tj_shop_tabs"
+							:key="item.id"
+							v-loading="tj_shop_loading"
 							>
-							<div class="tj-list u-p-20 u-flex u-flex-between" v-loading="item.loading">
+							<div class="tj-list u-p-20 u-flex u-flex-between u-flex-items-start">
 								<div class="tj-img u-p-r-10">
-									<el-image loading="lazy" :src="item.img" fit="fill" />
+									<el-image :src="item.img" fit="fill" />
 								</div>
-								<div class="tj-prods u-flex u-flex-wrap ">
+								<div class="tj-prods u-flex u-flex-wrap u-flex-1 ">
 									<div class="prods u-p-l-10 u-p-r-10"
-										v-for="prod in 10"
-										:key="prod"
+										v-for="item in tj_shop_products"
+										:key="item.id"
 										>
-										<product-card-simple></product-card-simple>
+										<product-card-simple :origin="item" ></product-card-simple>
 									</div>
 								</div>
 							</div>
@@ -149,17 +151,17 @@
 						</el-divider>
 					</div>
 					<div class="item u-flex u-flex-1 u-flex-end">
-						<el-link href="">
+						<!-- <el-link href="">
 							<span>查看更多</span>
 							<el-icon>
 								<i-ep-DArrowRight />
 							</el-icon>
-						</el-link>
+						</el-link> -->
 					</div>
 				</div>
 				<div class="box-main u-flex u-flex-wrap "> 
-					<div class="item cpy-card u-m-b-20" v-for="item in 6">
-						<company-card></company-card>
+					<div class="item cpy-card u-m-b-20" v-for="item in tj_shop_list" :key="item.id">
+						<company-card :origin="item.company" :products="item.product"></company-card>
 					</div>
 
 
@@ -170,37 +172,71 @@
 			
 
 
-			<el-tabs v-model="tabsActive" @tab-click="handleTabsClick">
-				<el-tab-pane 
-					:label="item.name" 
-					:name="item.value"
-					v-for="(item, index) in tabsList"
-					:key="item.value"
-					>
-				</el-tab-pane>
-			</el-tabs> 
-			<div class="base-list">
-				<div class="base-list-item u-m-b-20"
-					v-for="item in base_list_total"
-					:key="item"
-					>
-					<product-card></product-card>
-				</div>
+			<div v-loading="base_list_loading">
+				<el-tabs v-model="tabsActive" >
+					<el-tab-pane label="全部" name="" key="all"></el-tab-pane>
+					<el-tab-pane 
+						:label="item.name" 
+						:name="item.id"
+						v-for="(item, index) in cate_list"
+						:key="item.id"
+						>
+					</el-tab-pane>
+				</el-tabs> 
+				
+				<template v-if="!base_list || base_list.length == 0">
+					<div class="u-flex u-flex-center u-p-t-30" style="width: 100%; background-color: #fff;">
+						<el-empty description="列表为空" />
+					</div> 
+				</template>
+				<template v-else>
+					<div class="base-list" >
+						<div class="base-list-item u-m-b-20"
+							v-for="item in base_list"
+							:key="item.id"
+							>
+							<product-card :origin="item" :lazy="true" @uploadPlatformShowEvent="flowShow = true"></product-card>
+						</div>
+					</div>
+					<div class="u-m-b-40">
+						<el-button size="large" plain style="width: 100%;" @click="router.push({path: 'list', query: {cate: tabsActive}})">查看全部</el-button>
+					</div>
+				</template>
+				
 			</div>
+			
 		</div>
 	</div>
 	<Footer-base></Footer-base>
+	
+	<UploadShopControl
+		v-model:show="flowShow" 
+		></UploadShopControl>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeMount, inject, ref, toRefs } from "vue"; 
+import { onMounted, inject, ref, toRefs, watch } from "vue"; 
 import router from '@/router/guard'
 import {userStore} from '@/stores/user'
+const $api = inject('$api');  
 const user = userStore();
 const {login, user_info, cpy_info} = toRefs(user)
+import {cateStore} from '@/stores/cate' 
+const cate = cateStore();
+const { cate_list } = toRefs(cate)
+const base_home_list = ref([])
+const base_home_swiper = ref([])
 const base_list_loading = ref(false)
-const base_list = ref([])
-const base_list_total = ref(30)
+const base_list = ref([]) 
+// 优选店铺 by login
+const tj_shop_tabs = ref([]) 
+const tj_shop_products = ref([])
+const tj_shop_loading = ref(false)
+// 推荐店铺 list
+const tj_shop_list = ref([]) 
+const tj_shop_list_loading = ref(false)
+const news_list = ref([]) 
+const news_list_loading = ref(false)
 const swiperList = ref([
 	{
 		id: '1',
@@ -223,11 +259,12 @@ const swiperList = ref([
 		img: 'https://statics-master.xiebutou.com/admin/static/59df4c5c5e6c9f55ee19ec00fb641f27.jpg',
 	},
 ])
+const flowShow = ref(false)
 const load = () => { 
-	console.log(2)
+	// console.log(2)
 }
 
-const tjActive = ref('0')
+const tjActive = ref('')
 const tjList = ref([
 	{
 		name: '豪新鞋行', 
@@ -279,89 +316,97 @@ const tjList = ref([
 	},
 ])
 
-const tabsActive = ref('0')
-const tabsList = ref([
-	{
-		name: '全部推荐', 
-		value: '0',
+const tabsActive = ref('')
+ 
+onMounted(async () => {
+	getHome()
+})
+watch(
+	() => tabsActive.value,
+	() => {
+		base_list.value = []
+		getProdListData()
 	},
 	{
-		name: '男鞋',
-		value: '1', 
-	},
-	{
-		name: '女鞋',
-		value: '2', 
-	},
-	{
-		name: '运动鞋',
-		value: '3', 
-	}, 
-	{
-		name: '全部推荐',
-		value: '4', 
-	},
-	{
-		name: '男鞋',
-		value: '5', 
-	},
-	{
-		name: '女鞋',
-		value: '6', 
-	},
-	{
-		name: '运动鞋',
-		value: '7', 
-	}, 
-	{
-		name: '全部推荐',
-		value: '8', 
-	},
-	{
-		name: '男鞋',
-		value: '9', 
-	},
-	{
-		name: '女鞋',
-		value: '10', 
-	},
-	{
-		name: '运动鞋',
-		value: '11', 
-	}, 
-	{
-		name: '运动鞋',
-		value: '12', 
-	}, 
-	{
-		name: '运动鞋',
-		value: '13', 
-	}, 
-	{
-		name: '运动鞋',
-		value: '14', 
-	}, 
-	{
-		name: '运动鞋',
-		value: '15', 
-	}, 
-	{
-		name: '运动鞋',
-		value: '16', 
-	}, 
-])
+		immediate: true
+	}
+)
 
-
-function handleTabsClick(tab ) { 
-	tabsActive.value = tab.value
+// watch(
+// 	() => tjActive.value,
+// 	() => {
+// 		tj_shop.value = {}
+// 		getTjShopByLogin()
+// 	}
+// )
+async function getHome() {
+	getHomeData() 
+	getTjShopByLogin()
+	getTjShopData()  
+	getNewsData() 
+}
+function gotoUrl(url) {
+	if(!url) return
+	window.location.href = url
+}
+async function getTjShopByLogin() {
+	tj_shop_loading.value = true
+	const res = await $api.web_tuijian({params: {
+		login: tjActive.value
+	}});
+	tj_shop_loading.value = false
+	if(res.code == 1) {
+		if(!tjActive.value) {
+			tjActive.value = res.list[0].login
+		}
+		tj_shop_products.value = res.product
+		tj_shop_tabs.value = res.list
+	}
+}
+async function getNewsData() {
+	news_list_loading.value = true
+	const res = await $api.web_news({params: {
+		num: 3
+	}});
+	news_list_loading.value = false
+	if(res.code == 1) {
+		news_list.value = res.list 
+	}
+}
+async function getTjShopData() {
+	tj_shop_list_loading.value = true
+	const res = await $api.web_tuijian2({params: {
+		num: 6
+	}});
+	tj_shop_list_loading.value = false
+	if(res.code == 1) {
+		tj_shop_list.value = res.list 
+	}
+}
+async function getHomeData() {
+	const res = await $api.web_home();
+	if(res.code == 1) {
+		base_home_swiper.value = res.swiper
+		base_home_list.value = res.list
+	}
+}
+async function getProdListData() {
+	base_list_loading.value = true
+	const res = await $api.web_product({
+		params: {
+			cate: tabsActive.value,
+			p: 1,
+			num: 18
+		},
+		loading: false
+	});
+	base_list_loading.value = false
+	if(res.code == 1) {
+		base_list.value = res.list 
+	}
 } 
 function handleTjClick(tab ) { 
-	tjActive.value = tab.paneName
-	let i = tjList.value.findIndex(ele => ele.value == tab.paneName) 
-	tjList.value[i].loading = true;
-	setTimeout(() => {
-		tjList.value[i].loading = false
-	}, 1000)
+	getTjShopByLogin()
 } 
 </script>
 <style lang="scss" scoped>
@@ -378,7 +423,7 @@ function handleTjClick(tab ) {
 				width: $header-menus-w;
 				flex: 0 0 $header-menus-w;
 				border-radius: 8px;
-				background-color: $uni-bg-color;
+				background-color: $uni-bg-color; 
 			}
 			&.item-main {
 				flex: 1;
@@ -559,7 +604,7 @@ function handleTjClick(tab ) {
 		}
 		.tj-prods {
 			@extend %box-sizing;
-			
+			height: 100%;
 			.prods {
 				flex: 0 0 20%;
 				height: 230px;

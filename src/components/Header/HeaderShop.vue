@@ -1,47 +1,57 @@
 <template>
     <header class="header" id="header">
-        <div class="header-top">
-            <div class="home-w">
-                <div class="top-left">
-                    <p class="u-p-r-10">您好！欢迎光临-{{ app_title }}</p>
-                    <a href="#/login/" target="_blank" class="login u-m-r-5">登录</a>
-                    <a href="#/login/" target="_blank" class="reg u-p-l-5">免费注册</a>
-                </div>
-                <div class="top-right ">
-                    <span class="item">
-                        <el-link :underline="false" href="#/" target="_blank">选品首页</el-link>
-                    </span> 
-                    <span class="item">
-                        <el-link :underline="false" href="#/user/cart" target="_blank">选品车</el-link>
-                    </span> 
-                    <span class="item">
-                        <el-link :underline="false" href="#/user/" target="_blank">用户中心</el-link>
-                    </span> 
-                    <span class="item">
-                        <el-link :underline="false" href="" target="_blank">供应商中心</el-link>
-                    </span> 
-                    <span class="item">
-                        <el-link :underline="false" href="" target="_blank">联系客服</el-link>
-                    </span> 
-                    <span class="item">
-                        <el-link :underline="false" href="" target="_blank">帮助中心</el-link>
-                    </span>  
-                </div>
-            </div>
-        </div>
+        <HeaderBaseRow></HeaderBaseRow>
         <div class="header-main">
             <div class="home-w u-flex u-flex-between">
                 <div class="main-logo u-flex u-flex-1">
-                    <a href="#/" title="我要选品">
-                        <img src="/logo.png"  class="logo" alt="我要选品">
-                    </a>
-                    <div class="shop-info u-m-l-20">
-                        <div class="shop-name u-font-16">店铺名称名称</div>
-                        <div class="shop-sub">
-                            <el-text type="info" size="small">地址：</el-text>
-                            <el-text size="small">杭州市西湖区的骄傲开始觉得卡时间</el-text>
+                    
+                    <template v-if="props.info.login">
+                        <a href="#/" title="我要选品">
+                            <!-- <img :src="props.info.img"  class="logo" alt="我要选品"> -->
+                            <el-image :src="props.info.img" fit="cover" class="logo" >
+                                <template #placeholder>
+                                    <div class="u-flex u-flex-center"> 
+                                        <el-image src="/logo.png" class="logo" fit="contain" /> 
+                                    </div>
+                                </template>
+                                <template #error>
+                                    <div class="u-flex u-flex-center"> 
+                                        <el-image src="/logo.png" class="logo" fit="contain" /> 
+                                    </div>
+                                </template>
+                            </el-image>
+                        </a>
+                        <div class="shop-info u-m-l-20">
+                            <div class="shop-name u-font-16">{{ props.info.company }}</div>
+                            <div class="shop-sub u-flex">
+                                <el-text type="info" size="small">地址：</el-text>
+                                <el-text size="small">{{ props.info.address }}</el-text>
+                                <el-popover
+									placement="bottom-start" 
+									:width="200"
+									trigger="hover" 
+									v-if="props.info.ewm"
+								>
+									<el-image style="width: 100%; height: 180px;" :src="props.info.ewm"></el-image>
+									<template #reference>
+										<div class="u-m-l-10">
+											<el-icon size="12" color="#f90">
+												<i-ep-Iphone />
+											</el-icon>
+											<el-text size="small" class="u-p-3" type="warning">抖店</el-text>
+										</div>
+										
+									</template>
+								</el-popover>
+                            </div>
                         </div>
-                    </div>
+                    </template>
+                    <template v-else>
+                        <a href="#/" title="我要选品">
+                            <img src="/logo.png"  class="logo" alt="我要选品">
+                        </a>
+                    </template>
+                    
                 </div>
                 <div class="main-search u-flex u-flex-items-center">
                     <div class="search-w u-flex-1">
@@ -53,20 +63,21 @@
                             </div>
                         </div>
                         <div class="u-flex">
-                            <div class="search-row u-p-l-8 u-m-r-10" :style="{borderTopLeftRadius: keyActive == 'product'? '0px' : ''}">
+                            <div class="search-row u-p-l-8 u-m-r-10" :style="{borderTopLeftRadius: keyActive == '0'? '0px' : ''}">
                                 <el-input v-model="kw" placeholder="输入关键字检索" size="small" class="input-with-select"></el-input>
                                 <el-button 
                                     color="#007aff" 
                                     dark   
                                     size="small"
+                                    @click="router.push({name: 'search_list', query: {cate: keyActive, terms: kw}})"
                                 >
                                     <el-icon size="16">
                                         <i-ep-search></i-ep-search>
                                     </el-icon>
-                                    <span>搜本店</span>
+                                    <span>搜全站</span>
                                 </el-button>
                             </div> 
-                            <el-button 
+                            <!-- <el-button 
                                 color="#007aff" 
                                 plain   
                                 size="small"
@@ -76,7 +87,7 @@
                                     <i-ep-search></i-ep-search>
                                 </el-icon>
                                 <span>搜全站</span>
-                            </el-button>
+                            </el-button> -->
                         </div>
                        
                     </div> 
@@ -95,7 +106,7 @@
                             <div class="nav-item">
                                 <p>全部商品</p>
                             </div>
-                            <div class="nav-item">
+                            <!-- <div class="nav-item">
                                 <p>最新上架</p>
                             </div>
                             <div class="nav-item">
@@ -103,7 +114,7 @@
                             </div>
                             <div class="nav-item">
                                 <p>热卖推荐</p>
-                            </div> 
+                            </div>  -->
                         </div> 
                     </div>
                 </div>
@@ -116,19 +127,25 @@
 import { ref, toRefs } from 'vue'
 import router from '@/router/guard';
 import {baseStore} from '@/stores/main';
+const props = defineProps({
+    info: {
+        type: Object,
+        default: () => ({})
+    }
+})
 const base = baseStore() 
 const { app_title } = toRefs(base)
 const kw = ref('') 
-const keyActive = ref('product') 
+const keyActive = ref('0') 
 const keyList = ref([
     {
         name: '商品',
-        value: 'product'
+        value: '0'
     }, 
-    {
-        name: 'SKU编码',
-        value: 'sku'
-    }
+    // {
+    //     name: 'SKU编码',
+    //     value: 'sku'
+    // }
 ])
 </script>  
 <style lang='scss' scoped>

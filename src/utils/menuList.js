@@ -100,7 +100,7 @@ export default [
 		]
 	}, 
 	{
-		label: '身份认证',
+		label: '融资中心',
 		type: 'title',
 		index: '4',
 		icon: Files,

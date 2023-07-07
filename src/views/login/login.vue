@@ -1,13 +1,24 @@
 <template>
 	<header-help></header-help>
 	<div class="login-main">
-		<img src="https://doudian.y.netsun.com/Public/login-bg.jpg" alt="" />
+		<!-- <img src="https://doudian.y.netsun.com/Public/login-bg.jpg" alt="" /> -->
+		<div class="bg-swiper">
+			<el-carousel height="100%" :interval="5000">
+				<el-carousel-item >
+					<el-image class="bg-swiper-img" src="/bg-login2.jpg"></el-image>
+				</el-carousel-item>
+				<el-carousel-item >
+					<el-image class="bg-swiper-img" src="/bg-login1.jpg"></el-image>
+				</el-carousel-item>
+			</el-carousel>
+		</div>
+		
 		<div class="home-w">
 			<div class="login-box">
 				<div class="login-tabs u-p-10">
 					<el-tabs v-model="activeName" class="demo-tabs" @tabClick="handleClick">
-						<el-tab-pane label="账户登录" name="account_login"></el-tab-pane>
-						<el-tab-pane label="免密登录" name="phone_login"></el-tab-pane>
+						<el-tab-pane :label="`${roleName}账户${pageName}`" name="account_login" v-if="router.currentRoute.value.name != 'reg'"></el-tab-pane>
+						<el-tab-pane :label="`${roleName}免密${pageName}`" name="phone_login"></el-tab-pane>
 					</el-tabs>
 				</div>
 
@@ -15,7 +26,7 @@
 					<div class="login-form">
 						<el-form label-position="top" :model="formData" :rules="rules" ref="form" style="max-width: 460px"
 							:validate-on-rule-change="false">
-							<div v-show="activeName == 'account_login'">
+							<div v-show="activeName == 'account_login' && router.currentRoute.value.name != 'reg'">
 								<el-form-item label="账号" prop="login">
 									<el-input clearable v-model="formData.login" />
 								</el-form-item>
@@ -65,11 +76,21 @@
 					</div>
 
 					<div class="login-btn">
-						<el-button type="primary" @click="submitForm(form)">登 录</el-button>
+						<el-button type="primary" @click="submitForm(form)">{{ pageName }}</el-button>
 						<!-- <div class="u-p-t-10">
 							<a class="reg-link" href="https://element-plus.org" target="_blank">立即注册</a> 
 						</div> -->
+						<div class="u-p-t-5 u-flex u-flex-between">
+							<el-link :underline="false" :href="`#/login?role=${role == '13' ? '14' : '13'}`" target="_blank" >
+								<el-text size="small" type="danger">我是{{ roleName2 }}</el-text>
+							</el-link>
+							<el-link :underline="false" :href="`#/${pageName == '注册' ? 'login' : 'reg'}?role=${role}`" >
+								<el-text size="small" type="danger">去{{ pageName == '注册' ? '登录' : '注册' }}</el-text>
+							</el-link>
+							
+						</div>
 					</div>
+					
 				</div>
 
 				<div class="login-desc">
@@ -93,14 +114,20 @@ import { ref, reactive, computed, inject, toRefs, onMounted } from "vue";
 import {useSettingsStore} from '@/stores/settings';
 import {userStore} from '@/stores/user';
 import { ElLoading, ElMessage  } from "element-plus";
+const props = defineProps({
+	role: {
+		type: String,
+		default: '13'
+	}
+})
 import router from "@/router";
 const useSettings = useSettingsStore()
 const user = userStore()
-const { login:loginStore } = toRefs(user);
+const { login:loginStore, role, roleName, roleName2 } = toRefs(user);
 // console.log(router)
 // import { createLoadingComponent } from "element-plus/es/components/loading/src/loading";
 const $api: any = inject('$api')
-const activeName = ref("account_login");
+const activeName = ref("phone_login");
 const formData = reactive({
 	login: "",
 	passwd: "",
@@ -108,16 +135,21 @@ const formData = reactive({
 	code: "",
 });
 const params = computed(() => {
+	let obj:any = {
+		login: formData.login,
+	}
 	if(activeName.value == 'account_login') {
-		return { 
-			login: formData.login,
-			passwd: formData.passwd
-		}
+		obj.passwd = formData.passwd 
 	}
-	return {
-		login: formData.phone,
-		msgcode: formData.code
+	else {
+		obj.msgcode = formData.code ;
+		obj.login = formData.phone
 	}
+
+	if(router.currentRoute.value.name == 'reg') {
+		obj.role = role.value
+	}
+	return obj
 })
 const form = ref<FormInstance>()
 const countValue = ref(0)
@@ -125,11 +157,12 @@ const getCodeDisabled = computed(() => {
 	return countValue.value > Date.now()
 })
 onMounted(async () => {
-	// await user.getUserData()
-	// if(loginStore.value) {
-	// 	router.push({name: 'user_index'})
-	// 	return
-	// }
+	if(props.role) role.value = props.role  
+})
+const pageName = computed(() => {
+	let router_name = router.currentRoute.value.name;  
+	if(router_name == 'reg') return '注册'
+	return '登录'
 })
 const rules = computed<FormRules>(() => {
 	let obj = {
@@ -232,7 +265,7 @@ async function getCode() {
 		}
 	})
 	if(res.code == 1) {
-		ElLoading.success(res.msg)
+		ElMessage.success(res.msg)
 	}
 }
 // 用户点击遮罩层，应该关闭模态框
@@ -288,12 +321,21 @@ async function login() {
 		height: 100%;
 	}
 
-	>img {
+	>img,
+	.bg-swiper {
 		position: absolute;
 		left: 0;
 		top: 0;
 		width: 100%;
 		height: 100%;
+		.el-carousel {
+			width: 100%;
+			height: 100%;
+		}
+		.bg-swiper-img {
+			width: 100%;
+			height: 100%
+		}
 	}
 }
 

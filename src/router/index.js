@@ -22,7 +22,7 @@ const routes = [
         component: () => import('@/views/index/index.vue')
     },
     {
-        path: '/shop/:id',
+        path: '/shop/:login',
         name: 'shop',
         meta: {
             title: '店铺',
@@ -30,6 +30,14 @@ const routes = [
         }, 
         props:true, 
         component: () => import('@/views/shop/shop.vue')
+    },
+    {
+        path: '/search_list',
+        name: 'search_list',
+        meta: {
+            title: '搜索结果', 
+        }, 
+        component: () => import('@/views/search_list/search_list.vue')
     },
     {
         path: '/list',
@@ -50,6 +58,24 @@ const routes = [
         props:true, 
         component: () => import('@/views/product/product.vue')
     },
+    {
+        path: '/news_list',
+        name: 'news_list',
+        meta: {
+            title: '公告/资讯', 
+        }, 
+        component: () => import('@/views/news_list/news_list.vue')
+    },
+    {
+        path: '/news/:id',
+        name: 'news',
+        meta: {
+            title: '公告/资讯详情',
+            cache: true,
+        },
+        props:true, 
+        component: () => import('@/views/news/news.vue')
+    },
     // {
     //     path: '/home',
     //     component: () => import('@/views/home/home.vue')
@@ -58,19 +84,23 @@ const routes = [
         path: '/login',
         name: 'login',
         meta: {
-            title: '登录',
-            cache: true,
+            title: '登录', 
         },
+        props: (route) => ({
+            role: route.query.role ? route.query.role : '13', 
+        }),
         component: () => import('@/views/login/login.vue')
     },
     {
         path: '/reg',
         name: 'reg',
         meta: {
-            title: '注册',
-            cache: true,
+            title: '注册', 
         },
-        component: () => import('@/views/reg/reg.vue')
+        props: (route) => ({
+            role: route.query.role ? route.query.role : '13', 
+        }),
+        component: () => import('@/views/login/login.vue')
     },
     {
         path: '/rank',

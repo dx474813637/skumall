@@ -3,6 +3,7 @@ import {
 } from 'pinia';
 import apis from '@/apis/index'
 import menuList from '@/utils/menuList'
+import {deepClone} from '@/utils/index'
 
 export const cateStore = defineStore('cate', {
 	persist: {
@@ -25,7 +26,20 @@ export const cateStore = defineStore('cate', {
 		};
 	},
 	getters: {
-		// doubleCount: (state) => state.counter * 2,
+		cate_list_all: (state) => {
+			let cate = deepClone(state.cate_list)  
+			cate.unshift({
+				name: '全部',
+				id: ''
+			})
+			cate.forEach((ele, index) => {
+				ele.children && ele.children.unshift({
+					name: '全部',
+					id: ele.id
+				}) 
+			}) 
+			return cate
+		},
 	},
 	// 也可以这样定义
 	// state: () => ({ count: 0 })

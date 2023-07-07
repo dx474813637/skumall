@@ -46,6 +46,42 @@
 					</template>
 				</el-upload>
 			</el-form-item>
+			<el-form-item label="二维码" prop="ewm">
+				<el-upload 
+					ref="ewm" 
+					action=""  
+					:class="{
+						limit: userInfo.ewm.length == 1
+					}"  
+					v-model:file-list="userInfo.ewm"
+					list-type="picture-card" 
+					:headers="configHeader"  
+					:http-request="(options) => upload(options, userInfo.ewm) "
+					:before-upload="beforeUpload"
+					:limit="1"
+					>
+					<el-icon>
+						<i-ep-Plus />
+					</el-icon>
+
+					<template #file="{ file }">
+						<div>
+							<img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+							<span class="el-upload-list__item-actions">
+								<span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+									<el-icon><i-ep-ZoomIn /></el-icon>
+								</span>
+								<span v-if="!disabled" class="el-upload-list__item-delete"
+									@click="handleRemove(file, undefined, 'ewm')">
+									<el-icon>
+										<i-ep-Delete />
+									</el-icon>
+								</span>
+							</span>
+						</div>
+					</template>
+				</el-upload>
+			</el-form-item>
 			<el-form-item label="介绍" prop="info">
 				<el-input v-model="userInfo.info"></el-input>
 			</el-form-item>
@@ -96,6 +132,7 @@ watch(
 		userInfo.phone = val.phone;
 		userInfo.contacts = val.contacts; 
 		userInfo.address = val.address;
+		userInfo.ewm = val.ewm ? [{url: val.ewm}] : [];
 	},
 	{ deep: true }
 );
@@ -106,6 +143,7 @@ const userInfo = reactive({
 	phone: "",
 	contacts: "", 
 	address: "",
+	ewm: [],
 });
 const userForm = ref();
 const rules = {
@@ -127,7 +165,11 @@ const rules = {
 function submitForm(formName) {
 	formName.validate(async (valid) => {
 		if (valid) {
-			let res = await $api.save_company({ ...userInfo, img: userInfo.img[0]?.url });
+			let res = await $api.save_company({ 
+				...userInfo, 
+				img: userInfo.img[0]?.url, 
+				ewm: userInfo.ewm[0]?.url 
+			});
 			if (res.code != 1) return;
 			ElMessage.success(res.msg);
 			user.getCpyData();

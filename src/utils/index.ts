@@ -255,3 +255,7 @@ export function timeFrom(timestamp:any = null, format:any = 'yyyy-mm-dd') {
     }
     return tips
 }
+
+export function isNumber (num) {
+    return !isNaN(parseFloat(num)) && isFinite(num)
+}

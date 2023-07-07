@@ -1,40 +1,6 @@
 <template>
     <header class="header" id="header">
-        <div class="header-top">
-            <div class="home-w">
-                <div class="top-left u-flex">
-                    <p class="u-p-r-10">您好！欢迎光临-{{ app_title }}</p>
-                    <template v-if="login">
-                        <el-link class="u-font-12" type="primary" :underline="false" @click="router.push({name: 'user_index'})">{{ user_info.name }}</el-link>
-                    </template>
-                    <template v-else>
-                        <a href="#/login/" class="login u-m-r-5">登录</a>
-                        <a href="#/login/" class="reg u-p-l-5">免费注册</a>
-                    </template>
-                    
-                </div>
-                <div class="top-right ">
-                    <span class="item">
-                        <el-link :underline="false" href="#/" target="_blank">选品首页</el-link>
-                    </span> 
-                    <span class="item">
-                        <el-link :underline="false" href="#/user/cart" target="_blank">选品车</el-link>
-                    </span> 
-                    <span class="item">
-                        <el-link :underline="false" href="#/user/" target="_blank">用户中心</el-link>
-                    </span> 
-                    <span class="item">
-                        <el-link :underline="false" href="" target="_blank">供应商中心</el-link>
-                    </span> 
-                    <span class="item">
-                        <el-link :underline="false" href="" target="_blank">联系客服</el-link>
-                    </span> 
-                    <span class="item">
-                        <el-link :underline="false" href="" target="_blank">帮助中心</el-link>
-                    </span>  
-                </div>
-            </div>
-        </div>
+        <HeaderBaseRow></HeaderBaseRow>
         <div class="header-main">
             <div class="home-w">
                 <div class="main-logo">
@@ -50,12 +16,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="search-row u-p-l-8 " :style="{borderTopLeftRadius: keyActive == 'product'? '0px' : ''}">
-                            <el-input v-model="kw" placeholder="输入关键字检索" class="input-with-select"></el-input>
+                        <div class="search-row u-p-l-8 " :style="{borderTopLeftRadius: keyActive == '0'? '0px' : ''}">
+                            <el-input v-model="kw" placeholder="输入关键字检索" class="input-with-select" @keyup.enter="handleSearch" ></el-input>
                             <el-button 
                                 color="#007aff" 
                                 dark  
                                 size="large"
+                                @click="handleSearch"
                             >
                                 <el-icon size="16">
                                     <i-ep-search></i-ep-search>
@@ -63,14 +30,14 @@
                                 <span>搜索</span>
                             </el-button>
                         </div>
-                        <div class="search-hot u-font-12 u-p-l-5">
-                            <a href="search.html?terms=轴承" class="item text-danger ">轴承</a>
+                        <div class="search-hot u-font-12 u-p-l-5 u-p-t-20">
+                            <!-- <a href="search.html?terms=轴承" class="item text-danger ">轴承</a>
                             <a href="search.html?terms=深沟球" class="item  ">深沟球</a>
                             <a href="search.html?terms=6300" class="item  ">6300</a>
                             <a href="search.html?terms=花纹板" class="item  ">花纹板</a>
                             <a href="search.html?terms=工字钢" class="item  ">工字钢</a>
                             <a href="search.html?terms=深沟球轴承" class="item  ">深沟球轴承</a>
-                            <a href="search.html?terms=圆锥滚子轴承" class="item  ">圆锥滚子轴承</a>
+                            <a href="search.html?terms=圆锥滚子轴承" class="item  ">圆锥滚子轴承</a> -->
                         </div>
                     </div>
                     <div class="main-user u-p-t-10">
@@ -148,34 +115,65 @@
 </template>
 
 <script setup lang='ts'>
-import { onMounted, ref, toRefs } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import router from '@/router/guard';
-import {baseStore} from '@/stores/main';
-import {userStore} from '@/stores/user';
-const base = baseStore() 
-const user = userStore() 
-const { app_title } = toRefs(base)
-const { login, user_info } = toRefs(user)
+// import {baseStore} from '@/stores/main';
+// import {userStore} from '@/stores/user';
+// const base = baseStore() 
+// const user = userStore() 
+const props = defineProps({
+    cate: {
+        type: String,
+        default: '0'
+    },
+    terms: {
+        type: String,
+        default: ''
+    },
+})
+// const { app_title } = toRefs(base)
+// const { login, user_info } = toRefs(user)
 const kw = ref('') 
-const keyActive = ref('product') 
+const keyActive = ref('0') 
 const keyList = ref([
     {
         name: '商品',
-        value: 'product'
+        value: '0'
     },
     {
         name: '供应商',
-        value: 'company'
+        value: '1'
+    },
+    // {
+    //     name: 'SKU编码',
+    //     value: 'sku'
+    // }
+])
+watch(
+    () => props.cate,
+    (n) => {
+        keyActive.value = n || '0'
     },
     {
-        name: 'SKU编码',
-        value: 'sku'
+        immediate: true
     }
-])
+)
+watch(
+    () => props.terms,
+    (n) => {
+        kw.value = n 
+    },
+    {
+        immediate: true
+    }
+)
 const url = ref('logo.png')
 onMounted(() => {
     console.log(url.value)
 })
+function handleSearch() {
+    router.push({path: '/search_list', query: {cate: keyActive.value, terms: kw.value}})
+}
 </script>  
 <style lang='scss' scoped>
 ::v-deep .input-with-select {

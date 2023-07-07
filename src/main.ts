@@ -6,7 +6,7 @@ import App from './App.vue'
 import axios from '@/request/index'
 import apis from '@/apis/index'
 import 'element-plus/dist/index.css'
-
+import defineDirectives from '@/directive/index'
 import filters from '@/plugins/filters'
 declare module '@vue/runtime-core' {
 	interface ComponentCustomProperties {
@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
 	}
 }
 const app = createApp(App)
+defineDirectives(app)
 app.use(pinia)
 app.use(router)
 app.use(filters)

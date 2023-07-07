@@ -1,8 +1,13 @@
 <template>
 	<div class="product-card">
 		<div class="product-img" @click="gotoDetail">
-			<el-image loading="lazy" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" fit="cover" >
+			<el-image :lazy="lazy" :src="origin.pic?.split('|')[0]" fit="cover" >
 				<template #placeholder>
+					<div class="u-flex u-flex-center"> 
+						<el-image src="/logo.png" class="logo" fit="contain" /> 
+					</div>
+				</template>
+				<template #error>
 					<div class="u-flex u-flex-center"> 
 						<el-image src="/logo.png" class="logo" fit="contain" /> 
 					</div>
@@ -12,7 +17,7 @@
 				<div class="item" @click.stop="console.log(2)">
 					<span>找同款</span>
 				</div>
-				<div class="item">
+				<div class="item" @click.stop="uploadPlatformShowBtn">
 					<span>一键上传</span>
 				</div>
 				<div class="item">
@@ -29,7 +34,7 @@
 					<div class="price">
 						<div class="price-unit u-font-14">￥</div>
 						<div class="price-num">
-							<el-statistic :value="89" :precision="2" value-style="color: #ff0000"></el-statistic>
+							<el-statistic :value="origin.price" :precision="2" value-style="color: #ff0000"></el-statistic>
 						</div>
 					</div>
 				</div>
@@ -37,21 +42,20 @@
 			</div>
 			<div class="content-item">
 				<div class="item product-title u-line-1" @click="gotoDetail">
-					威尔胜（Wilson）篮球 NBA比赛室内外耐磨PU防滑蓝球7号
-					TAKE-OFF系列-实战利器801
+					{{origin.name}}
 				</div>
 			</div>
 			<div class="content-item">
-				<div class="item shop-name u-line-1" @click="gotoShop">威尔胜（Wilson）京东自营专区</div>
+				<div class="item shop-name u-line-1" @click="gotoShop">{{origin.company ? origin.company.company : '无'}}</div>
 			</div>
 			<div class="content-item" @click="gotoDetail">
 				<div class="item product-eva">
-					<div class="product-eva-num">5000+</div>
-					<div>条评价</div>
+					<div class="product-eva-num u-p-r-4">{{origin.pageviews}}</div>
+					<div>浏览</div>
 				</div>
 				<div class="item product-eva">
-					<div class="u-m-r-4">已售</div>
-					<div class="product-eva-num">999+</div>
+					<!-- <div class="u-m-r-4">已售</div>
+					<div class="product-eva-num">999+</div> -->
 				</div>
 			</div>
 		</div>
@@ -59,32 +63,48 @@
 </template>
 
 <script setup lang="ts">
+import { toRefs } from 'vue';
 import router from '@/router';
-
-const props = defineProps({
-	id: {
-		type: String,
-		default: '1'
+import { userStore } from '@/stores/user';
+const user = userStore();
+const {login} = toRefs(user)
+import { useSettingsStore } from '@/stores/settings';
+const settings = useSettingsStore();
+const props = defineProps({ 
+	lazy: {
+		type: Boolean,
+		default: false
 	},
-	sid: {
-		type: String,
-		default: '1'
+	origin: {
+		type: Object,
+		default: () => ({})
 	},
 })
+const emits = defineEmits(['uploadPlatformShowEvent'])
 
 function gotoDetail() {
+	if(!props.origin.id) return false
 	router.push({
 		name: 'product',
 		params: {
-			id: props.id
+			id: props.origin.id
 		}
 	})
 }
+function uploadPlatformShowBtn() {
+	// if(!login) {
+	// 	settings.setPrevPage()
+	// 	settings.goLogin()
+	// 	return
+	// }
+	emits('uploadPlatformShowEvent', true)
+}
 function gotoShop() {
+	if(!props.origin.company?.login) return false
 	router.push({
 		name: 'shop',
 		params: {
-			id: props.sid
+			login: props.origin.company.login
 		}
 	})
 }
@@ -140,6 +160,7 @@ function gotoShop() {
                 &.shop-name {
                     color: #999;
                     font-size: 12px;
+					height: 20px;
                     cursor: pointer;
                     &:hover {
                         color: $uni-color-primary;
@@ -209,7 +230,7 @@ function gotoShop() {
 	
 	&:hover {
 		.product-img {
-			img {
+			.el-image {
 				transform: scale(1.2);
 				transition-duration: .2s;
 			}

@@ -21,7 +21,7 @@ router.beforeEach(async (to, from, next) => {
             useSettings.setPrevPage(to)
             return
         }
-        else if(!user.login && to.name != 'user_index') {
+        else if(!user.login && to.name != 'user_index') {  
             user.getUserData()
         }
     }

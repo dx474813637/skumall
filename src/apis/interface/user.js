@@ -7,7 +7,7 @@ export const edit_card = (data, config) => axios.post('Userapi/edit_card', data,
 
 // my_company 卖家企业信息
 export const my_company = (data, config) => axios.post('Userapi/my_company', data, config) 
-// save_company 编辑卖家企业信息 `company`公司名称, `img`logo, `info`介绍, `phone`联系电话, `address`地址, contacts联系人
+// save_company 编辑卖家企业信息 `company`公司名称, `img`logo, `info`介绍, `phone`联系电话, `address`地址, contacts联系人 ewm二维码图片
 export const save_company = (data, config) => axios.post('Userapi/save_company', data, config) 
 
 

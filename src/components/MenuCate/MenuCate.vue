@@ -3,10 +3,10 @@
         height: props.height
     }">
         <div class="menu-items"
-            v-for="item in props.list"
+            v-for="item in cate_list"
             :key="item.id"
             >
-            <el-link :underline="false" class="menus-items-title" href="#/list" >
+            <el-link :underline="false" class="menus-items-title" :href="`#/list?cate=${item.id}`" >
                 <div class="u-flex u-flex-between menus-items-title-inner ">
                     <div class="item">
                         <img src="" alt="">
@@ -26,7 +26,7 @@
                         v-for="ele in item.children" 
                         :key="ele.id"
                         >
-                        <el-link :underline="false" class="list-item-link u-line-1" href="#/list" > {{ ele.name }} </el-link>
+                        <el-link :underline="false" class="list-item-link u-line-1" :href="`#/list?cate=${ele.id}`" > {{ ele.name }} </el-link>
                     </div>
                 </div>
             </div>
@@ -35,7 +35,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeMount, inject } from "vue"; 
+import { onMounted, inject, toRefs } from "vue"; 
+import {cateStore} from '@/stores/cate'
+const cate = cateStore()
+const {cate_list, cate_loading} = toRefs(cate)
 const props = defineProps({
     height: {
         type: String,
@@ -43,101 +46,14 @@ const props = defineProps({
     },
     list: {
         type: Array,
-        default: () => [
-            {
-                id: '0',
-                name: '轮胎品牌',
-                children: [
-                    {
-                        id: '0-1',
-                        name: '韩泰'
-                    },
-                    {
-                        id: '0-2',
-                        name: '万力万力万力万力万力万力'
-                    },
-                    {
-                        id: '0-3',
-                        name: '欧威森'
-                    },
-                    {
-                        id: '0-4',
-                        name: '双星'
-                    },
-                    {
-                        id: '0-5',
-                        name: '耐克森耐克森耐克森耐克森'
-                    },
-                    {
-                        id: '0-6',
-                        name: '玛仕图'
-                    },
-                ]
-            },
-            {
-                id: '1',
-                name: '轮胎品牌',
-                children: [
-                    {
-                        id: '1-1',
-                        name: '韩泰'
-                    },
-                    {
-                        id: '1-2',
-                        name: '万力'
-                    },
-                    {
-                        id: '1-3',
-                        name: '欧威森欧威森欧威森欧威森欧威森'
-                    },
-                    {
-                        id: '1-4',
-                        name: '双星'
-                    },
-                    {
-                        id: '1-5',
-                        name: '耐克森'
-                    },
-                    {
-                        id: '1-6',
-                        name: '玛仕图'
-                    },
-                ]
-            },
-            {
-                id: '2',
-                name: '轮胎品牌',
-                children: [
-                    {
-                        id: '2-1',
-                        name: '韩泰'
-                    },
-                    {
-                        id: '2-2',
-                        name: '万力'
-                    },
-                    {
-                        id: '2-3',
-                        name: '欧威森'
-                    },
-                    {
-                        id: '2-4',
-                        name: '双星双星双星双星双星'
-                    },
-                    {
-                        id: '2-5',
-                        name: '耐克森'
-                    },
-                    {
-                        id: '2-6',
-                        name: '玛仕图'
-                    },
-                ]
-            }
-        ]
+        default: () => []
     }
 })
-
+onMounted(async () => {
+    if(cate_list.value.length == 0 && !cate_loading.value) {
+        await cate.getCateData()
+    }
+})
 
 </script>
 <style lang="scss" scoped>
@@ -173,13 +89,16 @@ const props = defineProps({
         }
         .menu-items-list {
             width: 100%;
+            .el-link {
+                font-size: 14px
+            }
             .list-item {
                 @extend %box-sizing;
                 width: 100%;
                 padding: 5px 10px 15px;
                 
                 .item {
-                    flex: 1 1 33%;
+                    flex: 0 1 33%;
                     width: 33%;
                     // min-width: 33%;
                     // max-width: 50%;

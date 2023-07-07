@@ -41,7 +41,7 @@
 						<div class="product-price u-p-10 u-m-b-5">
 							<div class="u-flex u-flex-items-start info-row" >
 								<div class="info-row-item info-row-item-label">价格：</div>
-								<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-10">
+								<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-5">
 									<el-text type="danger" tag="b">￥</el-text>
 									<el-statistic :value="skuPrice" :precision="2" value-style="color: #ff0000; font-size: 22px; font-weight: bold"></el-statistic>
 								</div>
@@ -50,7 +50,7 @@
 						<div class="product-fahuo u-m-b-5">
 							<div class="u-flex u-flex-items-start info-row" >
 								<div class="info-row-item info-row-item-label">发货：</div>
-								<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-10">
+								<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-5">
 									<el-text >预计 {{ product_base_data.delivery_delay_day }} 天发货</el-text> 
 								</div>
 							</div>
@@ -58,7 +58,7 @@
 						<div class="product-service u-m-b-5">
 							<div class="u-flex u-flex-items-start info-row" >
 								<div class="info-row-item info-row-item-label">服务：</div>
-								<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-10">
+								<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-5">
 									<el-text >{{ freight_name }}</el-text> 
 								</div>
 							</div>
@@ -77,29 +77,43 @@
 							v-for="(item, index) in product_sku.data"
 							:key="index"
 							>
-							<div class="info-row-item info-row-item-label">
+							<div class="info-row-item info-row-item-label sku-label">
 								{{ item.label }}：
 							</div>
-							<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-10">
+							<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-5">
 								<div class="content-item u-m-r-10 u-m-b-10 radio"
 									v-for="(ele,i) in item.children"
 									:key="i"
 									>
-									<el-check-tag 
+									<el-check-tag   
 										:checked="product_sku.form[item.label] == ele.label" 
 										@change="skuClick(item.label, ele.label)"
-										>{{ ele.label }}</el-check-tag>
+										>{{ ele.label }}</el-check-tag> 
+								</div>
+							</div>
+						</div>
+						<div class="u-flex u-flex-items-start info-row u-m-b-20" v-show="active_sku_preview_img">
+							<div class="info-row-item info-row-item-label sku-label">预览：</div>
+							<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-5">
+								<div class="content-item u-m-r-10 u-m-b-10" >
+									<el-image
+										style="width: 80px; height: 80px"
+										:src="active_sku_preview_img"
+										:zoom-rate="1.2"
+										:preview-src-list="[active_sku_preview_img]" 
+										fit="cover"
+										/>
 								</div>
 							</div>
 						</div>
 						<div class="u-flex u-flex-items-start info-row u-m-b-20" >
 							<div class="info-row-item info-row-item-label">数量：</div>
-							<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-10">
+							<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-5">
 								<div class="content-item u-m-r-10 u-m-b-10" >
 									<el-input-number 
 										ref="countRef" 
 										v-model="product_num" 
-										:min="1" 
+										:min="0" 
 										:max="product_num_max" 
 										@blur="handleChange" 
 										/>
@@ -108,15 +122,35 @@
 						</div>
 						<div class="u-flex u-flex-items-start info-row" >
 							<div class="info-row-item info-row-item-label"> </div>
-							<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-10">
+							<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-5">
 								<div class="content-item u-m-r-10 u-m-b-10" >
 									<el-button type="primary" @click="addCartBtn" :disabled="skuCheckStatus" size="large">加入采购车</el-button>
+								</div>
+								<div class="content-item u-m-r-10 u-m-b-10" >
+									<el-button type="danger" @click="quickUploadBtn" size="large">一键上传</el-button>
 								</div>
 							</div>
 						</div>
 						<div class="u-flex u-flex-items-start info-row" >
 							<div class="info-row-item info-row-item-label"> </div>
-							<div class="info-row-item info-row-item-content u-m-l-10">
+							<div class="info-row-item info-row-item-content u-m-l-10 u-flex">
+								<el-popover
+									placement="top-start" 
+									:width="200"
+									trigger="hover" 
+									v-if="product_base_data.ewm"
+								>
+									<el-image style="width: 100%; height: 180px;" :src="product_base_data.ewm"></el-image>
+									<template #reference>
+										<div class="u-m-r-30">
+											<el-icon size="12" color="#f90">
+												<i-ep-Iphone />
+											</el-icon>
+											<el-text size="small" class="u-p-5" type="warning">抖店商品</el-text>
+										</div>
+										
+									</template>
+								</el-popover>
 								<!-- <el-text size="small" type="info" v-if="product_ctime">创建时间：{{ $filters.time_from( product_ctime, false )  }}</el-text> -->
 								<el-text size="small" type="info" v-if="product_ctime">创建时间：{{ product_ctime  }}</el-text>
 								<el-text size="small" type="info" class="u-m-l-30" v-if="product_uptime">更新时间：{{ product_uptime }}</el-text>
@@ -132,7 +166,7 @@
 									<el-avatar  :src="product_shop_data.img" />
 								</div>
 								<div class="shop-name u-m-l-10">
-									<el-link @click="$router.push({name: 'shop', params: {id: 1}})">
+									<el-link @click="$router.push({name: 'shop', params: {login: product_shop_data.login}})">
 										<el-text size="large">
 											{{product_shop_data.company}}
 										</el-text>
@@ -142,17 +176,36 @@
 							</div>
 							<div class="shop-row"><el-text size="small">地址：{{ product_shop_data.address }}</el-text></div>
 							<div class="shop-row"><el-text size="small">联系人：{{ product_shop_data.contacts }}</el-text></div>
-							<div class="shop-row"><el-text size="small">联系方式：{{ product_shop_data.phone }}</el-text></div>
+							<!-- <div class="shop-row"><el-text size="small">联系方式：{{ product_shop_data.phone }}</el-text></div> -->
 							<div class="shop-row"><el-text size="small">介绍：{{ product_shop_data.info }}</el-text></div>
+							<div class="shop-row" v-if="product_shop_data.ewm">
+								<el-text size="small">抖店</el-text>
+								<el-image
+									style="width: 100px; height: 100px"
+									:src="product_shop_data.ewm"
+									:zoom-rate="1.2"
+									:preview-src-list="[product_shop_data.ewm]" 
+									fit="cover"
+									/>
+							</div>
 						</div>
 					</div>
 				</el-col>
-			</el-row>
+			</el-row> 
 			<el-row>
 				<el-col :span="19">
 					<div class="u-m-b-40">
 						<el-tabs v-model="detailActive" type="border-card">
 							<el-tab-pane label="商品详情" name="description">
+								<div class="u-flex u-flex-wrap u-flex-items-start attribute-box u-p-10">
+									<div class="item u-flex u-flex-items-start u-m-b-10"
+										v-for="(item, index) in product_base_data.attribute"
+										:key="index"
+										>
+										<el-text type="info" size="small" >{{ item.name }}：</el-text>
+										<el-text type="" size="small" class="u-flex-1 u-p-r-10" >{{ item.value }}</el-text>
+									</div>
+								</div>
 								<div class="u-p-10">
 									<el-image v-for="(item, index) in descriptionArr" :key="index"
 										:src="item"
@@ -169,21 +222,26 @@
 		
 	</div>
 	<Footer-base></Footer-base>
+	<UploadShopControl
+		v-model:show="flowShow" 
+		></UploadShopControl>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, watch, onMounted, onUnmounted, inject, toRefs, computed } from 'vue';
-import { cartStore } from '@/stores/cart'
 import { ElMessage, ElNotification } from 'element-plus' 
 import router from '@/router';
 const cart = cartStore()
 import useProductSku from '@/hook/useProductSku.ts'
-import {isObjectEqual} from '@/utils/index'
+import {isObjectEqual, deepClone} from '@/utils/index'
+import { cartStore } from '@/stores/cart'
 import { userStore } from '@/stores/user';
+import { useSettingsStore } from '@/stores/settings';
+import { cateStore } from '@/stores/cate';
 import {timeFrom} from '@/utils/index'
 const user = userStore();
+const settings = useSettingsStore();
 let { login } = toRefs(user); 
-import { cateStore } from '@/stores/cate';
 const cate = cateStore();
 let { freight_list } = toRefs(cate); 
 const product_ctime = computed(() => timeFrom(String(new Date(product_base_data.value.ctime).getTime())) )
@@ -205,7 +263,7 @@ const picArr = computed(() => product_base_data.value.pic?.split('|'))
 const descriptionArr = computed(() => product_base_data.value.description?.split('|'))
 const spec_prices_data = ref([])
 const product_shop_data = ref({})
-const product_sku = reactive({
+const product_sku = reactive<any>({
 	data: {},
 	form: {}
 })
@@ -213,8 +271,10 @@ const countRef = ref()
 const product_num = ref(1)
 const product_num_max = ref(Infinity)
 // const product_sku_form = reactive({})
-const skuCheckStatus = computed(() => Object.values(product_sku.form).some(ele => !ele) )
+const skuCheckStatus = computed(() => Object.values(product_sku.form).some(ele => !ele) || product_num.value == 0 )
 const activeIndex = ref(0)
+
+const flowShow = ref(false) 
 
 const freight_name = computed(() => freight_list.value.filter(ele => ele.value == product_base_data.value?.freight_id)[0]?.label)
 
@@ -228,7 +288,7 @@ const skuPrice = computed(() => {
 	}
 	return price
 })
-
+const active_sku_preview_img = ref('')
 watch(
 	() => product_base_data.value.sku,
 	(val) => {
@@ -261,14 +321,17 @@ watch(
 	}
 )
  
-onMounted(async () => {
+onMounted(async () => { 
 	await getData()
-	window.addEventListener('storage', cart.addEventLocalStorage)  
+	settings.setTitle(product_base_data.value.name)
+	window.addEventListener('storage', cart.addEventLocalStorage) 
 })
 onUnmounted(() => {
 	window.removeEventListener('storage', cart.addEventLocalStorage)
-})
-
+}) 
+const quickUploadBtn = () => {
+	flowShow.value = true
+}
 const getData = async () => {
 	const res = await $api.web_product_detail({ params: { id: props.id } })
 	if(res.code == 1) {
@@ -277,11 +340,13 @@ const getData = async () => {
 		product_shop_data.value = res.company
 	}
 }
-const skuClick = (key, value) => {
+const skuClick = (key:any, value:any) => {
 	if(product_sku.form[key] == value) {
 		value = ''
-	} 
+		active_sku_preview_img.value = ''
+	}  
 	product_sku.form[key] = value
+	// checkSkuDisabled()
 	if(Object.values(product_sku.form).filter(ele => !ele).length == 0) {
 		setMaxCount()
 	} 
@@ -289,24 +354,68 @@ const skuClick = (key, value) => {
 	// console.log(product_sku.form)
 	
 }
-
+// function initCheckStatusSkuTree() {
+// 	product_sku.data.forEach(ele => {
+// 		ele.children.forEach(item =>{
+// 			item.disabled = false
+// 		})
+// 	});
+// }
+// function checkSkuDisabled () {
+// 	initCheckStatusSkuTree()
+// 	let vData = deepClone(product_sku.form); 
+// 	let biaozhunDataLeave = product_sku.data.filter(ele => !product_sku.form[ele.label]) 
+// 	biaozhunDataLeave.forEach(ele => {
+// 		ele.children.forEach(item => {
+// 			vData[ele.label] = item.label; 
+// 			let i = findIndexByObj(vData) 
+// 			console.log(i , vData)
+// 			if(i == -1) item.disabled = true
+// 			// vData = deepClone(product_sku.form);
+// 		})
+// 	})
+// }
 function setMaxCount() {
-	// console.log(product_sku)
+	// console.log(product_sku.form)
 	let i = spec_prices_data.value.map(ele => ele.specs).findIndex(ele => {
+		// console.log(ele, product_sku.form)
 		return isObjectEqual(ele, product_sku.form)
 	})
+	// console.log(i)
 	if(i != -1) {
 		let count = spec_prices_data.value[i].stock;
+		if(count == 0) {
+			product_num.value = 0
+		}
 		product_num_max.value = count
+		active_sku_preview_img.value = spec_prices_data.value[i].img
 	}
 } 
+// function findIndexByObj (tar) {
+// 	// return spec_prices_data.value.map(ele => ele.specs).findIndex(ele => isObjectEqual(ele, product_sku.form) );
+// 	return spec_prices_data.value.map(ele => ele.specs).findIndex(ele => {
+// 		const obj1Keys = Object.keys(ele);
+// 		const obj2Keys = Object.keys(tar);
+
+// 		if (obj1Keys.length !== obj2Keys.length) {
+// 			return false;
+// 		}
+
+// 		for (let key of obj1Keys) {
+// 			if (ele[key] !== tar[key] || !tar[key]) {
+// 				return false;
+// 			}
+// 		}
+
+// 		return true;
+// 	} );
+// }
 function findIndexby () {
 	return spec_prices_data.value.map(ele => ele.specs).findIndex(ele => isObjectEqual(ele, product_sku.form) );
 }
 const addCartBtn = () => {  
-	let skuItem
-	let i = findIndexby()
-	
+	let skuItem 
+	let i = findIndexby() 
 	if(i == -1) return
 
 	skuItem = {
@@ -317,7 +426,7 @@ const addCartBtn = () => {
 		freight_id: product_base_data.value.freight_id,
 		num: +product_num.value,
 		checked: false,
-	}
+	} 
 	let flag = cart.addProduct2Cart(skuItem)
 	if(flag) ElNotification({
 		title: '系统消息',
@@ -432,12 +541,12 @@ function previewHoverEvent(index) {
 			flex: 0 0 3em;
 			width: 3em;  
 			color: #999;
-			line-height: 30px;
-			// text-align: justify;
-			// text-justify: distribute-all-lines;
-			// text-align-last: justify;
-			// -moz-text-align-last: justify;
-			// -webkit-text-align-last: justify;
+			line-height: 30px; 
+			&.sku-label {
+				width: auto;
+    			flex: 0 1 auto;
+				min-width: 3em;
+			}
 		}
 		&.info-row-item-content {
 			line-height: 30px;
@@ -468,6 +577,15 @@ function previewHoverEvent(index) {
 
 				}
 			}
+		}
+	}
+}
+.attribute-box {
+	.item {
+		flex: 0 0 25%;
+		@extend %box-sizing;
+		.el-text {
+			align-self: auto;
 		}
 	}
 }

@@ -1,16 +1,21 @@
 <template>
 	<div class="product-card" @click="gotoDetail">
 		<div class="product-img">
-			<el-image loading="lazy" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" fit="cover" >
+			<el-image :lazy="lazy" :src="origin.pic?.split('|')[0]" fit="cover" >
 				<template #placeholder>
 					<div class="u-flex u-flex-center"> 
 						<el-image src="/logo.png" class="logo" fit="contain" /> 
 					</div>
 				</template>
+				<template #error>
+					<div class="u-flex u-flex-center"> 
+						<el-image src="/logo.png" class="logo" fit="contain" /> 
+					</div>
+				</template>
 			</el-image>
-			<div class="product-btns u-flex u-font-12">
-				<div class="item u-flex-1" @click.stop="gotoShop">
-					<span>友盟鞋业 2023</span>
+			<div class="product-btns u-flex u-font-12 u-p-5">
+				<div class="item u-flex-1 u-line-2" >
+					<span>{{ origin.name }}</span>
 				</div> 
 			</div>
 		</div>
@@ -20,13 +25,13 @@
 					<div class="price">
 						<div class="price-unit u-font-14">￥</div>
 						<div class="price-num">
-							<el-statistic :value="89" :precision="2" value-style="color: #ff0000"></el-statistic>
+							<el-statistic :value="origin.price" :precision="2" value-style="color: #ff0000"></el-statistic>
 						</div>
 					</div>
 				</div>
 				<div class="item product-eva">
-					<div class="u-m-r-4">已售</div>
-					<div class="product-eva-num">999+</div>
+					<div class="product-eva-num">{{ origin.pageviews }}</div>
+					<div class="u-m-l-4">浏览</div>
 				</div>
 			</div>
 			  
@@ -37,32 +42,32 @@
 <script setup lang="ts">
 import router from '@/router';
 
-const props = defineProps({
-	id: {
-		type: String,
-		default: '1'
+const props = defineProps({ 
+	lazy: {
+		type: Boolean,
+		default: false
 	},
-	sid: {
-		type: String,
-		default: '1'
+	origin: {
+		type: Object,
+		default: () => ({})
 	},
 })
 
-
-
 function gotoDetail() {
+	if(!props.origin.id) return false
 	router.push({
 		name: 'product',
 		params: {
-			id: props.id
+			id: props.origin.id
 		}
 	})
 }
 function gotoShop() {
+	if(!props.origin.company?.login) return false
 	router.push({
 		name: 'shop',
 		params: {
-			id: props.sid
+			login: props.origin.company.login
 		}
 	})
 }
@@ -162,12 +167,14 @@ function gotoShop() {
 			z-index: 19;
 		}
 		.product-btns {
+			@extend %box-sizing;
 			position: absolute;
 			bottom: 0;
 			left: 0;
 			width: 100%;
-			height: 30px;
-			background-color: rgba(0, 122, 255,70%);
+			line-height: 20px;
+			// background-color: rgba(0, 122, 255,70%);
+			background-color: rgba(0,0,0,.6);
 			color: #fff;
 			z-index: 20;
 			transform: translateY(100%);
@@ -177,7 +184,7 @@ function gotoShop() {
 				height: 100%;
 				transition: all .2s;
 				&:hover {
-					background-color: $uni-color-primary;
+					// background-color: $uni-color-primary; 
 				}
 			}
 		}
@@ -185,7 +192,7 @@ function gotoShop() {
 	
 	&:hover {
 		.product-img {
-			img {
+			.el-image {
 				transform: scale(1.2);
 				transition-duration: .2s;
 			}

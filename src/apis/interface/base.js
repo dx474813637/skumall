@@ -10,7 +10,7 @@ export const syblogin = (data) => axios.get('Userapi/syblogin', data)
 // msgcode  验证码获取 参数login（手机号不能是账号）
 export const msgcode = (data) => axios.get('Userapi/msgcode', data) 
 
-// product 商品列表 参数p 
+// product 商品列表 参数p  num默认20 cate
 export const product = (data) => axios.get('Userapi/product', data) 
 // product_detail 商品详情 参数id
 export const product_detail = (data) => axios.get('Userapi/product_detail', data) 
@@ -18,7 +18,7 @@ export const product_detail = (data) => axios.get('Userapi/product_detail', data
 export const login_sku = (data) => axios.get('Userapi/login_sku', data) 
 // sku_detail sku详情 参数id
 export const sku_detail = (data) => axios.get('Userapi/sku_detail', data) 
-// save_sku 保存sku 参数id name sku 有id更新没有id新增
+// save_sku 保存sku 参数id name sku 有id更新没有id新增 
 export const save_sku = (data) => axios.get('Userapi/save_sku', data) 
 // del_sku 删除sku 参数id
 export const del_sku = (data) => axios.get('Userapi/del_sku', data) 
@@ -66,7 +66,8 @@ export const save_product = (data, config) => axios.post('Userapi/save_product',
 
 // 弃用 save_stock 保存某一个规格的库存和价格 参数id 库存id stock price img
 export const save_stock = (data) => axios.get('Userapi/save_stock', data) 
-
+// save_product_ewm 参数id ewm 保存商品二维码
+export const save_product_ewm = (data) => axios.get('Userapi/save_product_ewm', data) 
 
 // `home` 参数p term（ 搜索关键字） tags（分类名称）term、tags两个不能同时有效，传tags了term就无效。
 export const home = (data) => axios.get('Userapi/home', data) 
@@ -75,4 +76,28 @@ export const web_product = (data) => axios.get('Userapi/web_product', data)
 // `web_product_detail` 参数id
 export const web_product_detail = (data) => axios.get('Userapi/web_product_detail', data) 
 // `sign_out` 生意宝账号退出
-export const sign_out = (data) => axios.get('Userapi/sign_out', data) 
+export const sign_out = (data) => axios.get('Userapi/sign_out', data)  
+
+// web_news 公告/资讯列表 p cate num默认20 这个cate是中文的
+export const web_news = (data) => axios.get('Userapi/web_news', data)  
+// web_news_detail 公告/资讯详情 id
+export const web_news_detail = (data) => axios.get('Userapi/web_news_detail', data)  
+// web_tuijian 优选店铺 login 空默认返回列表第一个数据的信息。
+export const web_tuijian = (data) => axios.get('Userapi/web_tuijian', data)  
+// web_tuijian2 推荐店铺 num获取几个数据
+export const web_tuijian2 = (data) => axios.get('Userapi/web_tuijian2', data)  
+// web_login_shop 店铺数据 p cate num login必填
+export const web_login_shop = (data) => axios.get('Userapi/web_login_shop', data)  
+// web_home 首页推荐里的一些数据
+export const web_home = (data) => axios.get('Userapi/web_home', data)  
+
+// web_search 搜索 p cate=0或不传  商品搜索 随便传个值就店铺搜索 num默认20 terms
+export const web_search = (data) => axios.get('Userapi/web_search', data)  
+
+// superboss 参数 toPlatform cate=0 登录 1上货设置页 2上货页 cate=2时  多传一个参数id 商品id
+export const superboss = (data) => axios.get('Userapi/superboss', data)  
+// toplatform 分销平台  现在图片都一样的
+export const toplatform = (data) => axios.get('Userapi/toplatform', data)  
+
+// web_danye 单页详情 参数id
+export const web_danye = (data) => axios.get('Userapi/web_danye', data)  
