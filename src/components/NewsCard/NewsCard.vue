@@ -6,7 +6,7 @@
 					<span>{{ origin.title }}</span> 
 				</div>
 			</template>
-			<div class="text item">{{ origin.intro }}</div>
+			<el-text class="text item" v-html="origin.intro"></el-text>
 		</el-card>
 	</div>
 </template>

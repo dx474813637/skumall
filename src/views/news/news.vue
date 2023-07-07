@@ -20,7 +20,7 @@
                 </div>
                 <el-divider />
                 <div class="main">
-                    <el-text>{{ detail.intro }}</el-text>
+                    <el-text v-html="detail.intro"></el-text>
 
                 </div>
             </div>
