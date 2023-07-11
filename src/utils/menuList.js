@@ -36,7 +36,7 @@ export default [
 		]
 	},
 	{
-		label: 'sku管理',
+		label: '商品管理',
 		type: 'title',
 		index: '2',
 		icon: Setting,
@@ -82,7 +82,7 @@ export default [
 				} 
 			},
 			{
-				label: '采购车', 
+				label: '选品车', 
 				icon: '',
 				index: 'cart', 
 				route: {

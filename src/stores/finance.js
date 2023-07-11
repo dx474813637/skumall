@@ -42,9 +42,24 @@ export const useFinanceStore = defineStore('finance', {
 			bank_loading: false, 
 			regional_list: [],
 			regional_loading: false, 
+			bank_buy_all: {},
+			bank_buy_all_loading: false, 
 		}
 	}, 
-	actions: {    
+	actions: {  
+		async getbankbuyall(needLoading = false) {
+			this.bank_buy_all_loading = true
+			try { 
+				const res = await apis.bank_buy_all({loading: needLoading});
+				if(res.code == 1) {
+					this.bank_buy_all = res.list 
+				} 
+			} catch (error) {
+				
+			}
+			this.bank_buy_all_loading = false
+			
+		},    
 		async getAccountData(needLoading = false) {
 			this.account_loading = true
 			try {

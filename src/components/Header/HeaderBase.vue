@@ -97,7 +97,30 @@
                         </div>
                         <el-divider direction="vertical" />
                         <div class="nav-w">
-                            <div class="nav-item" @click="router.push({name: 'rank'})">
+                            <div class="nav-item" v-for="(item) in memu_list" :key="item.id">
+                                <p>
+                                    <router-link
+                                        v-if="item.cate == '1'" 
+                                        tag="a" 
+                                        target="_blank" 
+                                        :to="{
+                                            name: 'web_danye',
+                                            params: {
+                                                id: item.id
+                                            },
+                                            query: {
+                                                title: item.name
+                                            }
+                                        }"
+                                        >{{ item.name }}</router-link> 
+                                    <a
+                                        v-else-if="item.cate == '2'"  
+                                        target="_blank" 
+                                        :href="item.url"
+                                        >{{ item.name }}</a> 
+                                </p>
+                            </div>
+                            <!-- <div class="nav-item" @click="router.push({name: 'rank'})">
                                 <p>供应商排行榜</p>
                             </div>
                             <div class="nav-item" @click="router.push({name: 'rank'})">
@@ -105,7 +128,7 @@
                             </div>
                             <div class="nav-item" @click="router.push({name: 'list'})">
                                 <p>快捷融资</p>
-                            </div> 
+                            </div>  -->
                         </div>
                     </div>
                 </div>
@@ -115,11 +138,12 @@
 </template>
 
 <script setup lang='ts'>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, toRefs } from 'vue'
 import router from '@/router/guard';
-// import {baseStore} from '@/stores/main';
+import {cateStore} from '@/stores/cate';
 // import {userStore} from '@/stores/user';
-// const base = baseStore() 
+const cate = cateStore() 
+const { memu_list } = toRefs(cate)
 // const user = userStore() 
 const props = defineProps({
     cate: {
@@ -173,7 +197,7 @@ onMounted(() => {
 })
 function handleSearch() {
     router.push({path: '/search_list', query: {cate: keyActive.value, terms: kw.value}})
-}
+} 
 </script>  
 <style lang='scss' scoped>
 ::v-deep .input-with-select {

@@ -101,3 +101,8 @@ export const toplatform = (data) => axios.get('Userapi/toplatform', data)
 
 // web_danye 单页详情 参数id
 export const web_danye = (data) => axios.get('Userapi/web_danye', data)  
+
+// web_help 帮助中心
+export const web_help = (data) => axios.get('Userapi/web_help', data) 
+// web_help_detail 帮助页详情 参数id
+export const web_help_detail = (data) => axios.get('Userapi/web_help_detail', data) 

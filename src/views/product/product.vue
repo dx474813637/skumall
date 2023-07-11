@@ -124,7 +124,7 @@
 							<div class="info-row-item info-row-item-label"> </div>
 							<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-5">
 								<div class="content-item u-m-r-10 u-m-b-10" >
-									<el-button type="primary" @click="addCartBtn" :disabled="skuCheckStatus" size="large">加入采购车</el-button>
+									<el-button type="primary" @click="addCartBtn" :disabled="skuCheckStatus" size="large">加入选品车</el-button>
 								</div>
 								<div class="content-item u-m-r-10 u-m-b-10" >
 									<el-button type="danger" @click="quickUploadBtn" size="large">一键上传</el-button>

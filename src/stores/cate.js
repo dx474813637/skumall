@@ -12,6 +12,7 @@ export const cateStore = defineStore('cate', {
 	state: () => {
 		return {
 			cate_list: [],
+			memu_list: [],
 			cate_loading: false,
 			freight_list: [
 				{
@@ -50,6 +51,7 @@ export const cateStore = defineStore('cate', {
 			this.cate_loading = false
 			if (res.code == 1) {
 				this.cate_list = res.list
+				this.memu_list = res.memu
 			}
 		},
 		async getFreightData() {

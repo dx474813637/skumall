@@ -195,7 +195,7 @@
 							v-for="item in base_list"
 							:key="item.id"
 							>
-							<product-card :origin="item" :lazy="true" @uploadPlatformShowEvent="flowShow = true"></product-card>
+							<product-card :origin="item" :lazy="true" @uploadPlatformShowEvent="uploadPlatformShowEvent"></product-card>
 						</div>
 					</div>
 					<div class="u-m-b-40">
@@ -210,7 +210,8 @@
 	<Footer-base></Footer-base>
 	
 	<UploadShopControl
-		v-model:show="flowShow" 
+		v-model:show="flowShow"
+		:product="flowProduct" 
 		></UploadShopControl>
 </template>
 
@@ -260,6 +261,7 @@ const swiperList = ref([
 	},
 ])
 const flowShow = ref(false)
+const flowProduct = ref({})
 const load = () => { 
 	// console.log(2)
 }
@@ -331,7 +333,10 @@ watch(
 		immediate: true
 	}
 )
-
+function uploadPlatformShowEvent(data) {
+	flowProduct.value = data
+	flowShow.value = true
+}
 // watch(
 // 	() => tjActive.value,
 // 	() => {

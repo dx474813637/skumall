@@ -3,7 +3,7 @@
 		<div class="cart-box-main">
 			<template v-if="cart_list.length == 0">
 				<div class="u-flex u-flex-center u-p-20" style="width: 100%;">
-					<el-empty description="采购车为空" />
+					<el-empty description="选品车为空" />
 				</div>
 				
 			</template>

@@ -76,6 +76,34 @@ const routes = [
         props:true, 
         component: () => import('@/views/news/news.vue')
     },
+    {
+        path: '/web_danye/:id',
+        name: 'web_danye',
+        meta: {
+            title: '单页详情',
+            cache: true,
+        },
+        props: (route) => ({
+            id: route.params.id,
+            title: route.query.title
+        }),
+        component: () => import('@/views/web_danye/web_danye.vue')
+    },
+    {
+        path: '/uploadtoplatform',
+        name: 'uploadtoplatform',
+        meta: {
+            title: '一键上传',
+            cache: true,
+            isAuth: true,
+        },
+        props: (route) => ({
+            itemIds: route.query.itemIds,
+            toPlatform: route.query.toPlatform,
+            jumpTo: route.query.jumpTo
+        }),
+        component: () => import('@/views/uploadtoplatform/uploadtoplatform.vue')
+    },
     // {
     //     path: '/home',
     //     component: () => import('@/views/home/home.vue')
@@ -138,7 +166,7 @@ const routes = [
                 path: 'cart',
                 name: 'cart',
                 meta: {
-                    title: '采购车', 
+                    title: '选品车', 
                 },
                 component: () => import('@/views/user/cart/cart.vue')
             },

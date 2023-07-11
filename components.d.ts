@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     CompanyCard: typeof import('./src/components/CompanyCard/CompanyCard.vue')['default']
+    CreateOrderForm: typeof import('./src/components/createOrderForm/createOrderForm.vue')['default']
     ElAffix: typeof import('element-plus/es')['ElAffix']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
@@ -94,6 +95,7 @@ declare module '@vue/runtime-core' {
     ProductCardSimple: typeof import('./src/components/ProductCard/ProductCardSimple.vue')['default']
     ProductFocusing: typeof import('./src/components/ProductFocusing/ProductFocusing.vue')['default']
     ProductList: typeof import('./src/components/ProductList/ProductList.vue')['default']
+    QueryProductCard: typeof import('./src/components/QueryProductCard/QueryProductCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SuperShop: typeof import('./src/components/SuperShop/SuperShop.vue')['default']

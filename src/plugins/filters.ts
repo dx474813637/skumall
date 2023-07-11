@@ -11,6 +11,11 @@ export default {
 				else if(value == '1') text = 'g' 
 				return text
 			},
+			credit_mode2_str(value: string | number | undefined) {
+				let text = value
+				if(value == 'month') text = '月' 
+				return text
+			},
 			finance_transfer_process(value: string | number | undefined) {
 				let text = value
 				if(value == 'INIT') text = '完成企业信息比对，但未发起打款'

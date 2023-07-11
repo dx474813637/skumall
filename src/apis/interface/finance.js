@@ -152,11 +152,18 @@ export const pacc_type_detail = (data) => axios.get('Userapi/pacc_type_detail', 
 
 
 // create_order_new 参数sell_login name specs num price id有id修改 zt=8的时候可以修改
+export const create_order_new = (data) => axios.get('Userapi/create_order_new', data)
 // order_shenhe 订单审核 参数order_id sh=1 通过 2拒绝
+export const order_shenhe = (data) => axios.get('Userapi/order_shenhe', data)
 // 下面接口跟原来的参数一致
 // order_list_new
+export const order_list_new = (data) => axios.get('Userapi/order_list_new', data)
 // order_detail_new
+export const order_detail_new = (data) => axios.get('Userapi/order_detail_new', data)
 // change_order_status_new
+export const change_order_status_new = (data) => axios.get('Userapi/change_order_status_new', data)
 // order_score_new
+export const order_score_new = (data) => axios.get('Userapi/order_score_new', data)
 
 // search_company_name 公司名搜索卖家账号(其实产品名称也能搜索) 参数terms
+export const search_company_name = (data) => axios.get('Userapi/search_company_name', data)

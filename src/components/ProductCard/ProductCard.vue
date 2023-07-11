@@ -97,7 +97,7 @@ function uploadPlatformShowBtn() {
 	// 	settings.goLogin()
 	// 	return
 	// }
-	emits('uploadPlatformShowEvent', true)
+	emits('uploadPlatformShowEvent', props.origin)
 }
 function gotoShop() {
 	if(!props.origin.company?.login) return false

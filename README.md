@@ -24,7 +24,9 @@
          {"id":"2"......},
          ]
         }
-        
+        "zxrz_login":"remark",                    ---- zxrz账号 
+        "platform_company":"\u6d59\u5546\u6d4b",  ----zxrz_login 对应的公司名称
+         "platform_tag":"S",                       ---- 绑定标签zxrz原料贷还是s供应链
 二、融资产品详情
     query_product_detail
     

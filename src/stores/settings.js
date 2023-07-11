@@ -25,14 +25,14 @@ export const useSettingsStore = defineStore(
                 router.push({ name: 'login' }) 
             },
             setPrevPage(route) { 
+                console.log(route)
                 if(route.name == 'login') return
                 this.loginToPage = route 
             }, 
             loginSuccessRoute() { 
                 if(this.loginToPage) {
                     router.push({ 
-                        name: this.loginToPage.name, 
-                        params: this.loginToPage.params 
+                        ...this.loginToPage
                     })  
                 } else {
                     router.push({ 

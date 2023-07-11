@@ -4,25 +4,19 @@
 		<div class="header-main">
 			<div class="home-w">
 				<div class="main-logo">
-					<a href="#/" title="衢链通"
+					<a href="#/" title="我要选品"
 						><img
 							src="/logo.png"
 							class="logo"
-							alt="衢链通"
+							alt="我要选品"
 					/></a>
 				</div>
 				<div class="main-nav">
 					<div class="nav-item">
-						<el-link  type="primary" href="https://element-plus.org" target="_blank">首页</el-link> 
+						<el-link  type="primary" href="/" >返回首页</el-link> 
 					</div>
 					<div class="nav-item">
-						<el-link  type="primary" href="https://element-plus.org" target="_blank">买家指南</el-link> 
-					</div>
-					<div class="nav-item">
-						<el-link  type="primary" href="https://element-plus.org" target="_blank">交收规则</el-link> 
-					</div>
-					<div class="nav-item">
-						<el-link  type="primary" href="https://element-plus.org" target="_blank">平台规则</el-link> 
+						<el-link  type="primary" href="https://element-plus.org" target="_blank">帮助中心</el-link> 
 					</div> 
 				</div>
 			</div>

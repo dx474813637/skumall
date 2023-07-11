@@ -113,7 +113,7 @@
                         </div> 
                     </template>
                     <div class="list-item u-m-b-10" v-for="item in product_list" :key="item.id">
-                        <product-card :origin="item"></product-card>
+                        <product-card :origin="item" @uploadPlatformShowEvent="flowShow = true"></product-card>
                     </div>
                 </div>
 
@@ -134,6 +134,10 @@
 		</div>
 	</div>
 	<Footer-base></Footer-base>
+	<UploadShopControl
+		v-model:show="flowShow" 
+		:product="flowProduct" 
+		></UploadShopControl>
 </template>
 
 <script setup lang="ts">
@@ -153,6 +157,8 @@ const params = computed(() => {
         num: pageSize.value
     }
 })
+const flowShow = ref(false)
+const flowProduct = ref({})
 const cate_active = ref('')   
 // const sort_active = ref('')
 // const sort_arr = ['asc', 'desc']
@@ -287,14 +293,20 @@ function sortTabsClick(tab) {
 const handleCheckedChange = (value: string[]) => {
     console.log(value)
 }
+function uploadPlatformShowEvent(data) {
+	flowProduct.value = data
+	flowShow.value = true
+}
 </script>
 <style >
     .el-menu--horizontal.el-menu--popup-container {
         border-bottom: none;
         
-    }
+    } 
     .el-menu--horizontal.el-menu--popup-container .el-menu--popup {
         display: flex;
+        max-width: 800px;
+        flex-wrap: wrap;
     }
 </style>
 <style lang="scss" scoped> 

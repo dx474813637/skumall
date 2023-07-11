@@ -25,6 +25,7 @@
                 <div class="platform-item u-radius-5 u-flex u-flex-column u-m-b-5 u-p-8"
                     v-for="item in upload_platform"
                     :key="item.id"
+                    @click="handleUploadBtn(item.value)"
                     >
                     <el-image :src="item.img" fit="contain" class="u-m-b-5"></el-image> 
                     <el-text>{{ item.name }}</el-text>
@@ -41,6 +42,7 @@
 <script lang="ts" setup>
 import { reactive, ref, watch, onMounted, onBeforeMount, inject, toRefs, computed } from 'vue';
 import { useSuperShopStore } from '@/stores/superShop'; 
+import router from '@/router/guard'
 const superShop = useSuperShopStore(); 
 let { upload_platform, upload_platform_loading } = toRefs(superShop); 
 const props = defineProps({
@@ -79,6 +81,17 @@ async function refreshToPlatformBtn() {
 function handleClose() { 
     // emits('update:show', false)
 }  
+
+function handleUploadBtn(toPlatform) {
+    const { href } = router.resolve({
+        name: 'uploadtoplatform',
+        query: {
+            itemIds: props.product.id,
+            toPlatform,
+        }
+    })
+    window.open(href, '_blank');
+}
 </script>  
    
 <style >
