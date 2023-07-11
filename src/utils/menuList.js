@@ -146,6 +146,14 @@ export default [
 				} 
 			},
 			{
+				label: '融资订单',
+				icon: '',
+				index: 'order_new_list', 
+				route: {
+					name: 'order_new_list'
+				} 
+			},
+			{
 				label: '融资记录',
 				icon: '',
 				index: 'order_bank_list', 

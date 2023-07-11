@@ -362,6 +362,23 @@ const routes = [
                         props: true,
                         component: () => import('@/views/user/finance/order_bank/order_bank.vue'),
                     },
+                    {
+                        path: 'order_new_list',
+                        name: 'order_new_list',
+                        meta: {
+                            title: '融资订单列表', 
+                        },
+                        component: () => import('@/views/user/finance/order_new_list/order_new_list.vue'),
+                    },
+                    {
+                        path: 'order_new/:id',
+                        name: 'order_new',
+                        meta: {
+                            title: '融资订单详情', 
+                        },
+                        props: true,
+                        component: () => import('@/views/user/finance/order_new/order_new.vue'),
+                    },
                     // {
                     //     path: 'pacc_type_detail/:type',
                     //     name: 'pacc_type_detail',

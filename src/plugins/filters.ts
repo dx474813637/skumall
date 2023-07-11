@@ -84,6 +84,19 @@ export default {
 				else if(status == '6') text = '支付失败' 
 				return text
 			},
+			order_new_zt(status: string | number | undefined) {
+				let text = status
+				if(status == '0') text = '待付款' 
+				else if(status == '1') text = '付款成功' 
+				else if(status == '2') text = '待收货'
+				else if(status == '3') text = '订单完成'
+				else if(status == '4') text = '评分完成'
+				else if(status == '5') text = '支付中'
+				else if(status == '6') text = '支付失败' 
+				else if(status == '7') text = '待审核' 
+				else if(status == '8') text = '审核拒绝' 
+				return text
+			},
 			order_pay_status(status: string | number | undefined) {
 				let text = status
 				if(status == '1') text = '等待支付' 

@@ -151,8 +151,8 @@ export const query_verify_organizations = (data) => axios.get('Userapi/query_ver
 export const pacc_type_detail = (data) => axios.get('Userapi/pacc_type_detail', data)
 
 
-// create_order_new 参数sell_login name specs num price id有id修改 zt=8的时候可以修改
-export const create_order_new = (data) => axios.get('Userapi/create_order_new', data)
+// create_order_new 参数sell_login name specs num price id有id修改 zt=8的时候可以修改 
+export const create_order_new = (data, config) => axios.post('Userapi/create_order_new', data, config)
 // order_shenhe 订单审核 参数order_id sh=1 通过 2拒绝
 export const order_shenhe = (data) => axios.get('Userapi/order_shenhe', data)
 // 下面接口跟原来的参数一致

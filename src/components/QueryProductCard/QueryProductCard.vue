@@ -81,11 +81,11 @@ const props = defineProps({
 const emits = defineEmits(['paccEvent', 'createOrderEvent'])
 
 function detailgoto() {
-    router.push({name: 'query_product', params: {id: props.origin.id}})
+    router.push({name: 'query_product', params: {id: props.origin.product_id}})
 }
 function handlePaccBtn() {
     // emits('paccEvent', props.origin)
-    router.push({name: 'pacc_query_edit', params: {id: props.origin.id}})
+    router.push({name: 'pacc_query_edit', params: {id: props.origin.product_id}})
 }
 function handleOrderBtn() {
     emits('createOrderEvent', props.origin)

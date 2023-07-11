@@ -24,9 +24,9 @@
 				</el-select>
 			</div>
 		</div>
-		<table-order
+		<table-order-new
 			:customParams="customParams"
-			></table-order>
+			></table-order-new>
 	</div>
 </template>
   
@@ -41,13 +41,15 @@ const tabs_list = ref([
 	{ label: '评分完成', value: '4' },
 	{ label: '支付中', value: '5' },
 	{ label: '支付失败', value: '6' }, 
+	{ label: '待审核', value: '7' },
+	{ label: '审核拒绝', value: '8' }, 
 ])
 const tabs_list2 = ref([
 	{ label: '我是卖家', value: '' },
 	{ label: '我是买家', value: '1' }, 
 ])
 const value = ref('');
-const role = ref('');
+const role = ref('1');
 const customParams = computed(() => {
 	return {
 		type: value.value,
