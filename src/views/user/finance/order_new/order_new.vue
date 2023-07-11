@@ -290,7 +290,7 @@ async function confirmScoreBtn() {
 		return
 	}
 	await ElMessageBox.confirm(`当前您的评分为：${score.value}分，请确认！` , {'cancelButtonText': '取消', 'confirmButtonText': '确认并提交'})
-    const res = await  $api.order_score({params: {score: score.value, order_id: props.id}});
+    const res = await  $api.order_score_new({params: {score: score.value, order_id: props.id}});
 	if(res.code == 1) {
 		ElMessage.success(res.msg)
 		await getData()
