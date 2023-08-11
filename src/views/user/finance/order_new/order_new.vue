@@ -81,7 +81,7 @@
 				<div class="grid-content label">卖家</div>
 			</el-col>
 			<el-col :span="19">
-				<div class="grid-content content">{{ sell_info?.login == login ? '我' : sell_info?.company }}</div>
+				<div class="grid-content content">{{ sell_info.company }}</div>
 			</el-col>
 		</el-row>
 		<el-row :gutter="10">
@@ -139,7 +139,7 @@
 				</div>
 			</el-col>
 		</el-row> 
-		<el-row :gutter="10">
+		<!-- <el-row :gutter="10">
 			<el-col :span="5">
 				<div class="grid-content label">订单评分</div>
 			</el-col>
@@ -149,7 +149,7 @@
 					<el-rate :value="list.score" disabled />
 				</div>
 			</el-col>
-		</el-row>
+		</el-row> -->
 		<el-row :gutter="10">
 			<el-col :span="5">
 				<div class="grid-content label"></div>
@@ -168,12 +168,12 @@
 					</el-popconfirm>
 					
 				</div>
-				<div class="item u-m-r-10" v-show="list.zt == 3 && login == buy_info.login"> 
+				<!-- <div class="item u-m-r-10" v-show="list.zt == 3 && login == buy_info.login"> 
 					<el-button plain type="primary" @click="scoreBtn">我要评分</el-button>	
 				</div>
 				<div class="item u-m-r-10" v-show="list.zt == 8 && login == buy_info.login"> 
 					<el-button plain type="primary" @click="editBtn">编辑订单内容</el-button>	
-				</div>
+				</div> -->
 				<!-- <div class="item u-m-r-10" v-show="list.zt == 2 && login == buy_info.login">
 					<el-popconfirm 
 						title="收货确认" 
@@ -246,6 +246,7 @@ const props = defineProps({
 })
 
 onMounted(async () => { 
+	$api.no_order_rz_pay_list()
 	if (!props.id) {
 		ElMessage.error('参数有误')
 		return
@@ -265,20 +266,24 @@ async function getData() {
 	const res = await $api.order_detail_new({ params: { order_id: props.id } })
 	if (res.code == 1) {
 		list.value = res.list
-		sell_info.value = res.sell_info
+		sell_info.value = res.sell_info.list
 		buy_info.value = res.buy_info
 	}
 }
-async function getAddressData() { 
-	const res = await $api.address_detail({ params: { address_id: list.value.address_id }, loading: false })
-	if (res.code == 1) {
-		addressData.value = res.list 
-	}
-}
+// async function getAddressData() { 
+// 	const res = await $api.address_detail({ params: { address_id: list.value.address_id }, loading: false })
+// 	if (res.code == 1) {
+// 		addressData.value = res.list 
+// 	}
+// }
 async function orderBuyBtn () {
-	const res = await $api.rz_pay({params: {
-		order_id: props.id
-	}})
+	const res = await $api.no_order_rz_pay({
+		order_id: props.id,
+		sell_id: sell_info.value.id,
+		pay_price: list.value.price,
+		product_intro: `商品：${list.value.name}`,
+		remark: `数量：${list.value.num}；规格：${list.value.specs}`,
+	})
 	if(res.code == 1) { 
 		ElMessage.success(res.msg)
 		await getData()
@@ -300,16 +305,16 @@ async function scoreBtn () {
 	showRate.value = true
 }
 
-async function confirmReceiveBtn () {
-	await changeStatus()
-	await getData()
-}
+// async function confirmReceiveBtn () {
+// 	await changeStatus()
+// 	await getData()
+// }
 
-async function confirmSendBtn () {
-	await changeStatus()
-	await getData()
+// async function confirmSendBtn () {
+// 	await changeStatus()
+// 	await getData()
 	
-}
+// }
 
 async function changeStatus () {
 	const res = await $api.change_order_status({params: {

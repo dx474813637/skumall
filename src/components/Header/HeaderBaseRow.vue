@@ -23,7 +23,7 @@
                     <el-link :underline="false" href="#/user/" target="_blank">用户中心</el-link>
                 </span>  
                 <span class="item">
-                    <el-link :underline="false" href="" target="_blank">帮助中心</el-link>
+                    <el-link :underline="false" href="#/help" target="_blank">帮助中心</el-link>
                 </span>  
             </div>
         </div>

@@ -93,14 +93,15 @@ const routes = [
         path: '/uploadtoplatform',
         name: 'uploadtoplatform',
         meta: {
-            title: '一键上传',
+            title: '一键铺货',
             cache: true,
             isAuth: true,
         },
         props: (route) => ({
             itemIds: route.query.itemIds,
             toPlatform: route.query.toPlatform,
-            jumpTo: route.query.jumpTo
+            jumpTo: route.query.jumpTo,
+            cate: route.query.cate
         }),
         component: () => import('@/views/uploadtoplatform/uploadtoplatform.vue')
     },
@@ -138,6 +139,19 @@ const routes = [
             cache: true,
         },
         component: () => import('@/views/rank/rank.vue')
+    },
+    {
+        path: '/help',
+        name: 'help',
+        meta: {
+            title: '帮助中心',
+            cache: true,
+        },
+        props: (route) => ({
+            cate: route.query.cate,
+            id: route.query.id,
+        }),
+        component: () => import('@/views/help/help.vue')
     },
     {
         path: '/user',  //:id就是动态路由匹配
@@ -366,7 +380,7 @@ const routes = [
                         path: 'order_new_list',
                         name: 'order_new_list',
                         meta: {
-                            title: '融资订单列表', 
+                            title: '订单管理', 
                         },
                         component: () => import('@/views/user/finance/order_new_list/order_new_list.vue'),
                     },
@@ -374,10 +388,60 @@ const routes = [
                         path: 'order_new/:id',
                         name: 'order_new',
                         meta: {
-                            title: '融资订单详情', 
+                            title: '订单详情', 
                         },
                         props: true,
                         component: () => import('@/views/user/finance/order_new/order_new.vue'),
+                    },
+                    {
+                        path: 'order_rz_pay_list',
+                        name: 'order_rz_pay_list',
+                        meta: {
+                            title: '融资记录', 
+                        },
+                        component: () => import('@/views/user/finance/order_rz_pay_list/order_rz_pay_list.vue'),
+                    },
+                    {
+                        path: 'order_rz_pay/:id',
+                        name: 'order_rz_pay',
+                        meta: {
+                            title: '融资详情', 
+                        },
+                        props: true,
+                        component: () => import('@/views/user/finance/order_rz_pay/order_rz_pay.vue'),
+                    },
+                    {
+                        path: 'no_order_buyer',
+                        name: 'no_order_buyer',
+                        meta: {
+                            title: '无订单融资借款人信息', 
+                        },
+                        component: () => import('@/views/user/finance/no_order_buyer/no_order_buyer.vue'),
+                    },
+                    {
+                        path: 'no_order_white_sell_list',
+                        name: 'no_order_white_sell_list',
+                        meta: {
+                            title: '无订单卖家白名单列表', 
+                        },
+                        component: () => import('@/views/user/finance/no_order_white_sell_list/no_order_white_sell_list.vue'),
+                    },
+                    {
+                        path: 'no_order_white_sell_edit/:id',
+                        name: 'no_order_white_sell_edit',
+                        meta: {
+                            title: '无订单卖家白名单编辑', 
+                        },
+                        props: true,
+                        component: () => import('@/views/user/finance/no_order_white_sell/no_order_white_sell.vue'),
+                    },
+                    {
+                        path: 'no_order_white_sell_add',
+                        name: 'no_order_white_sell_add',
+                        meta: {
+                            title: '新增无订单卖家白名单', 
+                        }, 
+                        component: () => import('@/views/user/finance/no_order_white_sell/no_order_white_sell.vue'),
                     },
                     // {
                     //     path: 'pacc_type_detail/:type',

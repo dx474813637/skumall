@@ -83,7 +83,7 @@
 						many content as you want here.
 					</div> -->
 				</el-page-header>
-				<router-view style="width: 100%;"></router-view>
+				<router-view style="width: 100%;" :key="routerPath"></router-view>
 			</div>
 		</div>
 	</div>
@@ -106,6 +106,9 @@ const {menuList} = toRefs(cate)
 const { account_info, organizations_info } = toRefs(finance)
 const user = userStore() 
 const menuActive = ref('user_index')
+const routerPath = computed(() => {
+	return router.currentRoute.value.fullPath
+})
 const addBtnList = [
 	// {
 	// 	name: 'address_list',

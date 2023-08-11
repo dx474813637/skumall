@@ -10,7 +10,7 @@
         scroll-to-error
         inline-message
         > 
-        <!-- <el-form-item prop="sell_login" label="公司名">
+        <!-- <el-form-item prop="sell_id" label="公司名">
             <el-select
 				style="width: 100%"
                 v-model="selectCompany" 
@@ -32,12 +32,12 @@
                 />
             </el-select>
         </el-form-item> -->
-        <el-form-item label="卖家" prop="sell_login">
+        <el-form-item label="卖家" prop="sell_id">
             <el-cascader
                 style="width: 100%"
                 placeholder="请选择（可输入关键字筛选）"
                 :options="white_seller_list"
-                v-model="dynamicValidateForm.sell_login" 
+                v-model="dynamicValidateForm.sell_id" 
                 filterable
                 :props="{
                     label: 'company',
@@ -45,21 +45,18 @@
                 }"
             >
                 <template #default="{ node, data }">
-                    <span>{{ data.company }} - {{ data.bank_name }} - {{ data.cardNo }}</span> 
+                    <span>{{ data.company }} - {{ data.bank_product_intro }} - {{ data.cardNo }}</span> 
                 </template>
             </el-cascader>
         </el-form-item>
-        <el-form-item prop="name" label="商品名">
-            <el-input v-model="dynamicValidateForm.name"></el-input>
+        <el-form-item prop="product_intro" label="产品描述">
+            <el-input v-model="dynamicValidateForm.product_intro"></el-input>
         </el-form-item>
-        <el-form-item prop="specs" label="规格">
-            <el-input v-model="dynamicValidateForm.specs"></el-input>
-        </el-form-item>
-        <el-form-item prop="num" label="数量">
-            <el-input v-model="dynamicValidateForm.num"></el-input>
-        </el-form-item>
-        <el-form-item prop="price" label="价格">
-            <el-input v-model="dynamicValidateForm.price"></el-input>
+        <el-form-item prop="remark" label="产品详细描述">
+            <el-input v-model="dynamicValidateForm.remark"></el-input>
+        </el-form-item> 
+        <el-form-item prop="pay_price" label="融资金额">
+            <el-input v-model="dynamicValidateForm.pay_price"></el-input>
         </el-form-item>
         <el-form-item  >
             <el-button class="u-m-t-20" style="width: 200px;" type="primary" @click="submit(formRef)">提交</el-button> 
@@ -80,11 +77,11 @@ const props = defineProps({
 const emits = defineEmits(['submitSuccess'])
 const $api: any = inject('$api') 
 const dynamicValidateForm = reactive({ 
-    sell_login: '', 
-    name: '',
-    specs: '', 
+    sell_id: '', 
+    product_intro: '',
+    remark: '', 
     num: '',
-    price: '',
+    pay_price: '',
     id: '', 
 })
 const formRef = ref()
@@ -92,21 +89,21 @@ const formRef = ref()
 // const options = ref([])
 const white_seller_list = ref([])
 const rules = reactive({
-    sell_login: [
+    sell_id: [
         {
             required: true,
             message: '公司名不能为空',
             trigger: ['change', 'blur'],
         },
     ],
-    name: [
+    product_intro: [
         {
             required: true,
             message: '商品名不能为空',
             trigger: ['change', 'blur'],
         },
     ],
-    specs: [
+    remark: [
         {
             required: true,
             message: '规格不能为空',
@@ -120,7 +117,7 @@ const rules = reactive({
             trigger: ['change', 'blur'],
         },
     ],
-    price: [
+    pay_price: [
         {
             required: true,
             message: '价格不能为空',
@@ -131,23 +128,23 @@ const rules = reactive({
 
 // const selectCompany = computed({
 //     get() {
-//         return dynamicValidateForm.company || dynamicValidateForm.sell_login
+//         return dynamicValidateForm.company || dynamicValidateForm.sell_id
 //     },
 //     set(v) {  
-//         let name = v ? options.value.filter(ele => ele.value == v)[0].name : v
-//         dynamicValidateForm.company = name;
-//         dynamicValidateForm.sell_login = v; 
+//         let product_intro = v ? options.value.filter(ele => ele.value == v)[0].product_intro : v
+//         dynamicValidateForm.company = product_intro;
+//         dynamicValidateForm.sell_id = v; 
 //     }
 // })
 watch(
     () => props.origin,
     (n) => {
         console.log(n)
-        dynamicValidateForm.sell_login = n.sell_login
-        dynamicValidateForm.name = n.name
-        dynamicValidateForm.specs = n.specs
+        dynamicValidateForm.sell_id = n.sell_id
+        dynamicValidateForm.product_intro = n.product_intro
+        dynamicValidateForm.remark = n.remark
         dynamicValidateForm.num = n.num
-        dynamicValidateForm.price = n.price
+        dynamicValidateForm.pay_price = n.pay_price
         dynamicValidateForm.id = n.id
     },
     {
@@ -169,10 +166,10 @@ const getWhiteListData = async () => {
 // 	query = query.trim()
 // 	if (query) {
 // 		search_loading.value = true;
-// 		const res = await $api.search_company_name({params: {terms: query}, loading: false})
+// 		const res = await $api.search_company_product_intro({params: {terms: query}, loading: false})
 // 		search_loading.value = false;
 // 		if(res.code == 1) {
-// 			options.value = res.list.map(ele => ({...ele, label: ele.name, value: ele.login}))
+// 			options.value = res.list.map(ele => ({...ele, label: ele.product_intro, value: ele.login}))
 // 		}
 // 	} else {
 // 		options.value = [];
@@ -192,9 +189,9 @@ function submit(formEl) {
 }
 
 async function submitApi() { 
-    const res = await $api.create_order_new({
+    const res = await $api.no_order_rz_pay({
         ...dynamicValidateForm,
-        sell_login: dynamicValidateForm.sell_login[0]
+        sell_id: dynamicValidateForm.sell_id[0]
     })
     if(res.code == 1) {
         ElMessage.success(res.msg)

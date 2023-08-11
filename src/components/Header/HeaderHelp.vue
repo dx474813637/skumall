@@ -1,6 +1,5 @@
 <template>
-	<header class="header" id="header">
-		 
+	<header class="header" id="header"> 
 		<div class="header-main">
 			<div class="home-w">
 				<div class="main-logo">
@@ -16,7 +15,7 @@
 						<el-link  type="primary" href="/" >返回首页</el-link> 
 					</div>
 					<div class="nav-item">
-						<el-link  type="primary" href="https://element-plus.org" target="_blank">帮助中心</el-link> 
+						<el-link  type="primary" href="#/help" target="_blank">帮助中心</el-link> 
 					</div> 
 				</div>
 			</div>
@@ -44,7 +43,8 @@
 
 header {
 	color: $uni-text-color-grey;
-	background: #fff; 
+	background: #fff;
+	border-bottom: 1px solid #f8f8f8;
 	&.header {
 		.header-top {
 			background-color: #fafafa;

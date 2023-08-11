@@ -10,9 +10,9 @@
 		</div>
 	</div>
 	<el-dialog v-model="dialogVisible" title="下单融资" width="50%" :before-close="handleClose"> 
-		<OrderCreateForm
+		<RzPayCreateForm
 			@submitSuccess="submitSuccess"
-		></OrderCreateForm> 
+		></RzPayCreateForm> 
 	</el-dialog>
 </template>
   

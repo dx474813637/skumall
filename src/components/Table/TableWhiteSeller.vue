@@ -6,27 +6,19 @@
         border 
         :maxHeight="maxHeight"  
         > 
-        <el-table-column prop="id" label="ID" width="70" align="center"  />
-        <!-- <el-table-column prop="company" :label="props.customParams.role == '1'? '卖家' : '买家'" width="150" /> -->
-        <el-table-column prop="name" label="商品" width="300"  />
-        <el-table-column prop="specs" label="规格" width="200"  />
-        <el-table-column prop="num" label="数量" width="150"  />
-        <el-table-column prop="price" label="总价" width="150"  >
+        <el-table-column prop="id" label="ID" width="70" align="center"  /> 
+        <el-table-column prop="product_name" label="融资产品" width="200"  />
+        <el-table-column prop="company" label="收款方公司名称" width="200"  />  
+        <el-table-column prop="name" label="收款方银行账户名称" width="200"  />  
+        <el-table-column prop="bank_name" label="收款方银行总行名称" width="200"  />  
+        <el-table-column prop="cardNo" label="收款方银行卡号" width="200"  />  
+        <el-table-column prop="subbranch" label="收款方银行账户开户行名称" width="200"  />  
+        <el-table-column prop="state" label="用户审核状态" width="100"   >
             <template #default="{row}">
-                <div class="u-flex">
-                    <el-statistic :precision="2" :value="row.price" value-style="font-size: 14px" />
-                    <el-text type="info" class="u-m-l-5" >元</el-text>
-                </div>
-                
-            </template>
-        </el-table-column>
-        <el-table-column label="订单状态" width="120" >
-            <template #default="{row}">
-                <el-text type="danger" v-if="row.zt == '6'">{{ $filters.order_new_zt(row.zt) }}</el-text>
-                <el-text type="success" v-else-if="row.zt == '3' || row.zt == '4'" >{{ $filters.order_new_zt(row.zt) }}</el-text>
-                <el-text type="warning" v-else >{{ $filters.order_new_zt(row.zt) }}</el-text>
+                <el-text type="danger" v-if="row.state == '1'">激活</el-text>
+                <el-text type="info" v-else >未激活</el-text> 
             </template> 
-        </el-table-column>  
+        </el-table-column>    
         <el-table-column prop="ctime" label="创建时间" width="200" />
         <el-table-column label="查看" width="70" align="center" fixed="right" > 
             <template #default="{row}">
@@ -34,7 +26,7 @@
                     link 
                     type="primary" 
                     size="small" 
-                    @click="router.push({name: 'order_new', params: {id: row.id}})"
+                    @click="router.push({name: 'no_order_white_sell_edit', params: {id: row.id}})"
                     >查看</el-button> 
             </template>
             
@@ -114,10 +106,10 @@ watch(
     {deep: true}
 )
 const getData = async () => { 
-    const res = await $api.order_list_new({params: paramsObj.value, loading: false}) 
+    const res = await $api.no_order_white_sell_list({params: paramsObj.value, loading: false}) 
     if(res.code == 1) {
-        list.value = res.list
-        total.value = +res.total 
+        list.value = res.list.list
+        total.value = +res.list.pw_rec_total 
     }
 }
    

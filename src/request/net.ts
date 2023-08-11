@@ -59,7 +59,7 @@ export const createAxiosByinterceptors = (
                 ...config.headers, 
                 token: localStorage.getItem('token'),
                 login: localStorage.getItem('login'),
-            } 
+            }  
             const { loading = true } = config;
             // console.log("config:", config);
             // config.headers.Authorization = vm.$Cookies.get("vue_admin_token");

@@ -76,9 +76,13 @@ export default [
 			{
 				label: '订单管理',
 				icon: '',
-				index: 'order_list', 
+				// index: 'order_list', 
+				// route: {
+				// 	name: 'order_list'
+				// } 
+				index: 'order_new_list', 
 				route: {
-					name: 'order_list'
+					name: 'order_new_list'
 				} 
 			},
 			{
@@ -111,6 +115,22 @@ export default [
 				index: 'finance_account', 
 				route: {
 					name: 'finance_account'
+				} 
+			},
+			{
+				label: '无订单融资借款人信息',
+				icon: '',
+				index: 'no_order_buyer', 
+				route: {
+					name: 'no_order_buyer'
+				} 
+			},
+			{
+				label: '无订单卖家白名单',
+				icon: '',
+				index: 'no_order_white_sell_list', 
+				route: {
+					name: 'no_order_white_sell_list'
 				} 
 			},
 			// {
@@ -146,21 +166,21 @@ export default [
 				} 
 			},
 			{
-				label: '融资订单',
-				icon: '',
-				index: 'order_new_list', 
-				route: {
-					name: 'order_new_list'
-				} 
-			},
-			{
 				label: '融资记录',
 				icon: '',
-				index: 'order_bank_list', 
+				index: 'order_rz_pay_list', 
 				route: {
-					name: 'order_bank_list'
+					name: 'order_rz_pay_list'
 				} 
 			},
+			// {
+			// 	label: '融资记录',
+			// 	icon: '',
+			// 	index: 'order_bank_list', 
+			// 	route: {
+			// 		name: 'order_bank_list'
+			// 	} 
+			// },
 		]
 	}, 
 	// {

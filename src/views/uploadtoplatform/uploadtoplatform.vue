@@ -51,7 +51,7 @@ const props = defineProps({
 const $api = inject('$api');
 const params = computed(() => {
     return {
-        id: props.cate == '2' ? props.itemIds: '',
+        id: props.itemIds ,
         toPlatform: props.toPlatform,
         cate: props.cate,
     }

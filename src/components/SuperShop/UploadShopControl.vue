@@ -31,12 +31,12 @@
                     <el-text>{{ item.name }}</el-text>
                 </div>
             </div>
-            <div class="u-flex u-flex-center">
-                <el-link>
-                    <el-text type="info" >修改一键上传设置 ></el-text>
+            <!-- <div class="u-flex u-flex-center">
+                <el-link @click="handleSettingBtn">
+                    <el-text type="info" >修改一键铺货设置 ></el-text>
                 </el-link>
                 
-            </div>
+            </div> -->
         </el-dialog> 
 </template>
 <script lang="ts" setup>
@@ -81,13 +81,22 @@ async function refreshToPlatformBtn() {
 function handleClose() { 
     // emits('update:show', false)
 }  
-
+function handleSettingBtn() {
+    const { href } = router.resolve({
+        name: 'uploadtoplatform',
+        query: { 
+            cate: '0'
+        }
+    })
+    window.open(href, '_blank');
+}
 function handleUploadBtn(toPlatform) {
     const { href } = router.resolve({
         name: 'uploadtoplatform',
         query: {
             itemIds: props.product.id,
             toPlatform,
+            cate: '2'
         }
     })
     window.open(href, '_blank');

@@ -167,3 +167,55 @@ export const order_score_new = (data) => axios.get('Userapi/order_score_new', da
 
 // search_company_name 公司名搜索卖家账号(其实产品名称也能搜索) 参数terms
 export const search_company_name = (data) => axios.get('Userapi/search_company_name', data)
+
+
+// no_order_buyer_detail 一、无订单融资借款人信息
+export const no_order_buyer_detail = (data) => axios.get('Userapi/no_order_buyer_detail', data)
+// no_order_buyer_change 二、创建/修改无订单融资借款人信息 
+// company 公司名称       必填
+//           platform_reg 统一社会信用代码   必填
+//           reg_pic 营业执照图片base64格式  必填   大小 < 5M
+//           remark  备注   选填
+//           id    借款人ID  修改必填，新建不填
+export const no_order_buyer_change = (data, config={}) => axios.post('Userapi/no_order_buyer_change', data, config)
+
+// no_order_white_sell_list 三、无订单卖家白名单列表 
+// page_record  每页显示数量  选填  系统默认15
+//           state    审核状态   选填   用来搜索不同审核状态的数据 p
+export const no_order_white_sell_list = (data) => axios.get('Userapi/no_order_white_sell_list', data)
+// no_order_white_sell_detail 四、无订单卖家白名单详情 id
+export const no_order_white_sell_detail = (data) => axios.get('Userapi/no_order_white_sell_detail', data)
+// no_order_white_sell_change 五、创建、修改卖家白名单 
+// product_id 融资产品ID  必填
+//           company 收款方公司名称 必填
+//           company_reg  收款方公司统一社会信用代码 必填
+//           name    收款方银行账户名称  必填
+//           bank_name    收款方银行总行名称   必填   五(1)接口获取
+//           cardNo    收款方银行卡号          必填
+//           subbranch 收款方银行账户开户行名称  必填  五(2)接口获取bank_name
+//           cnapsCode  收款方开户行银行编码   必填  五(2)接口获取bank_no
+//           state    用户审核状态             选填，系统默认状态1激活
+//           id       借款人ID                 修改必填，新建不填
+//           remark    备注         选填
+//           pic1   来往交易图片  五张图片   选填
+//           pic2
+//           pic3
+//           pic4
+//           pic5 
+export const no_order_white_sell_change = (data, config={}) => axios.post('Userapi/no_order_white_sell_change', data, config)
+// no_order_rz_pay_list 七、无订单融资提款请求记录列表
+// page_record  每页显示数量  选填  系统默认15
+//           rz_status  融资状态  选填 p
+export const no_order_rz_pay_list = (data) => axios.get('Userapi/no_order_rz_pay_list', data)
+// no_order_rz_pay_detail  八、无订单融资提款请求记录详情 id
+export const no_order_rz_pay_detail = (data) => axios.get('Userapi/no_order_rz_pay_detail', data)
+// no_order_pay_query 九、无订单融资提款请求记录 融资状态查询 id
+export const no_order_pay_query = (data) => axios.get('Userapi/no_order_pay_query', data)
+
+// no_order_rz_pay 十、发起无订单融资提款请求 
+// sell_id   卖家支付白名单ID   必填   来源接口三
+//           pay_price  融资金额，单位元  必填
+//           product_intro  产品描述      必填
+//           order_id  订单ID    在rz_status = 2的时候可以再次发起融资，再次发起必填。
+//           remark  产品详细描述    选填 
+export const no_order_rz_pay = (data, config={}) => axios.post('Userapi/no_order_rz_pay', data, config)

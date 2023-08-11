@@ -18,7 +18,7 @@
 					<span>找同款</span>
 				</div>
 				<div class="item" @click.stop="uploadPlatformShowBtn">
-					<span>一键上传</span>
+					<span>一键铺货</span>
 				</div>
 				<div class="item">
 					<el-icon class="u-font-12">

@@ -127,7 +127,7 @@
 									<el-button type="primary" @click="addCartBtn" :disabled="skuCheckStatus" size="large">加入选品车</el-button>
 								</div>
 								<div class="content-item u-m-r-10 u-m-b-10" >
-									<el-button type="danger" @click="quickUploadBtn" size="large">一键上传</el-button>
+									<el-button type="danger" @click="quickUploadBtn" size="large">一键铺货</el-button>
 								</div>
 							</div>
 						</div>
@@ -224,6 +224,7 @@
 	<Footer-base></Footer-base>
 	<UploadShopControl
 		v-model:show="flowShow" 
+		:product="product_base_data" 
 		></UploadShopControl>
 </template>
 

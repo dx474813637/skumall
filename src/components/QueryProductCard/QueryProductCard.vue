@@ -59,6 +59,8 @@
                         class="u-m-l-30"
                         type="primary"
                         @click="handleOrderBtn"
+                        :loading="bank_buy_all_loading"
+                        :disabled="bank_buy_all.amount == 0"
                         >下单融资</el-button>
                 </div>
                 <div> 
@@ -70,8 +72,11 @@
 </template>
 
 <script setup lang="ts"> 
-import { ref, reactive, computed, watch } from 'vue';
+import { ref, reactive, computed, watch, toRefs } from 'vue';
 import router from "@/router/guard"  
+import {useFinanceStore} from '@/stores/finance'
+const finance = useFinanceStore();
+const {bank_buy_all, bank_buy_all_loading} = toRefs(finance)
 const props = defineProps({ 
 	origin: {
 		type: Object,
@@ -88,6 +93,7 @@ function handlePaccBtn() {
     router.push({name: 'pacc_query_edit', params: {id: props.origin.product_id}})
 }
 function handleOrderBtn() {
+    if(!bank_buy_all.value.amount) return
     emits('createOrderEvent', props.origin)
     
 }

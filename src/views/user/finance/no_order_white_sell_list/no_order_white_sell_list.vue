@@ -13,7 +13,7 @@
 						/>
 					<template #prefix><i-ep-search /></template>
 				</el-select> -->
-				<el-select v-model="value" placeholder="状态筛选" size="large">
+				<el-select v-model="state" placeholder="状态筛选" size="large">
 					<el-option
 						v-for="item in tabs_list"
 						:key="item.value"
@@ -22,38 +22,29 @@
 						/>
 					<template #prefix><i-ep-search /></template>
 				</el-select>
+				<el-button class="u-m-l-20" type="primary" size="large" @click="router.push({name: 'no_order_white_sell_add'})" >添加白名单</el-button>
 			</div>
 		</div>
-		<table-order-new
+		<table-white-seller
 			:customParams="customParams"
-			></table-order-new>
+			></table-white-seller>
 	</div>
 </template>
   
 <script setup lang='ts'>
 import { computed, ref, inject } from 'vue'
+import router from '@/router/guard'
 const $api: any = inject('$api')
 const tabs_list = ref([
 	{ label: '全部状态', value: '' },
-	{ label: '待付款', value: '1' },
-	{ label: '待收货', value: '2' },
-	{ label: '已完成', value: '3' }, 
-	{ label: '评分完成', value: '4' },
-	{ label: '支付中', value: '5' },
-	{ label: '支付失败', value: '6' }, 
-	{ label: '待审核', value: '7' },
-	{ label: '审核拒绝', value: '8' }, 
-])
-const tabs_list2 = ref([
-	{ label: '我是卖家', value: '' },
-	{ label: '我是买家', value: '1' }, 
-])
-const value = ref('');
-const role = ref('1');
+	{ label: '等待审核', value: '0' },
+	{ label: '审核通过', value: '1' },
+	{ label: '审核未通过', value: '2' },  
+]) 
+const state = ref(''); 
 const customParams = computed(() => {
 	return {
-		type: value.value,
-		role: role.value
+		state: state.value, 
 	}
 })
 </script>

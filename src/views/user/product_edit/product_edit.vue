@@ -544,6 +544,7 @@ const dynamicValidateForm = reactive<{
     delivery_delay_day: string
     info: string
     on: string
+    ewm: string
     // zt: string
     // spec_prices: string
     // specs: string
@@ -561,6 +562,7 @@ const dynamicValidateForm = reactive<{
     weight_unit: '0',
     delivery_delay_day: '',
     info: '',
+    ewm: '',
     on: '0',
     attribute: []
     // zt: '',
@@ -1080,6 +1082,7 @@ async function getProductData () {
         dynamicValidateForm.delivery_delay_day = data.delivery_delay_day 
         dynamicValidateForm.freight_id = data.freight_id 
         dynamicValidateForm.on = data.on 
+        dynamicValidateForm.ewm = data.ewm 
         dynamicValidateForm.price = data.price 
         dynamicValidateForm.recommend_remark = data.recommend_remark 
         dynamicValidateForm.weight = data.weight 

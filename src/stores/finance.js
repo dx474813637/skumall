@@ -44,9 +44,25 @@ export const useFinanceStore = defineStore('finance', {
 			regional_loading: false, 
 			bank_buy_all: {},
 			bank_buy_all_loading: false, 
+			no_order_buyer: {},
+			no_order_buyer_loading: false, 
+			tooclePic: 'https://img-i-album.toocle.com/0-0/'
 		}
 	}, 
 	actions: {  
+		async getno_order_buyer(needLoading = false) {
+			this.bank_buy_all_loading = true
+			try { 
+				const res = await apis.no_order_buyer_detail({loading: needLoading});
+				if(res.code == 1 && res.list.hasOwnProperty('id')) {
+					this.no_order_buyer = {...res.list, filesList: [{url: `${this.tooclePic}${res.list.reg_pic}`}] }
+				} 
+			} catch (error) {
+				
+			}
+			this.bank_buy_all_loading = false
+			
+		},    
 		async getbankbuyall(needLoading = false) {
 			this.bank_buy_all_loading = true
 			try { 

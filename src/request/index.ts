@@ -6,7 +6,8 @@ const axios = createAxiosByinterceptors({
         'content-type': 'application/x-www-form-urlencoded',
         'appid': 10001,
         'appsecret': '66f7iMFW6859I2reEiTsm7wIZQWhevpdvu2XggRIuUnH/zEbybV1fMs',
-    }
+    },
+    timeout: 1 * 10 * 1000
 })
 
 export default axios

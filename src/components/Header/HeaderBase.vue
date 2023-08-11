@@ -410,7 +410,7 @@ header {
                                 color: $uni-color-primary;
                             }
                             p {
-                                padding: 8px 20px;
+                                padding: 8px 12px;
                             }
                         }
                     }
