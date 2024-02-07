@@ -1,10 +1,10 @@
 
 import {
-	User, Setting, Handbag, Pointer, Postcard, Files
+	User, Setting, Handbag, Pointer, Postcard, Files, Box
 } from "@element-plus/icons-vue"; 
 export default [
 	{
-		label: '账号管理',
+		label: '基础管理',
 		type: 'title',
 		icon: User,
 		index: '1',
@@ -26,7 +26,7 @@ export default [
 				}
 			}, 
 			{
-				label: '企业信息', 
+				label: '店铺信息', 
 				icon: '',
 				index: 'cpy_info', 
 				route: {
@@ -76,14 +76,14 @@ export default [
 			{
 				label: '订单管理',
 				icon: '',
-				// index: 'order_list', 
-				// route: {
-				// 	name: 'order_list'
-				// } 
-				index: 'order_new_list', 
+				index: 'order_list', 
 				route: {
-					name: 'order_new_list'
+					name: 'order_list'
 				} 
+				// index: 'order_new_list', 
+				// route: {
+				// 	name: 'order_new_list'
+				// } 
 			},
 			{
 				label: '选品车', 
@@ -229,6 +229,12 @@ export default [
 	// 		// }, 
 	// 	]
 	// }, 
+	{
+		label: '分销助手',
+		type: 'func', 
+		index: 'fx',
+		icon: Box,
+	},
 	{
 		label: '安全登出',
 		type: 'func', 

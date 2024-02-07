@@ -33,67 +33,78 @@
         <el-form-item prop="price" label="价格">
             <el-input v-model="dynamicValidateForm.price" />
         </el-form-item>
-        <el-form-item prop="pic" label="轮播图">
-            <el-upload 
-                ref="pic" 
-                action=""  
-                v-model:file-list="dynamicValidateForm.pic"
-                list-type="picture-card" 
-                :headers="configHeader"  
-                :http-request="(options) => upload(options, dynamicValidateForm.pic) "
-                :before-upload="beforeUpload">
-                <el-icon>
-                    <Plus />
-                </el-icon>
+        <el-form-item prop="pic" label="轮播主图">
+            <div>
+                <el-upload 
+                    ref="pic" 
+                    action=""  
+                    v-model:file-list="dynamicValidateForm.pic"
+                    list-type="picture-card" 
+                    :headers="configHeader"  
+                    :http-request="(options) => upload(options, dynamicValidateForm.pic) "
+                    :before-upload="beforeUpload">
+                    <el-icon>
+                        <Plus />
+                    </el-icon>
 
-                <template #file="{ file }">
-                    <div>
-                        <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-                        <span class="el-upload-list__item-actions">
-                            <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-                                <el-icon><zoom-in /></el-icon>
+                    <template #file="{ file }">
+                        <div>
+                            <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+                            <span class="el-upload-list__item-actions">
+                                <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                                    <el-icon><zoom-in /></el-icon>
+                                </span>
+                                <span v-if="!disabled" class="el-upload-list__item-delete"
+                                    @click="handleRemove(file, undefined, 'pic')">
+                                    <el-icon>
+                                        <Delete />
+                                    </el-icon>
+                                </span>
                             </span>
-                            <span v-if="!disabled" class="el-upload-list__item-delete"
-                                @click="handleRemove(file, undefined, 'pic')">
-                                <el-icon>
-                                    <Delete />
-                                </el-icon>
-                            </span>
-                        </span>
-                    </div>
-                </template>
-            </el-upload>
-        </el-form-item>
+                        </div>
+                    </template>
+                </el-upload> 
+                <div >
+                    <el-text type="info">主图直接影响商品在商城的曝光引流效果，低质图无法获得平台免费推荐机会，仅支持png，jpg，jpeg格式，宽高至少600*600px，大小2M内。</el-text>
+                </div>
+            </div>
+           
+        </el-form-item> 
         <el-form-item prop="description" label="商品描述">
-            <el-upload 
-                ref="description" 
-                action=""  
-                v-model:file-list="dynamicValidateForm.description"
-                list-type="picture-card" 
-                :headers="configHeader"  
-                :http-request="(options) => upload(options, dynamicValidateForm.description) "
-                :before-upload="beforeUpload">
-                <el-icon>
-                    <Plus />
-                </el-icon>
+            <div>
+                <el-upload 
+                    ref="description" 
+                    action=""  
+                    v-model:file-list="dynamicValidateForm.description"
+                    list-type="picture-card" 
+                    :headers="configHeader"  
+                    :http-request="(options) => upload(options, dynamicValidateForm.description) "
+                    :before-upload="beforeUpload">
+                    <el-icon>
+                        <Plus />
+                    </el-icon>
 
-                <template #file="{ file }">
-                    <div>
-                        <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-                        <span class="el-upload-list__item-actions">
-                            <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-                                <el-icon><zoom-in /></el-icon>
+                    <template #file="{ file }">
+                        <div>
+                            <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+                            <span class="el-upload-list__item-actions">
+                                <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                                    <el-icon><zoom-in /></el-icon>
+                                </span>
+                                <span v-if="!disabled" class="el-upload-list__item-delete"
+                                    @click="handleRemove(file, undefined, 'description')">
+                                    <el-icon>
+                                        <Delete />
+                                    </el-icon>
+                                </span>
                             </span>
-                            <span v-if="!disabled" class="el-upload-list__item-delete"
-                                @click="handleRemove(file, undefined, 'description')">
-                                <el-icon>
-                                    <Delete />
-                                </el-icon>
-                            </span>
-                        </span>
-                    </div>
-                </template>
-            </el-upload>
+                        </div>
+                    </template>
+                </el-upload>
+                <div >
+                    <el-text type="info">仅支持png，jpg，jpeg格式，图片宽高不低于375*500（750*1000最佳），大小2M内，图片比例3:4最佳！</el-text>
+                </div>
+            </div>
         </el-form-item>
         <el-form-item prop="recommend_remark" label="商家推荐语">
             <el-input v-model="dynamicValidateForm.recommend_remark" />

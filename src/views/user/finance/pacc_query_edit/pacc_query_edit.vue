@@ -57,7 +57,7 @@
 		</el-row>
 		<el-row :gutter="10">
 			<el-col :span="5">
-				<div class="grid-content label">银行利率(年化)</div>
+				<div class="grid-content label">费率(年化)</div>
 			</el-col>
 			<el-col :span="19">
 				<div class="grid-content content">

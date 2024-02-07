@@ -13,10 +13,12 @@
                 </div>
                 <div class="box-main ">  
                     <el-carousel height="300px" indicator-position="outside">
-                        <el-carousel-item v-for="item in 4" :key="item">
+                        <el-carousel-item>
                             <div class="u-flex swiper-list u-flex u-flex-between u-p-l-20 u-p-r-20">
-                                <div class="list-item " v-for="item in 6" :key="item">
-                                    <product-card-simple></product-card-simple>
+                                <div class="list-item " v-for="(item, index) in recommend_list" :key="index">
+                                    <product-card-simple
+                                        :origin="item"
+                                    ></product-card-simple>
                                 </div>
                             </div>
                             
@@ -232,6 +234,7 @@ const checkbox_tabs_list = ref([
         value: 'tag_season',
     },
 ])
+const recommend_list = ref([])
 const product_list = ref([])
 const product_total = ref(0)
 // ref([0, 1000])
@@ -300,6 +303,7 @@ async function getShopData() {
         shop_info.value = res.company 
 	    res.company.company && settings.setTitle(res.company.company)
         product_list.value = res.list
+        recommend_list.value = res.recommend.slice(0,6)
         product_total.value = +res.total 
     }
 }

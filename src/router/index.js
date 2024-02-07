@@ -259,10 +259,18 @@ const routes = [
                 component: () => import('@/views/user/info/info.vue'),
             },
             {
+                path: 'fx_helper',
+                name: 'fx_helper',
+                meta: {
+                    title: '分销助手', 
+                },
+                component: () => import('@/views/user/fx_helper/fx_helper.vue'),
+            },
+            {
                 path: 'cpy_info',
                 name: 'cpy_info',
                 meta: {
-                    title: '企业信息', 
+                    title: '店铺信息', 
                 },
                 component: () => import('@/views/user/cpy_info/cpy_info.vue'),
             },

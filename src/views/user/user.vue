@@ -1,7 +1,7 @@
 <!--  -->
 <template>
 	<header-user></header-user>
-	<div class="user-wrap">
+	<div class="user-wrap " :class="{fx_mode: routerName == 'fx_helper'}">
 		<div class="home-w u-flex u-flex-items-start u-p-t-15 u-p-b-15">
 			<div class="item item-menus u-radius-5 u-p-5">
 				<el-menu
@@ -50,7 +50,7 @@
 								
 							</el-menu-item>
 						</el-sub-menu>
-						<el-menu-item v-else @click="logout" class="logout">
+						<el-menu-item v-else @click="funcClick(item)" class="logout">
 							<el-icon>
 								<component :is="item.icon"></component>
 							</el-icon>
@@ -106,8 +106,11 @@ const {menuList} = toRefs(cate)
 const { account_info, organizations_info } = toRefs(finance)
 const user = userStore() 
 const menuActive = ref('user_index')
-const routerPath = computed(() => {
+const routerPath = computed(() => { 
 	return router.currentRoute.value.fullPath
+})
+const routerName = computed(() => { 
+	return router.currentRoute.value.name
 })
 const addBtnList = [
 	// {
@@ -157,9 +160,17 @@ watch(
 	{immediate: true, deep: true}
 )
 
-const logout = () => {
-	user.logout()
-	useSettings.goLogin()
+const funcClick = (item) => {
+	if(item.index == 'logout') {
+		user.logout()
+		useSettings.goLogin() 
+	}
+	else if(item.index == 'fx') {
+		const target = router.resolve({
+			name: 'fx_helper'
+		})
+		window.open(target.href, '_blank')
+	}
 }
 
 const onBack = () => {
@@ -185,6 +196,24 @@ const onBack = () => {
 		.logout {
 			font-weight: bold;
 			color: #333;
+		}
+	}
+	&.fx_mode {
+		.home-w {
+			min-width: 1440px;
+			max-width: 100vw;
+			padding-top: 0!important;
+		}
+		.item-menus.item {
+			display: none;
+		}
+		.item-main.item {
+			width: 100%;
+			flex: 1;
+			margin: 0!important;
+			.el-page-header {
+				display: none;
+			}
 		}
 	}
 }

@@ -67,8 +67,8 @@ export const rz_check_tran = (data) => axios.get('Userapi/rz_check_tran', data)
 // account 十三、个人信息
 export const account = (data) => axios.get('Userapi/account', data)
 
-// create_account      十四、创建个人信息
-export const create_account = (data) => axios.get('Userapi/create_account', data)
+// create_account      十四、创建个人信息 
+export const create_account = (data, config) => axios.post('Userapi/create_account', data, config)
 // 参数：name      姓名         必填
 // idType    证件类型     必填
 // idNumber  证件号       必填
@@ -119,7 +119,7 @@ export const change_organizations = (data) => axios.get('Userapi/change_organiza
 export const create_verify_organizations = (data) => axios.get('Userapi/create_verify_organizations', data)
 
 // transfer_random_amount      二十三(1)、发起随机金额打款认证 
-export const transfer_random_amount = (data) => axios.get('Userapi/transfer_random_amount', data)
+export const transfer_random_amount = (data, config) => axios.post('Userapi/transfer_random_amount', data, config)
 // 参数：name      企业名称     必填
 //           bank 对公账号开户行总行名称  必填             接口二十三(2)
 //           regional 对公账号开户行所在地对应的code 必填  接口二十三(3)

@@ -13,19 +13,10 @@
 					</div>
 				</template>
 			</el-image>
-			<div class="product-btns u-flex u-font-12">
-				<div class="item" @click.stop="console.log(2)">
-					<span>找同款</span>
-				</div>
+			<div class="product-btns u-flex u-font-12"> 
 				<div class="item" @click.stop="uploadPlatformShowBtn">
 					<span>一键铺货</span>
-				</div>
-				<div class="item">
-					<el-icon class="u-font-12">
-						<i-ep-ShoppingCart />
-					</el-icon>
-					<span>进货车</span>
-				</div>
+				</div> 
 			</div>
 		</div>
 		<div class="product-content u-p-l-10 u-p-r-10 u-p-b-10 u-p-t-5">
@@ -217,8 +208,8 @@ function gotoShop() {
 			transition: all .2s;
 			.item {
 				@include flex(x, center, center);
-				flex: 0 0 33%;
-				width: 33%; 
+				flex: 1;
+				// width: 33%; 
 				height: 100%;
 				transition: all .2s;
 				&:hover {

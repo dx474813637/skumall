@@ -11,12 +11,21 @@
 					/></a>
 				</div>
 				<div class="main-nav">
-					<div class="nav-item">
-						<el-link  type="primary" href="/" >返回首页</el-link> 
-					</div>
-					<div class="nav-item">
-						<el-link  type="primary" href="#/help" target="_blank">帮助中心</el-link> 
-					</div> 
+					<template v-if="routerName == 'fx_helper'">
+						<div class="nav-item">
+							<router-link :to="{name: 'user_index'}">返回用户中心</router-link> 
+						</div>
+					</template>
+					<template v-else >
+						<div class="nav-item">
+							<el-link  type="primary" href="/" >返回首页</el-link> 
+						</div>
+						<div class="nav-item">
+							<el-link  type="primary" href="#/help" target="_blank">帮助中心</el-link> 
+						</div> 
+					</template>
+
+					
 				</div>
 			</div>
 		</div>
@@ -24,7 +33,11 @@
 </template>
 
 <script setup lang="ts">
-// import { ref } from 'vue'
+import { ref, watch, computed, onMounted, toRefs  } from "vue";
+import router from "@/router/guard" 
+const routerName = computed(() => { 
+	return router.currentRoute.value.name
+})
 </script>
 <style lang="scss" scoped>
 ::v-deep .input-with-select {

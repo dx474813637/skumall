@@ -56,7 +56,7 @@ const rules = {
 function submitForm(formName) {
 	formName.validate(async (valid) => {
 		if (valid) {
-			let res = await $api.verify_random_amount({ ...formData });
+			let res = await $api.verify_random_amount({ params: {...formData} });
 			if (res.code != 1) return;
 			ElMessage.success(res.msg);  
 			verifyStatus.value = true  

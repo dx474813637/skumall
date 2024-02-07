@@ -113,7 +113,7 @@
                         </div> 
                     </template>
                     <div class="list-item u-m-b-10" v-for="item in product_list" :key="item.id">
-                        <product-card :origin="item" @uploadPlatformShowEvent="flowShow = true"></product-card>
+                        <product-card :origin="item"  @uploadPlatformShowEvent="uploadPlatformShowEvent"></product-card>
                     </div>
                 </div>
 

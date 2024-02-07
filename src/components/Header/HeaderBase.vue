@@ -101,8 +101,7 @@
                                 <p>
                                     <router-link
                                         v-if="item.cate == '1'" 
-                                        tag="a" 
-                                        target="_blank" 
+                                        tag="a"  
                                         :to="{
                                             name: 'web_danye',
                                             params: {
@@ -114,8 +113,7 @@
                                         }"
                                         >{{ item.name }}</router-link> 
                                     <a
-                                        v-else-if="item.cate == '2'"  
-                                        target="_blank" 
+                                        v-else-if="item.cate == '2'"   
                                         :href="item.url"
                                         >{{ item.name }}</a> 
                                 </p>

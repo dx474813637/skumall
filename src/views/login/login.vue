@@ -110,7 +110,7 @@
 <script setup lang="ts">
 import Vcode from "vue3-puzzle-vcode";
 import type { TabsPaneContext, FormRules, FormInstance } from "element-plus";
-import { ref, reactive, computed, inject, toRefs, onMounted } from "vue"; 
+import { ref, reactive, computed, inject, toRefs, onMounted, watch } from "vue"; 
 import {useSettingsStore} from '@/stores/settings';
 import {userStore} from '@/stores/user';
 import { ElLoading, ElMessage  } from "element-plus";
@@ -127,7 +127,7 @@ const { login:loginStore, role, roleName, roleName2 } = toRefs(user);
 // console.log(router)
 // import { createLoadingComponent } from "element-plus/es/components/loading/src/loading";
 const $api: any = inject('$api')
-const activeName = ref("phone_login");
+const activeName = ref("account_login");
 const formData = reactive({
 	login: "",
 	passwd: "",
@@ -158,10 +158,16 @@ const getCodeDisabled = computed(() => {
 })
 onMounted(async () => {
 	if(props.role) role.value = props.role  
+	console.log(router_name.value)
+	if(router_name.value == 'reg') {
+		activeName.value = 'phone_login'
+	}
 })
-const pageName = computed(() => {
-	let router_name = router.currentRoute.value.name;  
-	if(router_name == 'reg') return '注册'
+const router_name = computed(() => {
+	return router.currentRoute.value.name;   
+}) 
+const pageName = computed(() => {  
+	if(router_name.value == 'reg') return '注册'
 	return '登录'
 })
 const rules = computed<FormRules>(() => {

@@ -124,7 +124,12 @@
 							<div class="info-row-item info-row-item-label"> </div>
 							<div class="info-row-item info-row-item-content u-flex u-flex-items-start u-flex-wrap u-m-l-5">
 								<div class="content-item u-m-r-10 u-m-b-10" >
-									<el-button type="primary" @click="addCartBtn" :disabled="skuCheckStatus" size="large">加入选品车</el-button>
+									<el-tooltip 
+										:disabled="!skuNumCheckStatus"
+										:content="skuCheck? '规格未选' : '数量未选' " placement="top">
+										<el-button type="primary" @click="addCartBtn" :disabled="skuNumCheckStatus" size="large">加入选品车</el-button>
+									</el-tooltip>
+									
 								</div>
 								<div class="content-item u-m-r-10 u-m-b-10" >
 									<el-button type="danger" @click="quickUploadBtn" size="large">一键铺货</el-button>
@@ -272,7 +277,9 @@ const countRef = ref()
 const product_num = ref(1)
 const product_num_max = ref(Infinity)
 // const product_sku_form = reactive({})
-const skuCheckStatus = computed(() => Object.values(product_sku.form).some(ele => !ele) || product_num.value == 0 )
+const skuCheck = computed(() => Object.values(product_sku.form).some(ele => !ele))
+const numCheck = computed(() => product_num.value == 0 )
+const skuNumCheckStatus = computed(() => skuCheck.value || numCheck.value )
 const activeIndex = ref(0)
 
 const flowShow = ref(false) 
@@ -421,7 +428,7 @@ const addCartBtn = () => {
 
 	skuItem = {
 		...spec_prices_data.value[i],
-		img: spec_prices_data.value[i].img ? spec_prices_data.value[i].img : spec_prices_data.value[i].pic.split('|')[0],
+		img: spec_prices_data.value[i].img ? spec_prices_data.value[i].img : product_base_data.value.pic.split('|')[0],
 		shop: product_shop_data.value || {},
 		name: product_base_data.value.name,
 		freight_id: product_base_data.value.freight_id,
