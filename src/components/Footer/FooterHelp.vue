@@ -69,9 +69,7 @@
 				</el-link> 
 			 </div>
 			 <div class="footer-link footer-link-sub u-flex u-flex-center" style="color: #999">
-				<el-link type="info" :underline="false" href="/" target="_blank">增值电信业务经营许可证：浙B2-2023</el-link>
-				<el-divider direction="vertical" class="u-m-l-20 u-m-r-20" />
-				<el-link type="info" :underline="false" href="/" target="_blank">经营性网站备案信息: 浙1CP备2023000-1 </el-link>
+				<el-link type="info" :underline="false" href="https://beian.miit.gov.cn/" target="_blank">浙ICP备14007955号-158</el-link>
 				<el-link type="info" class="u-m-l-20 " :underline="false" href="#/" > Copyright @ 2023我要选品 版权所有</el-link> 
 			 </div>
 		</div>
